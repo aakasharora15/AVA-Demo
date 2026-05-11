@@ -5,141 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #f0f4f8 0%, #d7e3ec 100%); 
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            width: 100%;
-            max-width: 1100px;
-            height: 85vh;
-            display: flex;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        .sidebar {
-            width: 240px;
-            background: rgba(255, 255, 255, 0.3);
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            padding: 32px 20px;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .input-area {
-            background: white;
-            border-radius: 24px;
-            border: 1px solid #e2e8f0;
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-        .input-area:focus-within {
-            border-color: #f97316;
-            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
-        }
-        .audit-btn {
-            background: #f97316;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .audit-btn:hover {
-            background: #ea580c;
-            transform: translateY(-1px);
-        }
-        .result-card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            padding: 32px;
-            margin-top: 24px;
-            border: 1px solid rgba(249, 115, 22, 0.1);
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
+        .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; }
+        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 24px 0 0 24px; flex-grow: 1; min-height: 100vh; overflow-y: auto; }
+        .input-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
+        .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
+        .accent-btn:active { transform: scale(0.98); }
     </style>
 </head>
-<body>
+<body class="flex">
 
-    <div class="glass-container">
-        <aside class="sidebar">
-            <div class="mb-12">
-                <img src="https://raw.githubusercontent.com/aakasharora15/AVA-Demo/main/Asset%205.svg" alt="AVA Logo" class="w-12 h-auto mb-4">
-                <h2 class="text-xs uppercase tracking-widest font-bold text-orange-600">Strategic Lab</h2>
+    <aside class="sidebar p-8 hidden md:flex flex-col">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center font-bold text-xs text-lime-300">A</div>
+            <span class="font-semibold tracking-tight text-lg text-white">AVA Orchestrator</span>
+        </div>
+        
+        <nav class="space-y-6">
+            <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl">
+                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Lab
             </div>
-            
-            <nav class="space-y-6">
-                <div class="flex items-center gap-3 text-gray-900 font-medium bg-white/50 p-3 rounded-xl">
-                    <span class="text-lg">🛡️</span> Audit Engine
-                </div>
-                <div class="flex items-center gap-3 text-gray-500 p-3 hover:bg-white/30 rounded-xl cursor-not-allowed opacity-50">
-                    <span class="text-lg">📊</span> Rival Analysis
-                </div>
-                <div class="flex items-center gap-3 text-gray-500 p-3 hover:bg-white/30 rounded-xl cursor-not-allowed opacity-50">
-                    <span class="text-lg">⚡</span> Pivot Logic
-                </div>
-            </nav>
+            <div class="text-zinc-600 text-sm pl-4 cursor-default">Agent Status: Active</div>
+        </nav>
 
-            <div class="mt-auto pt-6 border-t border-black/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-[10px] font-bold text-orange-700">AA</div>
-                    <div class="text-xs">
-                        <p class="font-bold text-gray-900">Aakash Arora</p>
-                        <p class="text-gray-500">Founder Mode</p>
-                    </div>
-                </div>
+        <div class="mt-auto">
+            <div class="flex items-center gap-3 text-zinc-400 text-xs">
+                <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
             </div>
-        </aside>
+        </div>
+    </aside>
 
-        <main class="main-content">
-            <header class="mb-10 text-center">
-                <h1 class="text-3xl font-semibold text-gray-900 tracking-tight">Welcome to AVA</h1>
-                <p class="text-gray-500 mt-2 font-light">Input your strategy and let the adversary take over.</p>
+    <main class="main-stage p-8 md:p-16">
+        <div class="max-w-4xl mx-auto w-full">
+            <header class="mb-12">
+                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Aakash</h1>
+                <p class="text-zinc-500 text-lg font-light">Input your venture hypothesis and initiate the simulation.</p>
             </header>
 
-            <div class="max-w-3xl mx-auto w-full">
-                <div class="input-area mb-8">
-                    <textarea id="ideaInput" rows="5" class="w-full text-lg font-light border-none focus:ring-0 placeholder-gray-300 resize-none text-gray-800" placeholder="Drop your venture hypothesis here..."></textarea>
-                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-50">
-                        <div class="flex gap-2">
-                            <span class="px-3 py-1 bg-gray-100 rounded-full text-[10px] font-bold text-gray-400">GPT-4o</span>
-                            <span class="px-3 py-1 bg-orange-50 rounded-full text-[10px] font-bold text-orange-600">STRATEGY</span>
-                        </div>
-                        <button onclick="runSimulation()" id="runBtn" class="audit-btn flex items-center gap-2">
-                            <span id="btnText">Execute War-Game</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="resultsArea" class="hidden">
-                    <div class="result-card">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-2 h-2 bg-orange-500 rounded-full animate-ping"></div>
-                            <span class="text-[10px] uppercase tracking-tighter font-black text-orange-600">Adversarial Verdict // 01</span>
-                        </div>
-                        <div id="output" class="text-gray-700 leading-relaxed text-lg font-light whitespace-pre-wrap"></div>
-                    </div>
+            <div class="mb-10 w-full flex items-center justify-between pb-6 border-b border-zinc-100">
+                <img src="https://raw.githubusercontent.com/aakasharora15/AVA-Demo/main/Asset%205.svg" alt="AVA Logo" class="h-10 w-auto">
+                <div class="flex items-center gap-3 text-xs font-bold text-zinc-400 tracking-widest uppercase">
+                    Audit Phase // Active
                 </div>
             </div>
-        </main>
-    </div>
+
+            <div class="input-card p-6 rounded-3xl mb-12 relative">
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Ask anything about your strategy..."></textarea>
+                <div class="flex justify-end pt-4 border-t border-zinc-100">
+                    <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
+                        <span id="btnText">Execute War-Game</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultsArea" class="hidden opacity-0 transition-opacity duration-500">
+                <div class="result-card p-8 rounded-3xl border-2 border-dashed border-zinc-100">
+                    <div class="flex items-center gap-3 text-xs font-bold tracking-widest text-zinc-500 uppercase mb-8 pb-4 border-b border-zinc-100">
+                        <div class="p-1 bg-lime-100 text-lime-800 rounded text-[10px]">VERDICT</div>
+                        Adversarial Audit Results
+                    </div>
+                    <div id="output" class="text-zinc-700 leading-relaxed text-xl font-light whitespace-pre-wrap pl-6">Executing Adversarial Logic...</div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script>
         async function runSimulation() {
@@ -153,21 +87,23 @@
 
             btnText.innerText = "Simulating...";
             btn.disabled = true;
-            btn.style.opacity = "0.7";
             
+            // Clear old results immediately
+            resultsArea.classList.remove('hidden');
+            resultsArea.classList.add('opacity-100');
+            outputDiv.innerText = "Initiating Adversarial Simulation...";
+
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
                 const data = await response.json();
                 
-                resultsArea.classList.remove('hidden');
                 outputDiv.innerText = data.result;
+                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (err) {
-                resultsArea.classList.remove('hidden');
-                outputDiv.innerText = "// CONNECTION_ERROR: Check API key.";
+                outputDiv.innerText = "Error connecting to Orchestrator.";
             } finally {
                 btnText.innerText = "Execute War-Game";
                 btn.disabled = false;
-                btn.style.opacity = "1";
             }
         }
     </script>
