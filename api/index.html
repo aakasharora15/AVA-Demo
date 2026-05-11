@@ -7,39 +7,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
         .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; }
-        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 24px 0 0 24px; flex-grow: 1; height: 100vh; overflow-y: auto; }
-        .input-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 24px 0 0 24px; flex-grow: 1; min-height: 100vh; overflow-y: auto; }
+        .input-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
-        .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s ease; }
-        .accent-btn:hover { background: #bef264; transform: translateY(-1px); }
+        .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
+        .accent-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex">
 
-    <aside class="sidebar p-6 hidden md:flex flex-col">
-        <div class="flex items-center gap-3 mb-10">
+    <aside class="sidebar p-8 hidden md:flex flex-col">
+        <div class="flex items-center gap-3 mb-12">
             <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center font-bold text-xs">A</div>
             <span class="font-semibold tracking-tight text-lg">AVA Orchestrator</span>
         </div>
         
-        <button class="w-full py-2.5 px-4 bg-zinc-800 hover:bg-zinc-700 text-sm rounded-xl text-left mb-8 flex items-center justify-between transition-all">
-            <span>New Simulation</span>
-            <span class="text-zinc-500 text-xs">⌘ N</span>
-        </button>
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-3 text-zinc-100 font-medium">
+                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span>
+                Strategic Lab
+            </div>
+            <div class="text-zinc-500 text-sm pl-4 cursor-default">Simulation Mode</div>
+        </div>
 
-        <nav class="flex flex-col gap-4 text-zinc-400 text-sm">
-            <div class="uppercase text-[10px] tracking-widest font-bold text-zinc-600">History</div>
-            <div class="hover:text-white cursor-pointer truncate">Fintech Strategy Audit</div>
-            <div class="hover:text-white cursor-pointer truncate">Gen-Z Fashion Pivot</div>
-            <div class="hover:text-white cursor-pointer truncate">AI SaaS Stress-Test</div>
-        </nav>
-
-        <div class="mt-auto p-4 bg-zinc-900 rounded-2xl border border-zinc-800">
-            <div class="text-xs font-semibold mb-2">MBA Mode Active</div>
-            <div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
-                <div class="bg-lime-400 h-full w-3/4"></div>
+        <div class="mt-auto">
+            <div class="p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
+                <div class="text-[10px] uppercase tracking-widest font-bold text-zinc-500 mb-2">System Status</div>
+                <div class="flex items-center gap-2 text-xs text-lime-400 font-medium">
+                    <div class="w-1.5 h-1.5 bg-lime-400 rounded-full animate-pulse"></div>
+                    Engine Ready
+                </div>
             </div>
         </div>
     </aside>
@@ -47,45 +47,27 @@
     <main class="main-stage p-8 md:p-16">
         <div class="max-w-4xl mx-auto">
             <header class="mb-12">
-                <h1 class="text-4xl font-semibold tracking-tight mb-2">Hello, Aakash</h1>
-                <p class="text-zinc-500 text-lg font-light">Let’s stress-test your next venture hypothesis.</p>
+                <h1 class="text-4xl font-semibold tracking-tight mb-2 text-zinc-900">Strategic Audit</h1>
+                <p class="text-zinc-500 text-lg font-light">Input your venture hypothesis for adversarial stress-testing.</p>
             </header>
 
-            <div class="input-card p-6 rounded-3xl mb-8 relative">
-                <textarea id="ideaInput" rows="5" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Ask anything about your strategy..."></textarea>
+            <div class="input-card p-6 rounded-3xl mb-12 relative">
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Drop your business strategy here..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
-                    <button onclick="runSimulation()" id="runBtn" class="accent-btn px-8 py-3 rounded-2xl text-sm font-semibold flex items-center gap-2">
-                        <span>Execute War-Game</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                    <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
+                        <span id="btnText">Execute War-Game</span>
+                        <svg id="btnIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" id="quickActions">
-                <div class="p-4 rounded-2xl border border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-all">
-                    <div class="w-8 h-8 bg-lime-100 rounded-lg flex items-center justify-center text-lime-700 mb-3">🛡️</div>
-                    <div class="text-sm font-semibold">Legal Audit</div>
-                    <div class="text-xs text-zinc-400 mt-1">Stress-test governance.</div>
-                </div>
-                <div class="p-4 rounded-2xl border border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-all">
-                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 mb-3">📊</div>
-                    <div class="text-sm font-semibold">Market Rival</div>
-                    <div class="text-xs text-zinc-400 mt-1">Simulate competition.</div>
-                </div>
-                <div class="p-4 rounded-2xl border border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-all">
-                    <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-700 mb-3">⚡</div>
-                    <div class="text-sm font-semibold">Pivot Logic</div>
-                    <div class="text-xs text-zinc-400 mt-1">Identify new angles.</div>
-                </div>
-            </div>
-
-            <div id="resultsArea" class="hidden animate-fade-in">
+            <div id="resultsArea" class="hidden opacity-0 transition-opacity duration-500">
                 <div class="result-card p-8 rounded-3xl">
-                    <div class="flex items-center gap-2 text-xs font-bold tracking-widest text-zinc-400 uppercase mb-6">
-                        <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div>
-                        Strategic Audit Result
+                    <div class="flex items-center gap-3 text-xs font-bold tracking-widest text-zinc-400 uppercase mb-8">
+                        <span class="p-1 bg-zinc-200 rounded text-[10px]">VERDICT // 01</span>
+                        Adversarial Audit Results
                     </div>
-                    <div id="output" class="text-zinc-700 leading-relaxed text-lg font-light whitespace-pre-wrap"></div>
+                    <div id="output" class="text-zinc-700 leading-relaxed text-lg font-light whitespace-pre-wrap border-l-2 border-lime-400 pl-6"></div>
                 </div>
             </div>
         </div>
@@ -95,27 +77,36 @@
         async function runSimulation() {
             const idea = document.getElementById('ideaInput').value;
             const btn = document.getElementById('runBtn');
+            const btnText = document.getElementById('btnText');
             const outputDiv = document.getElementById('output');
             const resultsArea = document.getElementById('resultsArea');
-            const quickActions = document.getElementById('quickActions');
 
             if(!idea) return;
 
-            btn.innerText = "Processing...";
+            // UI State Change
+            btnText.innerText = "Simulating...";
             btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
             
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
                 const data = await response.json();
                 
-                quickActions.classList.add('hidden');
+                // Reveal Results
                 resultsArea.classList.remove('hidden');
+                setTimeout(() => resultsArea.classList.add('opacity-100'), 10);
                 outputDiv.innerText = data.result;
+                
+                // Smooth scroll to result
+                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (err) {
-                outputDiv.innerText = "Error connecting to Orchestrator.";
+                resultsArea.classList.remove('hidden');
+                resultsArea.classList.add('opacity-100');
+                outputDiv.innerText = "Engine Error: Ensure your GROQ_API_KEY is correctly set in Vercel.";
             } finally {
-                btn.innerText = "Execute War-Game";
+                btnText.innerText = "Execute War-Game";
                 btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
     </script>
