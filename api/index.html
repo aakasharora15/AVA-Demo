@@ -14,25 +14,32 @@
         .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
         .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
+        .accent-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex">
 
     <aside class="sidebar p-8 hidden md:flex flex-col">
-        <div class="flex items-center gap-3 mb-12">
-            <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center font-bold text-xs text-lime-300">A</div>
-            <span class="font-semibold tracking-tight text-lg text-white">AVA Orchestrator</span>
+        <div class="mb-12">
+            <svg class="h-8 w-auto" viewBox="0 0 1103.78 353.49" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#bcf948" d="M237.38,31.75L50.43,353.49l-50.43-.05L208.74,0h57.23l210.37,353.41-49.33.03L237.38,31.75Z"/>
+                <path fill="#bcf948" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
+                <path fill="#bcf948" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
+            </svg>
+            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Strategic Lab</div>
         </div>
         
         <nav class="space-y-6">
             <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl">
-                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Lab
+                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
             </div>
-            <div class="text-zinc-600 text-sm pl-4 cursor-default uppercase tracking-tighter font-bold">Agent Status: Active</div>
+            <div class="text-zinc-600 text-xs pl-4 cursor-default font-bold uppercase tracking-widest">Active Simulation</div>
         </nav>
 
-        <div class="mt-auto flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-            <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
+        <div class="mt-auto">
+            <div class="flex items-center gap-3 text-zinc-500 text-[11px] font-bold uppercase tracking-widest">
+                <div class="w-1.5 h-1.5 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
+            </div>
         </div>
     </aside>
 
@@ -44,21 +51,12 @@
             </header>
 
             <div class="mb-10 w-full flex items-center justify-between pb-6 border-b border-zinc-100">
-                <div class="flex items-center gap-4">
-                    <img src="https://raw.githubusercontent.com/aakasharora15/AVA-Demo/main/Asset%205.svg" 
-                         alt="AVA" 
-                         class="h-8 w-auto" 
-                         onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
-                    
-                    <div id="logo-fallback" class="hidden font-black text-2xl tracking-tighter text-orange-600 italic">AVA_LOGIC</div>
-                </div>
-                <div class="text-[10px] font-black text-zinc-400 tracking-[0.2em] uppercase">
-                    Audit Phase // 01
-                </div>
+                <div class="text-sm font-semibold text-zinc-900 tracking-tight text-zinc-400">Governance & Stress-Testing</div>
+                <div class="text-[10px] font-black text-zinc-400 tracking-[0.2em] uppercase">Audit Phase // 01</div>
             </div>
 
             <div class="input-card p-6 rounded-3xl mb-12 relative">
-                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Describe the strategy to be stress-tested..."></textarea>
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Ask anything about your strategy..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
                     <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
                         <span id="btnText">Execute War-Game</span>
@@ -93,4 +91,20 @@
             
             resultsArea.classList.remove('hidden');
             setTimeout(() => resultsArea.classList.add('opacity-100'), 10);
-            outputDiv
+            outputDiv.innerText = "Synthesizing Adversarial Logic...";
+
+            try {
+                const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
+                const data = await response.json();
+                outputDiv.innerText = data.result;
+                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                outputDiv.innerText = "System Error: Orchestrator unreachable.";
+            } finally {
+                btnText.innerText = "Execute War-Game";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
