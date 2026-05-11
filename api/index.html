@@ -14,7 +14,6 @@
         .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
         .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
-        .accent-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex">
@@ -29,13 +28,11 @@
             <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl">
                 <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Lab
             </div>
-            <div class="text-zinc-600 text-sm pl-4 cursor-default">Agent Status: Active</div>
+            <div class="text-zinc-600 text-sm pl-4 cursor-default uppercase tracking-tighter font-bold">Agent Status: Active</div>
         </nav>
 
-        <div class="mt-auto">
-            <div class="flex items-center gap-3 text-zinc-400 text-xs">
-                <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
-            </div>
+        <div class="mt-auto flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+            <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
         </div>
     </aside>
 
@@ -43,18 +40,25 @@
         <div class="max-w-4xl mx-auto w-full">
             <header class="mb-12">
                 <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Aakash</h1>
-                <p class="text-zinc-500 text-lg font-light">Input your venture hypothesis and initiate the simulation.</p>
+                <p class="text-zinc-500 text-lg font-light">Initiate adversarial simulation for your venture hypothesis.</p>
             </header>
 
             <div class="mb-10 w-full flex items-center justify-between pb-6 border-b border-zinc-100">
-                <img src="https://raw.githubusercontent.com/aakasharora15/AVA-Demo/main/Asset%205.svg" alt="AVA Logo" class="h-10 w-auto">
-                <div class="flex items-center gap-3 text-xs font-bold text-zinc-400 tracking-widest uppercase">
-                    Audit Phase // Active
+                <div class="flex items-center gap-4">
+                    <img src="https://raw.githubusercontent.com/aakasharora15/AVA-Demo/main/Asset%205.svg" 
+                         alt="AVA" 
+                         class="h-8 w-auto" 
+                         onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+                    
+                    <div id="logo-fallback" class="hidden font-black text-2xl tracking-tighter text-orange-600 italic">AVA_LOGIC</div>
+                </div>
+                <div class="text-[10px] font-black text-zinc-400 tracking-[0.2em] uppercase">
+                    Audit Phase // 01
                 </div>
             </div>
 
             <div class="input-card p-6 rounded-3xl mb-12 relative">
-                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Ask anything about your strategy..."></textarea>
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Describe the strategy to be stress-tested..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
                     <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
                         <span id="btnText">Execute War-Game</span>
@@ -64,12 +68,11 @@
             </div>
 
             <div id="resultsArea" class="hidden opacity-0 transition-opacity duration-500">
-                <div class="result-card p-8 rounded-3xl border-2 border-dashed border-zinc-100">
-                    <div class="flex items-center gap-3 text-xs font-bold tracking-widest text-zinc-500 uppercase mb-8 pb-4 border-b border-zinc-100">
-                        <div class="p-1 bg-lime-100 text-lime-800 rounded text-[10px]">VERDICT</div>
-                        Adversarial Audit Results
+                <div class="result-card p-8 rounded-3xl border border-zinc-200">
+                    <div class="flex items-center gap-3 text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase mb-8 pb-4 border-b border-zinc-100">
+                        <span class="text-lime-600">Verification</span> // Strategic Audit Result
                     </div>
-                    <div id="output" class="text-zinc-700 leading-relaxed text-xl font-light whitespace-pre-wrap pl-6">Executing Adversarial Logic...</div>
+                    <div id="output" class="text-zinc-700 leading-relaxed text-xl font-light whitespace-pre-wrap pl-6 border-l-2 border-lime-400"></div>
                 </div>
             </div>
         </div>
@@ -85,27 +88,9 @@
 
             if(!idea) return;
 
-            btnText.innerText = "Simulating...";
+            btnText.innerText = "Processing...";
             btn.disabled = true;
             
-            // Clear old results immediately
             resultsArea.classList.remove('hidden');
-            resultsArea.classList.add('opacity-100');
-            outputDiv.innerText = "Initiating Adversarial Simulation...";
-
-            try {
-                const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
-                const data = await response.json();
-                
-                outputDiv.innerText = data.result;
-                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } catch (err) {
-                outputDiv.innerText = "Error connecting to Orchestrator.";
-            } finally {
-                btnText.innerText = "Execute War-Game";
-                btn.disabled = false;
-            }
-        }
-    </script>
-</body>
-</html>
+            setTimeout(() => resultsArea.classList.add('opacity-100'), 10);
+            outputDiv
