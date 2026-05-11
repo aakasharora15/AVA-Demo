@@ -1,22 +1,20 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from groq import Groq
 import os
 
 app = FastAPI()
 
+@app.get("/", response_class=HTMLResponse)
+def home():
+    # This reads the HTML file sitting right next to it in the api folder
+    with open("api/index.html", "r") as f:
+        return f.read()
+
 @app.get("/api/audit")
 def audit(idea: str = "No idea provided"):
     client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-    
-    # Simple, high-speed adversarial prompt
-    prompt = f"""
-    Act as two distinct personas:
-    1. A Ruthless VC Auditor: Find 3 lethal flaws in this idea: {idea}.
-    2. A Market Rival CEO: Plan a 3-step attack to crush this startup.
-    
-    Provide the response in a clean, structured format.
-    """
-    
+    prompt = f"Audit this business idea: {idea}. Provide 3 flaws and a competitive counter-attack."
     try:
         completion = client.chat.completions.create(
             messages=[
