@@ -28,7 +28,7 @@
         <div id="resultsArea" class="mt-8 hidden animate-fade-in">
             <div class="p-6 bg-zinc-50 rounded-xl border border-zinc-100">
                 <h3 class="text-xs uppercase tracking-widest text-zinc-400 font-semibold mb-4">Strategic Audit Result</h3>
-                <div id="output" class="text-gray-700 leading-relaxed whitespace-pre-wrap font-light"></div>
+                <div id="output" class="text-gray-700 leading-relaxed whitespace-pre-wrap font-light italic">Running simulation...</div>
             </div>
         </div>
     </div>
@@ -44,14 +44,15 @@
 
             btn.innerText = "Simulating...";
             btn.disabled = true;
+            resultsArea.classList.remove('hidden');
+            outputDiv.innerText = "Executing Adversarial Logic...";
 
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
                 const data = await response.json();
                 outputDiv.innerText = data.result;
-                resultsArea.classList.remove('hidden');
             } catch (err) {
-                outputDiv.innerText = "Error connecting to Orchestrator.";
+                outputDiv.innerText = "Error connecting to Orchestrator. Check Vercel Environment Variables.";
             } finally {
                 btn.innerText = "Execute War-Game";
                 btn.disabled = false;
