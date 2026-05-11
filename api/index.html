@@ -3,59 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVA | Strategic Lab</title>
+    <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { mono: ['Geist Mono', 'monospace'] },
+                    colors: {
+                        brand: {
+                            black: '#0A0A0B',
+                            dark: '#141416',
+                            muted: '#2A2A2E',
+                            accent: '#FBFBFB',
+                        }
+                    },
+                    animation: { 'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite' }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fcfcfc; }
-        .executive-shadow { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); }
+        body { font-family: 'Geist Mono', monospace; background-color: #0A0A0B; color: #FBFBFB; -webkit-font-smoothing: antialiased; }
+        .glass-panel { background: rgba(20, 20, 22, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(251, 251, 251, 0.03); }
+        .dynamic-height { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); max-height: 0; overflow: hidden; opacity: 0; }
+        .dynamic-height.expanded { max-height: 1000px; opacity: 1; margin-top: 2rem; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 3px; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
-    <div class="max-w-2xl w-full">
-        <header class="mb-12">
-            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">🛡️ AVA Orchestrator</h1>
-            <p class="text-gray-500 font-light mt-2">Adversarial Venture Architect | Governance & Stress-Testing</p>
-        </header>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+    <div class="max-w-4xl w-full">
+        <div class="glass-panel p-6 md:p-10 rounded-3xl executive-shadow">
+            <header class="mb-10 flex items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">🛡️ AVA :: STRATEGIC_COMMAND</h1>
+                    <p class="text-zinc-500 font-light mt-1 text-sm md:text-base">Adversarial Venture Architect | Governance Simulation</p>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-muted text-zinc-400 text-xs font-medium">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    SYSTEM_ACTIVE
+                </div>
+            </header>
 
-        <div class="bg-white p-8 rounded-2xl border border-gray-100 executive-shadow">
-            <textarea id="ideaInput" rows="4" class="w-full p-4 text-lg font-light bg-transparent border-none focus:ring-0 placeholder-gray-300 resize-none" placeholder="Drop your business strategy here..."></textarea>
-            <div class="flex justify-end mt-4">
-                <button onclick="runSimulation()" id="runBtn" class="bg-black text-white px-8 py-3 rounded-full text-sm font-medium hover:bg-zinc-800 transition-all">Execute War-Game</button>
+            <div class="relative group">
+                <textarea id="ideaInput" rows="5" class="w-full p-6 text-base md:text-lg font-light bg-brand-dark rounded-2xl border border-transparent group-hover:border-zinc-800 focus:border-white focus:ring-0 placeholder-zinc-700 resize-none transition-all duration-200" placeholder="// INITIATE HYPOTHESIS: Drop your business strategy here..."></textarea>
+                <div class="absolute bottom-4 right-4 flex items-center gap-2">
+                    <div id="statusIndicator" class="text-xs text-zinc-600 hidden animate-pulse-fast">PROCESSING...</div>
+                    <button onclick="runSimulation()" id="runBtn" class="bg-brand-accent text-brand-black px-8 py-3 rounded-xl text-sm font-semibold hover:bg-zinc-200 transition-all active:scale-95 disabled:opacity-50">Execute War-Game</button>
+                </div>
             </div>
         </div>
 
-        <div id="resultsArea" class="mt-8 hidden animate-fade-in">
-            <div class="p-6 bg-zinc-50 rounded-xl border border-zinc-100">
-                <h3 class="text-xs uppercase tracking-widest text-zinc-400 font-semibold mb-4">Strategic Audit Result</h3>
-                <div id="output" class="text-gray-700 leading-relaxed whitespace-pre-wrap font-light italic">Running simulation...</div>
-            </div>
+        <div id="resultsArea" class="glass-panel p-6 md:p-8 rounded-3xl executive-shadow dynamic-height">
+            <h3 class="text-xs uppercase tracking-widest text-zinc-500 font-semibold mb-6 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+                Strategic Audit Verdict
+            </h3>
+            <div id="output" class="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-base md:text-lg">Executing Adversarial Logic...</div>
         </div>
     </div>
 
     <script>
         async function runSimulation() {
-            const idea = document.getElementById('ideaInput').value;
+            const ideaInput = document.getElementById('ideaInput');
+            const idea = ideaInput.value;
             const btn = document.getElementById('runBtn');
+            const statusInd = document.getElementById('statusIndicator');
             const outputDiv = document.getElementById('output');
             const resultsArea = document.getElementById('resultsArea');
 
-            if(!idea) return alert("Please enter an idea.");
+            if(!idea) return alert("// ERROR: Input hypothesis missing.");
 
+            // Initiate UI State
             btn.innerText = "Simulating...";
             btn.disabled = true;
-            resultsArea.classList.remove('hidden');
-            outputDiv.innerText = "Executing Adversarial Logic...";
+            statusInd.classList.remove('hidden');
+            outputDiv.innerText = "// AWAITING SYNTHESIS: Executing Adversarial Logic...";
+            
+            // Initial expansion for immediate feedback
+            resultsArea.classList.add('expanded');
+            outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
                 const data = await response.json();
+                
+                // Set data with a fast "typing" effect simulation
                 outputDiv.innerText = data.result;
             } catch (err) {
-                outputDiv.innerText = "Error connecting to Orchestrator. Check Vercel Environment Variables.";
+                outputDiv.innerText = "// CRITICAL_ERROR: Connection to Orchestrator severed. Check Vercel Environment Variables.";
             } finally {
+                // Reset UI State
                 btn.innerText = "Execute War-Game";
                 btn.disabled = false;
+                statusInd.classList.add('hidden');
+                ideaInput.value = ''; // Optional clear
             }
         }
     </script>
