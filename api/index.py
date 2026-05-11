@@ -1,36 +1,24 @@
 from fastapi import FastAPI
-from crewai import Agent, Task, Crew, Process
+from langchain_groq import ChatGroq
+from langchain.schema import SystemMessage, HumanMessage
 import os
 
 app = FastAPI()
 
 @app.get("/api/audit")
 def audit(idea: str):
-    # Backend Configuration
-    os.environ["OPENAI_API_BASE"] = "https://api.groq.com/openai/v1"
-    os.environ["OPENAI_MODEL_NAME"] = "llama-3.3-70b-versatile"
-    os.environ["OPENAI_API_KEY"] = os.environ.get("GROQ_API_KEY")
+    # Config
+    api_key = os.environ.get("GROQ_API_KEY")
+    llm = ChatGroq(groq_api_key=api_key, model_name="llama-3.3-70b-versatile")
     
-    # Define Adversarial Agents
-    saboteur = Agent(
-        role='Forensic Strategy Auditor',
-        goal='Identify lethal flaws in business logic',
-        backstory='You are a ruthless VC auditor.',
-        verbose=True
-    )
-    rival = Agent(
-        role='Market Rival CEO',
-        goal='Plan a counter-attack to crush the startup',
-        backstory='You are the market leader protecting your share.',
-        verbose=True
-    )
+    # 1. THE AUDITOR PHASE
+    auditor_prompt = f"You are a ruthless VC Auditor. Identify 3 lethal flaws in this business idea: {idea}. Be harsh and specific."
+    audit_res = llm.invoke([SystemMessage(content="You are a Forensic Strategy Auditor."), HumanMessage(content=auditor_prompt)])
     
-    # Define Tasks
-    t1 = Task(description=f"Audit this idea: {idea}", agent=saboteur, expected_output="3 Fatal Flaws.")
-    t2 = Task(description="Plan a competitive counter-attack based on those flaws.", agent=rival, expected_output="A tactical response plan.")
+    # 2. THE RIVAL PHASE
+    rival_prompt = f"Based on these flaws: {audit_res.content}, plan a 3-step competitive counter-attack to crush this startup."
+    rival_res = llm.invoke([SystemMessage(content="You are an Aggressive Market Rival."), HumanMessage(content=rival_prompt)])
     
-    # Execute Orchestration
-    crew = Crew(agents=[saboteur, rival], tasks=[t1, t2], process=Process.sequential)
-    final_result = crew.kickoff()
-    
-    return {"result": str(final_result)}
+    # Combined Output
+    final_output = f"AUDITOR'S FINDINGS:\n{audit_res.content}\n\nREACTION FROM COMPETITION:\n{rival_res.content}"
+    return {"result": final_output}
