@@ -7,18 +7,23 @@ app = FastAPI()
 
 @app.get("/api/audit")
 def audit(idea: str):
-    # Config
     api_key = os.environ.get("GROQ_API_KEY")
+    # Using a high-speed versatile model
     llm = ChatGroq(groq_api_key=api_key, model_name="llama-3.3-70b-versatile")
     
-    # 1. THE AUDITOR PHASE
-    auditor_prompt = f"You are a ruthless VC Auditor. Identify 3 lethal flaws in this business idea: {idea}. Be harsh and specific."
-    audit_res = llm.invoke([SystemMessage(content="You are a Forensic Strategy Auditor."), HumanMessage(content=auditor_prompt)])
+    # We combine the Auditor and Rival into one orchestrated prompt to save time
+    orchestration_prompt = f"""
+    AUDIT REQUEST: {idea}
     
-    # 2. THE RIVAL PHASE
-    rival_prompt = f"Based on these flaws: {audit_res.content}, plan a 3-step competitive counter-attack to crush this startup."
-    rival_res = llm.invoke([SystemMessage(content="You are an Aggressive Market Rival."), HumanMessage(content=rival_prompt)])
+    TASK 1: Act as a Ruthless VC Auditor. Identify 3 lethal flaws.
+    TASK 2: Act as an Aggressive Market Rival. Plan a 3-step attack based on those flaws.
     
-    # Combined Output
-    final_output = f"AUDITOR'S FINDINGS:\n{audit_res.content}\n\nREACTION FROM COMPETITION:\n{rival_res.content}"
-    return {"result": final_output}
+    FORMAT: Start with 'AUDITOR'S FINDINGS' then 'COMPETITIVE ATTACK'.
+    """
+    
+    response = llm.invoke([
+        SystemMessage(content="You are the AVA Strategic Orchestrator."),
+        HumanMessage(content=orchestration_prompt)
+    ])
+    
+    return {"result": response.content}
