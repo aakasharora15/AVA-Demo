@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVA | Hello Mate!</title>
+    <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
-        .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; }
-        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 24px 0 0 24px; flex-grow: 1; min-height: 100vh; overflow-y: auto; }
+        .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; border-right: 1px solid #222; }
+        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 32px 0 0 32px; flex-grow: 1; min-height: 100vh; overflow-y: auto; box-shadow: -20px 0 40px rgba(0,0,0,0.2); }
         .input-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
-        .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
+        .accent-btn { background: #bcf948; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accent-btn:hover { background: #a8e036; transform: translateY(-1px); }
     </style>
 </head>
 <body class="flex">
@@ -25,19 +24,34 @@
                 <path fill="#bcf948" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
                 <path fill="#bcf948" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
             </svg>
-            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Venture Laboratory</div>
+            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Venture Lab v1.0</div>
         </div>
         
-        <nav class="space-y-6">
-            <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl">
-                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
+        <nav class="flex-grow space-y-8">
+            <div>
+                <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Core Engine</div>
+                <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/50">
+                    <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
+                </div>
             </div>
-            <div class="text-zinc-600 text-[10px] pl-4 cursor-default font-bold uppercase tracking-widest">Protocol Active</div>
+
+            <div>
+                <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Recent Audits</div>
+                <div class="space-y-3 text-xs text-zinc-500">
+                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">Wardrobe Subscription...</div>
+                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">SaaS Governance Model...</div>
+                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">Fintech Moat Analysis...</div>
+                </div>
+            </div>
         </nav>
 
         <div class="mt-auto">
-            <div class="flex items-center gap-3 text-zinc-500 text-[11px] font-bold uppercase tracking-widest">
-                <div class="w-1.5 h-1.5 bg-lime-400 rounded-full animate-pulse"></div> Engine Online
+            <div class="p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">AA</div>
+                    <span class="text-xs text-zinc-300 font-medium">Aakash Arora</span>
+                </div>
+                <div class="text-[9px] text-lime-400/70 font-bold uppercase tracking-widest">Founder Access</div>
             </div>
         </div>
     </aside>
@@ -45,17 +59,12 @@
     <main class="main-stage p-8 md:p-16">
         <div class="max-w-4xl mx-auto w-full">
             <header class="mb-12">
-                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950 uppercase italic">AVA :: STRATEGIC COMMAND</h1>
-                <p class="text-zinc-500 text-lg font-light">Adversarial Venture Architect | Governance & Stress-Testing</p>
+                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Mate</h1>
+                <p class="text-zinc-500 text-lg font-light">The Adversarial Engine is primed. Initiate your next simulation.</p>
             </header>
 
-            <div class="mb-10 w-full flex items-center justify-between pb-6 border-b border-zinc-100">
-                <div class="text-sm font-semibold text-zinc-400 tracking-tight">System Environment: Production</div>
-                <div class="text-[10px] font-black text-zinc-400 tracking-[0.2em] uppercase">Audit Phase // 01</div>
-            </div>
-
             <div class="input-card p-6 rounded-3xl mb-12 relative">
-                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Input venture hypothesis for simulation..."></textarea>
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Drop your venture hypothesis here..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
                     <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
                         <span id="btnText">Execute War-Game</span>
@@ -65,9 +74,9 @@
             </div>
 
             <div id="resultsArea" class="hidden opacity-0 transition-opacity duration-500">
-                <div class="result-card p-8 rounded-3xl border border-zinc-200">
-                    <div class="flex items-center gap-3 text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase mb-8 pb-4 border-b border-zinc-100">
-                        <span class="text-lime-600">Verification</span> // Strategic Audit Result
+                <div class="p-8 rounded-3xl bg-zinc-50 border border-zinc-200">
+                    <div class="flex items-center gap-3 text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase mb-8 pb-4 border-b border-zinc-200">
+                        <span class="text-lime-600">Forensic Verdict</span> // Strategic Synthesis
                     </div>
                     <div id="output" class="text-zinc-700 leading-relaxed text-xl font-light whitespace-pre-wrap pl-6 border-l-2 border-lime-400"></div>
                 </div>
@@ -85,12 +94,12 @@
 
             if(!idea) return;
 
-            btnText.innerText = "Simulating...";
+            btnText.innerText = "Synthesizing...";
             btn.disabled = true;
             
             resultsArea.classList.remove('hidden');
             setTimeout(() => resultsArea.classList.add('opacity-100'), 10);
-            outputDiv.innerText = "Synthesizing Adversarial Logic...";
+            outputDiv.innerText = "Forensic logic in progress...";
 
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
@@ -98,7 +107,7 @@
                 outputDiv.innerText = data.result;
                 resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (err) {
-                outputDiv.innerText = "System Error: Orchestrator unreachable.";
+                outputDiv.innerText = "Error connecting to Orchestrator.";
             } finally {
                 btnText.innerText = "Execute War-Game";
                 btn.disabled = false;
