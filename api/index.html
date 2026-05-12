@@ -14,7 +14,6 @@
         .result-card { background: #F9FAFB; border: 1px solid #F3F4F6; }
         .accent-btn { background: #D9F99D; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .accent-btn:hover { background: #bef264; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 249, 157, 0.3); }
-        .accent-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex">
@@ -26,14 +25,14 @@
                 <path fill="#bcf948" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
                 <path fill="#bcf948" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
             </svg>
-            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Strategic Lab</div>
+            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Venture Laboratory</div>
         </div>
         
         <nav class="space-y-6">
             <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl">
                 <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
             </div>
-            <div class="text-zinc-600 text-xs pl-4 cursor-default font-bold uppercase tracking-widest">Active Simulation</div>
+            <div class="text-zinc-600 text-[10px] pl-4 cursor-default font-bold uppercase tracking-widest">Protocol Active</div>
         </nav>
 
         <div class="mt-auto">
@@ -46,17 +45,17 @@
     <main class="main-stage p-8 md:p-16">
         <div class="max-w-4xl mx-auto w-full">
             <header class="mb-12">
-                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Aakash</h1>
-                <p class="text-zinc-500 text-lg font-light">Initiate adversarial simulation for your venture hypothesis.</p>
+                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950 uppercase italic">AVA :: STRATEGIC COMMAND</h1>
+                <p class="text-zinc-500 text-lg font-light">Adversarial Venture Architect | Governance & Stress-Testing</p>
             </header>
 
             <div class="mb-10 w-full flex items-center justify-between pb-6 border-b border-zinc-100">
-                <div class="text-sm font-semibold text-zinc-900 tracking-tight text-zinc-400">Governance & Stress-Testing</div>
+                <div class="text-sm font-semibold text-zinc-400 tracking-tight">System Environment: Production</div>
                 <div class="text-[10px] font-black text-zinc-400 tracking-[0.2em] uppercase">Audit Phase // 01</div>
             </div>
 
             <div class="input-card p-6 rounded-3xl mb-12 relative">
-                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Ask anything about your strategy..."></textarea>
+                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Input venture hypothesis for simulation..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
                     <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
                         <span id="btnText">Execute War-Game</span>
@@ -86,7 +85,7 @@
 
             if(!idea) return;
 
-            btnText.innerText = "Processing...";
+            btnText.innerText = "Simulating...";
             btn.disabled = true;
             
             resultsArea.classList.remove('hidden');
