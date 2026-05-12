@@ -10,13 +10,17 @@
         body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
         .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; border-right: 1px solid #222; }
         .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 32px 0 0 32px; flex-grow: 1; min-height: 100vh; overflow-y: auto; box-shadow: -20px 0 40px rgba(0,0,0,0.2); }
-        .input-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        .accent-btn { background: #bcf948; color: #1A2E05; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-flat { background: #f8f9fa; border: 1px solid #eee; border-radius: 20px; padding: 20px; transition: all 0.3s ease; }
+        .card-flat:hover { border-color: #bcf948; background: white; }
+        .accent-btn { background: #bcf948; color: #1A2E05; transition: all 0.2s ease; }
         .accent-btn:hover { background: #a8e036; transform: translateY(-1px); }
+        .hidden-section { display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
+        .show-section { display: block !important; opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body class="flex">
 
+    <!-- Sidebar -->
     <aside class="sidebar p-8 hidden md:flex flex-col">
         <div class="mb-12">
             <svg class="h-8 w-auto" viewBox="0 0 1103.78 353.49" xmlns="http://www.w3.org/2000/svg">
@@ -27,43 +31,77 @@
             <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Venture Lab v1.0</div>
         </div>
         
-        <nav class="flex-grow space-y-8">
-            <div>
-                <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Core Engine</div>
-                <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/50">
-                    <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
-                </div>
-            </div>
-
-            <div>
-                <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Recent Audits</div>
-                <div class="space-y-3 text-xs text-zinc-500">
-                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">Wardrobe Subscription...</div>
-                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">SaaS Governance Model...</div>
-                    <div class="truncate hover:text-zinc-300 cursor-default opacity-60">Fintech Moat Analysis...</div>
-                </div>
+        <nav class="flex-grow space-y-6">
+            <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2">Navigation</div>
+            <button onclick="toggleHowItWorks()" class="w-full flex items-center gap-3 text-zinc-400 hover:text-white transition-all py-2">
+                <span class="text-lg">💡</span> How It Works
+            </button>
+            <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/50">
+                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
             </div>
         </nav>
 
         <div class="mt-auto">
             <div class="p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">AA</div>
-                    <span class="text-xs text-zinc-300 font-medium">Aakash Arora</span>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div>
+                    <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-widest">Engine Active</span>
                 </div>
-                <div class="text-[9px] text-lime-400/70 font-bold uppercase tracking-widest">Founder Access</div>
+                <div class="text-xs text-zinc-300">Aakash Arora</div>
             </div>
         </div>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-stage p-8 md:p-16">
         <div class="max-w-4xl mx-auto w-full">
+            
+            <!-- How It Works Section (Toggleable) -->
+            <section id="howItWorks" class="hidden-section mb-16">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 italic underline decoration-lime-400 underline-offset-8">The AVA Framework</h2>
+                    <button onclick="toggleHowItWorks()" class="text-zinc-400 hover:text-zinc-800 text-sm font-bold">Close ✕</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">🔍</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Forensic Audit</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Systematic deconstruction of internal logic to find structural death-traps.</p>
+                    </div>
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">📉</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Economic Leakage</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Hard-truth unit economic check to identify where capital burns faster than it scales.</p>
+                    </div>
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">🦈</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Rival Predator</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Simulation of aggressive market counter-moves aimed at moat-breaching.</p>
+                    </div>
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">🛡️</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Defensibility</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Evaluating long-term commercial viability and competitive defensibility.</p>
+                    </div>
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">⚙️</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Systems Logic</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Ensuring architectural integrity and business logic consistency.</p>
+                    </div>
+                    <div class="card-flat">
+                        <div class="text-xl mb-2">🚀</div>
+                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Pre-Mortem</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Identifying high-probability failure points before capital is deployed.</p>
+                    </div>
+                </div>
+            </section>
+
             <header class="mb-12">
                 <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Mate</h1>
-                <p class="text-zinc-500 text-lg font-light">The Adversarial Engine is primed. Initiate your next simulation.</p>
+                <p class="text-zinc-500 text-lg font-light italic">The Adversarial Engine is primed for simulation.</p>
             </header>
 
-            <div class="input-card p-6 rounded-3xl mb-12 relative">
+            <div class="bg-white p-6 rounded-3xl border border-zinc-200 mb-12 shadow-sm">
                 <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Drop your venture hypothesis here..."></textarea>
                 <div class="flex justify-end pt-4 border-t border-zinc-100">
                     <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
@@ -85,6 +123,11 @@
     </main>
 
     <script>
+        function toggleHowItWorks() {
+            const section = document.getElementById('howItWorks');
+            section.classList.toggle('show-section');
+        }
+
         async function runSimulation() {
             const idea = document.getElementById('ideaInput').value;
             const btn = document.getElementById('runBtn');
