@@ -6,10 +6,11 @@ import os
 
 app = FastAPI()
 
-# Supabase Configuration
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+# 1. Initialize Supabase Client
+# These come from the variables you just saved in Vercel
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -22,7 +23,7 @@ def audit(idea: str = "No idea provided"):
     
     system_instruction = (
         "You are AVA, a ruthless Lead Partner at an activist hedge fund. "
-        "Your goal is to destroy weak business logic. Be direct and adversarial."
+        "Your goal is to destroy weak business logic. Be direct, adversarial, and intellectually high-pressure."
     )
     
     user_prompt = (
@@ -33,7 +34,7 @@ def audit(idea: str = "No idea provided"):
     )
 
     try:
-        # 1. Generate the AI Response
+        # 2. Execute AI Audit
         completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": system_instruction},
@@ -44,18 +45,18 @@ def audit(idea: str = "No idea provided"):
         )
         ai_result = completion.choices[0].message.content
 
-        # 2. Log the data to Supabase
-        # Note: For now, we use a placeholder user_id until we add Auth in the next step.
-        # Ensure you have an 'audits' table in Supabase.
-        data = {
-            "user_query": idea,
-            "ai_response": ai_result,
-            "business_idea_title": idea[:50] # Taking first 50 chars as title
-        }
-        
-        # This will fail if your 'audits' table isn't ready or RLS is too strict.
-        # We will refine the 'user_id' once we add login.
-        supabase.table("audits").insert(data).execute()
+        # 3. Save to Supabase (The Intelligence Hub)
+        # We are using a try/except here so the app doesn't crash if the DB is busy
+        try:
+            data = {
+                "user_query": idea,
+                "ai_response": ai_result,
+                "business_idea_title": idea[:50]
+            }
+            # This logs the query into your 'audits' table
+            supabase.table("audits").insert(data).execute()
+        except Exception as db_error:
+            print(f"Database Logging Error: {db_error}")
 
         return {"result": ai_result}
     except Exception as e:
