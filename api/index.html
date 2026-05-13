@@ -14,100 +14,63 @@
         .card-dark { background: #161618; border: 1px solid #222; transition: all 0.3s ease; }
         .card-dark:hover { border-color: #bcf948; }
         .hero-gradient { background: radial-gradient(circle at center, #1a1a1a 0%, #0f0f10 100%); }
-        .framework-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #bcf948; opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <!-- 1. LANDING PAGE (Logged Out) -->
+    <!-- LANDING PAGE -->
     <div id="loggedOutView" class="min-h-screen flex flex-col">
         <nav class="p-8 flex justify-between items-center">
-            <div class="font-bold tracking-tighter text-2xl">AVA <span class="text-xs opacity-50 uppercase tracking-widest ml-2">v1.1</span></div>
-            <button onclick="handleLogin()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-zinc-200">Sign In</button>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-lime rounded-lg flex items-center justify-center"><span class="text-black font-black text-xl">A</span></div>
+                <div class="font-bold tracking-tighter text-2xl">AVA <span class="text-[10px] opacity-40 uppercase tracking-[0.2em] ml-1">v1.1</span></div>
+            </div>
+            <button onclick="handleLogin()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-zinc-200">Access Protocol</button>
         </nav>
 
         <main class="flex-grow flex flex-col items-center justify-center text-center px-6 hero-gradient">
             <div class="uppercase tracking-[0.4em] text-[10px] font-black accent-lime mb-4">Adversarial Venture Analysis</div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none">Before You Build It, <br><span class="accent-lime italic">Break It.</span></h1>
-            <p class="max-w-2xl text-zinc-400 text-lg mb-10">Integrated adversarial auditing using <span class="text-white font-bold italic">TIM WOODS</span> Lean Waste methodology and <span class="text-white font-bold italic">Adversarial SWOT</span> Analysis.</p>
-            <button onclick="handleLogin()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Start Forensic Audit —></button>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
+            <p class="max-w-3xl text-zinc-400 text-lg mb-10 leading-relaxed">
+                Proprietary forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span> to identify operational liabilities and market vulnerabilities. A defensible, investor-grade audit.
+            </p>
+            <button onclick="handleLogin()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Initialize Forensic Audit —></button>
         </main>
-
-        <!-- 6 MAIN TILES -->
-        <section class="p-12 md:p-24 grid grid-cols-1 md:grid-cols-3 gap-8 bg-zinc-950">
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">Framework: TIM WOODS</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Operational Waste</h3>
-                <p class="text-sm text-zinc-500">Detecting Transport, Inventory, and Over-processing traps in your execution model.</p>
-            </div>
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">Framework: SWOT</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Adversarial Weakness</h3>
-                <p class="text-sm text-zinc-500">A ruthless look at internal vulnerabilities and external threats others ignore.</p>
-            </div>
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">Framework: TIM WOODS</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Skill Underutilization</h3>
-                <p class="text-sm text-zinc-500">Identifying where human capital and expertise are wasted in your business logic.</p>
-            </div>
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">Framework: SWOT</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Predator Opportunity</h3>
-                <p class="text-sm text-zinc-500">How competitors will exploit your 'Opportunities' section to neutralize you.</p>
-            </div>
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">System Logic</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Process Defects</h3>
-                <p class="text-sm text-zinc-500">Pinpointing where 'Defects' and 'Waiting' will kill your unit economic efficiency.</p>
-            </div>
-            <div class="card-dark p-8 rounded-3xl">
-                <div class="framework-tag mb-2">Venture Strategy</div>
-                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Moat Defensibility</h3>
-                <p class="text-sm text-zinc-500">Analyzing if your 'Strengths' are actually defensible against market incumbents.</p>
-            </div>
-        </section>
     </div>
 
-    <!-- 2. DASHBOARD VIEW (Logged In) -->
+    <!-- COMMAND CENTER (Logged In) -->
     <div id="loggedInView" class="hidden min-h-screen flex">
         <aside class="w-72 bg-zinc-950 p-10 border-r border-zinc-800 flex flex-col">
-            <div class="font-black text-2xl accent-lime italic mb-12">AVA v1.1</div>
+            <div class="font-black text-2xl accent-lime italic mb-12 text-white">AVA v1.1</div>
             <nav class="flex-grow space-y-6">
-                <div class="text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Active Frameworks</div>
+                <div class="text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Diagnostic Stack</div>
                 <div class="space-y-3">
-                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> TIM WOODS Audit</div>
-                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> SWOT Synthesis</div>
+                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> WOODS Waste Audit</div>
+                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> SWOT-A Synthesis</div>
                 </div>
-                <div class="pt-8 text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Account</div>
-                <button onclick="logout()" class="w-full text-left text-zinc-500 text-sm hover:text-white">Sign Out</button>
             </nav>
-            <div id="userLabel" class="text-[10px] text-zinc-600 truncate mt-auto uppercase tracking-tighter"></div>
+            <button onclick="logout()" class="text-left text-zinc-500 text-sm hover:text-white mt-auto">Deauthorize Session</button>
+            <div id="userLabel" class="text-[10px] text-zinc-600 truncate mt-4 uppercase tracking-tighter"></div>
         </aside>
 
         <main class="flex-grow p-16 bg-zinc-900 overflow-y-auto">
-            <h1 class="text-4xl font-black tracking-tighter mb-2">Hello, Mate</h1>
-            <p class="text-zinc-500 text-sm mb-8">The Adversarial Engine is configured for Lean Waste & SWOT analysis.</p>
-            
+            <h1 class="text-4xl font-black tracking-tighter mb-2 text-white">Command Center</h1>
+            <p class="text-zinc-500 text-sm mb-8">System engaged. All audits are encrypted and tied to your identity.</p>
             <div class="bg-zinc-800/40 p-8 rounded-[32px] border border-zinc-700/50 mb-16">
-                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Drop your hypothesis..."></textarea>
+                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Enter hypothesis..."></textarea>
                 <div class="flex justify-end pt-6 border-t border-zinc-700/50">
-                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Execute War-Game</button>
+                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Run Protocol</button>
                 </div>
             </div>
-
-            <div id="historyList" class="space-y-6">
-                <div class="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mb-4">Audit History Feed</div>
-            </div>
+            <div id="historyList" class="space-y-6"></div>
         </main>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
         const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_Nvm-G3z1DWgzY1uowxqe_w_cj3876-0f796472251a7995188f6a978f85f1c50355f9';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- SESSION MANAGEMENT ---
         async function checkSession() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (user) {
@@ -119,16 +82,14 @@
         }
 
         async function handleLogin() {
-            const email = prompt("Enter your Gmail for a secure access link:");
+            const email = prompt("Enter professional Gmail for identity verification:");
             if(email) {
                 const { error } = await supabaseClient.auth.signInWithOtp({
                     email: email,
-                    options: {
-                        emailRedirectTo: window.location.origin, 
-                    },
+                    options: { emailRedirectTo: window.location.origin }
                 });
                 if(error) alert(error.message);
-                else alert("Verification link sent! Check your Gmail inbox.");
+                else alert("AUTHENTICATION SENT: Check your Gmail to authorize this session.");
             }
         }
 
@@ -137,20 +98,15 @@
             window.location.reload();
         }
 
-        // --- DATA OPERATIONS ---
         async function fetchHistory() {
-            const { data, error } = await supabaseClient
-                .from('audits')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
+            const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
             if(data) {
                 const list = document.getElementById('historyList');
-                list.innerHTML = `<div class="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mb-4">Audit History Feed</div>` + 
+                list.innerHTML = `<div class="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mb-4">Audit Records</div>` + 
                 data.map(item => `
                     <div class="card-dark p-8 rounded-3xl">
-                        <div class="text-[10px] font-bold text-zinc-600 mb-4 uppercase tracking-widest">${new Date(item.created_at).toDateString()}</div>
-                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 decoration-2 underline-offset-4">${item.business_idea_title || 'Audit Session'}</div>
+                        <div class="text-[10px] font-bold text-zinc-600 mb-2 uppercase tracking-widest">${new Date(item.created_at).toDateString()}</div>
+                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 underline-offset-4">${item.business_idea_title}</div>
                         <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap">${item.ai_response}</div>
                     </div>
                 `).join('');
@@ -161,27 +117,18 @@
             const idea = document.getElementById('ideaInput').value;
             const btn = document.getElementById('auditBtn');
             const { data: { user } } = await supabaseClient.auth.getUser();
-
             if(!idea) return;
-
-            btn.innerText = "SYNTHESIZING...";
+            btn.innerText = "AUDITING...";
             btn.disabled = true;
-
             try {
-                // Pass the user_id to the backend so the audit is saved to THIS user's history
-                const response = await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
-                const data = await response.json();
+                await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
                 fetchHistory(); 
                 document.getElementById('ideaInput').value = '';
-            } catch(e) {
-                console.error(e);
-                alert("Audit Failed. Check your connection.");
             } finally {
-                btn.innerText = "EXECUTE WAR-GAME";
+                btn.innerText = "RUN PROTOCOL";
                 btn.disabled = false;
             }
         }
-
         checkSession();
     </script>
 </body>
