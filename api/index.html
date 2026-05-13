@@ -8,33 +8,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; }
+        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
         .accent-lime { color: #bcf948; }
         .bg-lime { background-color: #bcf948; }
         .card-dark { background: #161618; border: 1px solid #222; transition: all 0.3s ease; }
-        .card-dark:hover { border-color: #bcf948; }
         .hero-gradient { background: radial-gradient(circle at center, #1a1a1a 0%, #0f0f10 100%); }
+        .input-field { background: #1a1a1c; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px; width: 100%; outline: none; margin-bottom: 12px; }
+        .input-field:focus { border-color: #bcf948; }
     </style>
 </head>
 <body>
 
-    <!-- LANDING PAGE -->
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-6">
+        <div class="card-dark w-full max-w-md p-10 rounded-[32px] shadow-2xl">
+            <h2 id="authTitle" class="text-3xl font-black tracking-tighter mb-2 text-white">Initialize Identity</h2>
+            <p id="authSub" class="text-zinc-500 text-sm mb-8">Secure access to the WOODS-SWOT Forensic Stack.</p>
+            
+            <div id="signupFields">
+                <input type="text" id="fullName" placeholder="Full Name" class="input-field">
+                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="input-field">
+            </div>
+            <input type="email" id="email" placeholder="Gmail" class="input-field">
+            <input type="password" id="password" placeholder="Secure Password" class="input-field">
+            
+            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-lime text-black font-black py-4 rounded-2xl uppercase tracking-widest text-xs mt-4">Create Account</button>
+            <p class="text-center text-[10px] text-zinc-600 mt-6 uppercase tracking-widest cursor-pointer hover:text-white" onclick="toggleAuthMode()" id="toggleText">Already have an account? Sign In</p>
+            <button onclick="closeAuth()" class="w-full text-zinc-700 text-[10px] uppercase font-bold mt-4 tracking-[0.3em]">Cancel</button>
+        </div>
+    </div>
+
+    <!-- LANDING VIEW -->
     <div id="loggedOutView" class="min-h-screen flex flex-col">
         <nav class="p-8 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-lime rounded-lg flex items-center justify-center"><span class="text-black font-black text-xl">A</span></div>
-                <div class="font-bold tracking-tighter text-2xl">AVA <span class="text-[10px] opacity-40 uppercase tracking-[0.2em] ml-1">v1.1</span></div>
+                <div class="font-bold tracking-tighter text-2xl text-white">AVA <span class="text-[10px] opacity-40 uppercase tracking-[0.2em] ml-1">v1.1</span></div>
             </div>
-            <button onclick="handleLogin()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-zinc-200">Access Protocol</button>
+            <button onclick="openAuth()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm">Access Protocol</button>
         </nav>
 
         <main class="flex-grow flex flex-col items-center justify-center text-center px-6 hero-gradient">
             <div class="uppercase tracking-[0.4em] text-[10px] font-black accent-lime mb-4">Adversarial Venture Analysis</div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none text-white text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
             <p class="max-w-3xl text-zinc-400 text-lg mb-10 leading-relaxed">
-                Proprietary forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span> to identify operational liabilities and market vulnerabilities. A defensible, investor-grade audit.
+                Proprietary forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span>. A defensible, investor-grade audit for complex venture architecture.
             </p>
-            <button onclick="handleLogin()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Initialize Forensic Audit —></button>
+            <button onclick="openAuth()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Initialize Forensic Audit —></button>
         </main>
     </div>
 
@@ -49,15 +69,15 @@
                     <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> SWOT-A Synthesis</div>
                 </div>
             </nav>
-            <button onclick="logout()" class="text-left text-zinc-500 text-sm hover:text-white mt-auto">Deauthorize Session</button>
+            <button onclick="logout()" class="text-left text-zinc-500 text-sm hover:text-white mt-auto">Sign Out</button>
             <div id="userLabel" class="text-[10px] text-zinc-600 truncate mt-4 uppercase tracking-tighter"></div>
         </aside>
 
         <main class="flex-grow p-16 bg-zinc-900 overflow-y-auto">
-            <h1 class="text-4xl font-black tracking-tighter mb-2 text-white">Command Center</h1>
-            <p class="text-zinc-500 text-sm mb-8">System engaged. All audits are encrypted and tied to your identity.</p>
+            <h1 id="welcomeTitle" class="text-4xl font-black tracking-tighter mb-2 text-white">Command Center</h1>
+            <p class="text-zinc-500 text-sm mb-8 italic">Verified Identity: Secure Strategic Ledger.</p>
             <div class="bg-zinc-800/40 p-8 rounded-[32px] border border-zinc-700/50 mb-16">
-                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Enter hypothesis..."></textarea>
+                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Enter high-level hypothesis..."></textarea>
                 <div class="flex justify-end pt-6 border-t border-zinc-700/50">
                     <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Run Protocol</button>
                 </div>
@@ -71,42 +91,58 @@
         const SUPABASE_KEY = 'sb_publishable_Nvm-G3z1DWgzY1uowxqe_w_cj3876-0f796472251a7995188f6a978f85f1c50355f9';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        let isSignUp = true;
+
+        // UI ACTIONS
+        function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            document.getElementById('authTitle').innerText = isSignUp ? 'Initialize Identity' : 'Authorized Access';
+            document.getElementById('signupFields').style.display = isSignUp ? 'block' : 'none';
+            document.getElementById('authSubmitBtn').innerText = isSignUp ? 'Create Account' : 'Sign In';
+            document.getElementById('toggleText').innerText = isSignUp ? 'Already have an account? Sign In' : 'Need an account? Create One';
+        }
+
         async function checkSession() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (user) {
                 document.getElementById('loggedOutView').classList.add('hidden');
                 document.getElementById('loggedInView').classList.remove('hidden');
+                document.getElementById('welcomeTitle').innerText = `Hello, ${user.user_metadata.full_name || 'Partner'}`;
                 document.getElementById('userLabel').innerText = user.email;
                 fetchHistory();
             }
         }
 
-        async function handleLogin() {
-            const email = prompt("Enter professional Gmail for identity verification:");
-            if(email) {
-                const { error } = await supabaseClient.auth.signInWithOtp({
-                    email: email,
-                    options: { emailRedirectTo: window.location.origin }
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phoneNumber').value;
+
+            if (isSignUp) {
+                const { error } = await supabaseClient.auth.signUp({
+                    email, password,
+                    options: { data: { full_name: fullName, phone_number: phone } }
                 });
-                if(error) alert(error.message);
-                else alert("AUTHENTICATION SENT: Check your Gmail to authorize this session.");
+                if (error) alert(error.message);
+                else alert("Account created! Check your email to verify before signing in.");
+            } else {
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) alert(error.message);
+                else location.reload();
             }
         }
 
-        async function logout() {
-            await supabaseClient.auth.signOut();
-            window.location.reload();
-        }
+        async function logout() { await supabaseClient.auth.signOut(); location.reload(); }
 
         async function fetchHistory() {
             const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
-            if(data) {
-                const list = document.getElementById('historyList');
-                list.innerHTML = `<div class="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mb-4">Audit Records</div>` + 
-                data.map(item => `
+            if (data) {
+                document.getElementById('historyList').innerHTML = data.map(item => `
                     <div class="card-dark p-8 rounded-3xl">
-                        <div class="text-[10px] font-bold text-zinc-600 mb-2 uppercase tracking-widest">${new Date(item.created_at).toDateString()}</div>
-                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 underline-offset-4">${item.business_idea_title}</div>
+                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 decoration-2 underline-offset-4">${item.business_idea_title}</div>
                         <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap">${item.ai_response}</div>
                     </div>
                 `).join('');
@@ -115,20 +151,13 @@
 
         async function runAudit() {
             const idea = document.getElementById('ideaInput').value;
-            const btn = document.getElementById('auditBtn');
-            const { data: { user } } = await supabaseClient.auth.getUser();
             if(!idea) return;
-            btn.innerText = "AUDITING...";
-            btn.disabled = true;
-            try {
-                await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
-                fetchHistory(); 
-                document.getElementById('ideaInput').value = '';
-            } finally {
-                btn.innerText = "RUN PROTOCOL";
-                btn.disabled = false;
-            }
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            document.getElementById('auditBtn').innerText = "AUDITING...";
+            await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
+            location.reload();
         }
+
         checkSession();
     </script>
 </body>
