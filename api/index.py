@@ -18,47 +18,45 @@ def home():
 
 @app.get("/api/audit")
 def audit(idea: str = "No idea provided", user_id: str = None):
-    # Initialize Groq
     client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
     
-    # MBA-Level Adversarial Frameworks
+    # Proprietary Forensic Instruction Set
     system_instruction = (
         "You are AVA, a ruthless Lead Partner at an activist hedge fund. "
-        "Analyze using: 1. TIM WOODS (Lean Wastes) and 2. SWOT Analysis. "
-        "Identify structural death-traps and competitive threats. Be adversarial."
+        "Analyze using the WOODS-SWOT Protocol: 1. TIM WOODS (Lean Wastes) and 2. Adversarial SWOT. "
+        "Identify structural death-traps and competitive vulnerabilities. Be adversarial and professional."
     )
     
     user_prompt = (
         f"Perform a forensic audit on this hypothesis: {idea}. \n\n"
-        "Structure: \n"
-        "### 1. TIM WOODS LEAN AUDIT\n"
-        "### 2. STRATEGIC SWOT ANALYSIS\n"
-        "### 3. RIVAL PREDATOR ATTACK"
+        "Structure your response exactly as follows: \n"
+        "### 1. TIM WOODS OPERATIONAL AUDIT\n"
+        "### 2. ADVERSARIAL SWOT ANALYSIS\n"
+        "### 3. PREDATOR EXPLOITATION RISK"
     )
 
     try:
-        # 1. Generate Audit
+        # 1. Execute Adversarial Reasoning
         completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": user_prompt}
             ],
             model="llama-3.3-70b-versatile",
-            temperature=0.7
+            temperature=0.6
         )
         ai_result = completion.choices[0].message.content
 
-        # 2. Save to User's Private History
-        # If user_id is provided, the RLS policies in image_2ca9df.jpg will link it.
-        data = {
-            "user_query": idea,
-            "ai_response": ai_result,
-            "business_idea_title": idea[:50],
-            "user_id": user_id
-        }
-        
-        supabase.table("audits").insert(data).execute()
+        # 2. Secure Data Persistence
+        if user_id:
+            data = {
+                "user_query": idea,
+                "ai_response": ai_result,
+                "business_idea_title": idea[:50],
+                "user_id": user_id
+            }
+            supabase.table("audits").insert(data).execute()
 
         return {"result": ai_result}
     except Exception as e:
-        return {"result": f"Execution Error: {str(e)}"}
+        return {"result": f"Protocol Error: {str(e)}"}
