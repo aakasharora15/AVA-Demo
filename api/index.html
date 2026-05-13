@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --orange: #FF6B00; --dark: #05050A; }
         body { font-family: 'Urbanist', sans-serif; background-color: var(--dark); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
         
-        /* High-Intensity Orange Visuals */
+        /* High-Intensity Liquid Background */
         .diagonal-glow {
             position: fixed; top: -10%; right: -20%; width: 90%; height: 150%; z-index: 0;
             background: 
@@ -27,7 +26,7 @@
             opacity: 0.3; transform: rotate(15deg); z-index: 0; pointer-events: none;
         }
 
-        /* Glassmorphism Architecture */
+        /* Premium Glassmorphism */
         .pill-nav {
             background: rgba(10, 10, 12, 0.7);
             backdrop-filter: blur(30px);
@@ -46,7 +45,11 @@
         .btn-glow { box-shadow: 0 0 30px rgba(255, 107, 0, 0.4); transition: all 0.3s ease; }
         .btn-glow:hover { box-shadow: 0 0 50px rgba(255, 107, 0, 0.6); transform: scale(1.02); }
 
-        /* Custom Scrollbar */
+        /* Accordion Animations */
+        .accordion-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
+        .accordion-item.active .accordion-content { max-height: 200px; opacity: 1; margin-top: 0.5rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(45deg); color: #FF6B00; }
+
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 107, 0, 0.3); border-radius: 10px; }
@@ -57,18 +60,18 @@
     <div class="streak-accent"></div>
 
     <!-- ========================================== -->
-    <!-- 1. LANDING VIEW (Logged Out)               -->
+    <!-- 1. PITCH VIEW: LANDING PAGE                -->
     <!-- ========================================== -->
-    <div id="loggedOutView" class="w-full relative z-10">
-        <!-- Strategic Navigation -->
+    <div id="loggedOutView" class="w-full relative z-10 transition-opacity duration-700">
+        <!-- Navigation -->
         <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-50 px-8 py-4 pill-nav flex items-center justify-between w-[90%] max-w-5xl">
             <div class="flex items-center gap-3">
                 <div class="w-6 h-6 bg-[#FF6B00] rounded flex items-center justify-center text-black font-black text-[10px]">A</div>
                 <span class="font-bold tracking-tighter text-sm uppercase">AVA</span>
             </div>
             <div class="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
-                <a href="#intelligence" class="hover:text-white hover:drop-shadow-[0_0_8px_#FF6B00] transition-all">Intelligence</a>
-                <a href="#protocol" class="hover:text-white hover:drop-shadow-[0_0_8px_#FF6B00] transition-all">Protocol</a>
+                <a href="#intelligence" class="hover:text-white transition-all cursor-pointer">Methodology</a>
+                <a href="#stack" class="hover:text-white transition-all cursor-pointer">Protocol</a>
             </div>
             <button onclick="openAuth()" class="bg-white text-black px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[#FF6B00] hover:text-white transition-colors">Access Protocol</button>
         </nav>
@@ -80,8 +83,8 @@
                     Audit every <br> <span class="text-zinc-600">vulnerability of</span> <br> your venture
                 </h1>
                 <div class="flex flex-wrap gap-6">
-                    <button onclick="openAuth()" class="bg-white text-black px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] btn-glow">Initialize Protocol</button>
-                    <a href="#intelligence" class="inline-flex items-center justify-center border border-zinc-700 text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-zinc-900 transition-colors">View Methodology</a>
+                    <button onclick="openAuth()" class="bg-white text-black px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] btn-glow">Initialize Engine</button>
+                    <a href="#intelligence" class="inline-flex items-center justify-center border border-zinc-700 text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-zinc-900 transition-colors">View Defense Stack</a>
                 </div>
 
                 <div class="mt-24 flex items-center gap-12">
@@ -95,46 +98,48 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Floating Forensic Stack Card -->
-            <div class="hidden xl:block absolute right-20 bottom-32 w-[440px] glass-card p-10 rounded-[40px] z-10">
-                <div class="flex justify-between items-center mb-10">
-                    <span class="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 italic">Forensic Stack</span>
-                    <div class="w-6 h-6 rounded-full border border-[#FF6B00]/40 flex items-center justify-center">
-                        <div class="w-2 h-2 bg-[#FF6B00] rounded-full animate-pulse shadow-[0_0_10px_#FF6B00]"></div>
-                    </div>
-                </div>
-                <h3 class="text-3xl font-black italic mb-8 leading-tight">Adversarial <br>Venture Engine</h3>
-                <div class="bg-[#0A0A0C] rounded-2xl p-6 border border-white/5 flex gap-5 items-center shadow-inner">
-                    <div class="w-12 h-12 bg-zinc-900 rounded-xl flex items-center justify-center font-black text-[#FF6B00] text-lg border border-[#FF6B00]/20">A</div>
-                    <div>
-                        <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em] mb-1">AVA System Status</p>
-                        <p class="text-xs text-white font-semibold italic">“Awaiting identity verification...”</p>
-                    </div>
-                </div>
-            </div>
         </section>
         
-        <!-- Methodology Section -->
-        <section id="intelligence" class="min-h-screen flex items-center px-8 md:px-20 border-t border-white/5">
-             <div class="max-w-3xl">
-                <div class="text-[10px] font-black uppercase tracking-[0.4em] text-[#FF6B00] mb-8">Phase 01</div>
-                <h2 class="text-6xl font-black tracking-tighter italic mb-8">Threat <br>Intelligence.</h2>
-                <p class="text-zinc-400 text-lg leading-relaxed font-light mb-12">Forensic scanning for operational waste via the TIM WOODS framework, coupled with an Adversarial SWOT to weaponize your vulnerabilities against market incumbents.</p>
-                <button onclick="openAuth()" class="border border-[#FF6B00]/50 text-white px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-black transition-colors">Access Secure Ledger</button>
+        <!-- Methodology Section (TIM WOODS) -->
+        <section id="intelligence" class="min-h-screen flex items-center px-8 md:px-20 border-t border-white/5 py-32">
+             <div class="max-w-[1200px] w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-16">
+                <div class="md:col-span-5">
+                    <div class="text-[10px] font-black uppercase tracking-[0.4em] text-[#FF6B00] mb-8">Phase 01</div>
+                    <h2 class="text-5xl font-black tracking-tighter italic mb-8">Threat <br>Intelligence.</h2>
+                    <p class="text-zinc-400 text-sm leading-relaxed font-light mb-12">Forensic scanning for operational waste via the TIM WOODS framework, coupled with an Adversarial SWOT to weaponize your vulnerabilities against market incumbents.</p>
+                    <button onclick="openAuth()" class="border border-[#FF6B00]/50 text-white px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-black transition-colors">Access Secure Ledger</button>
+                </div>
+                
+                <div class="md:col-span-7 flex flex-col pt-4 border-l border-white/5 pl-8">
+                    <!-- Item 1 -->
+                    <div class="accordion-item group border-b border-zinc-900/40 py-6 flex items-start justify-between cursor-pointer hover:border-[#FF6B00]/30 transition-colors" onclick="this.classList.toggle('active')">
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-medium tracking-tight text-white group-hover:text-[#FF6B00] transition-colors">Transport & Inventory Waste</h3>
+                            <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Identify lethal drags in capital allocation before deployment. Scans for logistical and storage vulnerabilities.</p>
+                        </div>
+                        <span class="accordion-icon text-zinc-600 font-light text-2xl transition-transform duration-300">+</span>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="accordion-item group border-b border-zinc-900/40 py-6 flex items-start justify-between cursor-pointer hover:border-[#FF6B00]/30 transition-colors" onclick="this.classList.toggle('active')">
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-medium tracking-tight text-white group-hover:text-[#FF6B00] transition-colors">Motion & Waiting Inefficiencies</h3>
+                            <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Scan for operational lag and non-value-adding structural loops that slow down execution maturity.</p>
+                        </div>
+                        <span class="accordion-icon text-zinc-600 font-light text-2xl transition-transform duration-300">+</span>
+                    </div>
+                </div>
              </div>
         </section>
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. COMMAND CENTER VIEW (Logged In)         -->
+    <!-- 2. PITCH VIEW: COMMAND CENTER (The Demo)   -->
     <!-- ========================================== -->
     <div id="loggedInView" class="hidden min-h-screen w-full relative z-20 bg-[#05050A]">
-        <!-- Layout Wrapper -->
         <div class="flex h-screen w-full">
             
             <!-- Left Sidebar -->
-            <aside class="w-64 border-r border-white/5 bg-[#0A0A0E] flex flex-col p-8">
+            <aside class="w-64 border-r border-white/5 bg-[#0A0A0E] flex flex-col p-8 relative z-30">
                 <div class="flex items-center gap-3 mb-16">
                     <div class="w-6 h-6 bg-[#FF6B00] rounded flex items-center justify-center text-black font-black text-[10px]">A</div>
                     <span class="font-bold tracking-tighter text-lg uppercase">AVA <span class="text-[10px] opacity-40 ml-1">v1.1</span></span>
@@ -142,212 +147,143 @@
 
                 <div class="flex-1">
                     <div class="text-[9px] uppercase font-black text-zinc-600 tracking-[0.3em] mb-6">Diagnostic Stack</div>
-                    <div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3 cursor-pointer hover:border-[#FF6B00]/50 transition-colors">
+                    <div class="bg-white/5 border border-[#FF6B00]/50 rounded-xl p-4 flex items-center gap-3 cursor-pointer">
                         <div class="w-1.5 h-1.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
                         <span class="text-[11px] font-bold text-white uppercase tracking-widest">WOODS-SWOT</span>
                     </div>
                 </div>
-
-                <div class="mt-auto pt-8 border-t border-white/5">
-                    <div id="userLabel" class="text-[10px] font-bold text-zinc-500 truncate mb-4 uppercase tracking-widest"></div>
-                    <button onclick="logout()" class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 hover:text-[#FF6B00] transition-colors">Deauthorize</button>
-                </div>
             </aside>
 
-            <!-- Center Console (War Room) -->
-            <main class="flex-1 flex flex-col p-10 relative overflow-hidden bg-transparent">
-                <header class="mb-8 flex justify-between items-end">
+            <!-- Center Console (The Pitch Stage) -->
+            <main class="flex-1 flex flex-col p-10 relative overflow-hidden bg-transparent z-10">
+                <header class="mb-8 flex justify-between items-end border-b border-white/5 pb-6">
                     <div>
                         <h1 class="text-4xl font-black tracking-tighter italic">Command Center</h1>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 mt-2">Secure Strategic Ledger</p>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6B00] mt-2">Secure Strategic Ledger // Active</p>
                     </div>
                 </header>
 
                 <!-- Forensic Output Display -->
-                <div id="auditDisplay" class="flex-1 overflow-y-auto space-y-8 pr-4 pb-8">
-                    <div class="flex items-center justify-center h-full text-zinc-600 text-sm font-light italic">
-                        Initialize protocol by entering a venture hypothesis below.
-                    </div>
+                <div id="auditDisplay" class="flex-1 overflow-y-auto pr-4 pb-8 flex flex-col justify-end">
+                    <!-- Empty state initially -->
                 </div>
 
                 <!-- Input Area -->
-                <div class="glass-card rounded-[32px] p-8 mt-4 relative z-10">
-                    <textarea id="ideaInput" class="w-full bg-transparent border-none outline-none text-xl font-light text-white placeholder:text-zinc-600 resize-none" rows="2" placeholder="Enter venture architecture for forensic scan..."></textarea>
+                <div class="glass-card rounded-[32px] p-8 mt-4 relative z-20">
+                    <textarea id="ideaInput" class="w-full bg-transparent border-none outline-none text-xl font-light text-white placeholder:text-zinc-700 resize-none" rows="2" placeholder="Enter venture architecture for forensic scan..."></textarea>
                     <div class="flex justify-between items-center mt-6 pt-6 border-t border-white/10">
-                        <span class="text-[9px] font-black uppercase tracking-[0.3em] text-[#FF6B00]">Engine Ready</span>
-                        <button onclick="runAudit()" id="auditBtn" class="bg-white text-black px-10 py-3 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-white transition-colors">
+                        <span class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-500" id="engineStatus">Awaiting Input...</span>
+                        <button onclick="runPitchDemo()" id="auditBtn" class="bg-white text-black px-10 py-3 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-white transition-all cursor-pointer">
                             Execute Protocol
                         </button>
                     </div>
                 </div>
             </main>
-
-            <!-- Right Sidebar (History) -->
-            <aside class="w-80 border-l border-white/5 bg-[#0A0A0E] flex flex-col p-8">
-                <div class="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8">Forensic Feed</div>
-                <div id="historyList" class="flex-1 overflow-y-auto space-y-4 pr-2">
-                    <!-- History cards load here -->
-                </div>
-            </aside>
-
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 3. AUTH MODAL                              -->
+    <!-- 3. FAKE AUTH MODAL (Smoke & Mirrors)       -->
     <!-- ========================================== -->
-    <div id="authModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-6 transition-opacity">
+    <div id="authModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-6 transition-opacity">
         <div class="glass-card w-full max-w-md p-10 rounded-[32px] border border-[#FF6B00]/30 shadow-[0_0_80px_rgba(255,107,0,0.15)]">
             <div class="flex justify-between items-start mb-8">
-                <h2 id="authTitle" class="text-3xl font-black tracking-tighter italic text-white">Initialize <br>Identity</h2>
+                <h2 class="text-3xl font-black tracking-tighter italic text-white">Initialize <br>Identity</h2>
                 <button onclick="closeAuth()" class="text-zinc-500 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             
-            <div id="signupFields">
-                <input type="text" id="fullName" placeholder="Full Name" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-[#FF6B00] transition-colors text-sm">
-                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-[#FF6B00] transition-colors text-sm">
-            </div>
-            <input type="email" id="email" placeholder="Professional Email" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-[#FF6B00] transition-colors text-sm">
-            <input type="password" id="password" placeholder="Secure Password" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-8 outline-none focus:border-[#FF6B00] transition-colors text-sm">
+            <input type="email" id="fakeEmail" placeholder="Professional Email" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-[#FF6B00] transition-colors text-sm">
+            <input type="password" id="fakePass" placeholder="Secure Password" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-8 outline-none focus:border-[#FF6B00] transition-colors text-sm">
             
-            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-[#FF6B00] text-black font-black py-4 rounded-xl uppercase tracking-widest text-[11px] hover:scale-[1.02] transition-transform">Create Account</button>
-            <p class="text-center text-[10px] text-zinc-500 mt-6 uppercase tracking-[0.2em] cursor-pointer hover:text-[#FF6B00] transition-colors" onclick="toggleAuthMode()" id="toggleText">Already Authorized? Sign In</p>
+            <!-- This button immediately bypasses logic and forces the demo -->
+            <button onclick="forceDemoLogin()" class="w-full bg-[#FF6B00] text-black font-black py-4 rounded-xl uppercase tracking-widest text-[11px] hover:scale-[1.02] transition-transform">Verify Identity</button>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 4. APPLICATION LOGIC                       -->
+    <!-- 4. PRESENTATION LOGIC (NO BACKEND NEEDED)  -->
     <!-- ========================================== -->
     <script>
-        // --- Supabase Configuration ---
-        const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaXJkaHhic2V1aHVkdXJqcmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTY0NzAsImV4cCI6MjA5NDE5MjQ3MH0.DIB8aKuBFQzEzHNTZw8lPmxUUygAsTQ0ac9vof2iU8E';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // --- Modal Toggles ---
+        function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
 
-        // --- Auth UI Toggles ---
-        let isSignUp = true;
-        
-        function openAuth() { 
-            document.getElementById('authModal').classList.remove('hidden'); 
-        }
-        function closeAuth() { 
-            document.getElementById('authModal').classList.add('hidden'); 
-        }
-        function toggleAuthMode() {
-            isSignUp = !isSignUp;
-            document.getElementById('authTitle').innerHTML = isSignUp ? 'Initialize <br>Identity' : 'Authorized <br>Access';
-            document.getElementById('signupFields').style.display = isSignUp ? 'block' : 'none';
-            document.getElementById('authSubmitBtn').innerText = isSignUp ? 'Create Account' : 'Sign In';
-            document.getElementById('toggleText').innerText = isSignUp ? 'Already Authorized? Sign In' : 'Need Identity? Create One';
+        // --- Demo Login Force (Instantly swaps to Command Center) ---
+        function forceDemoLogin() {
+            closeAuth();
+            document.getElementById('loggedOutView').style.display = 'none';
+            document.getElementById('loggedInView').classList.remove('hidden');
         }
 
-        // --- Session Management ---
-        async function checkSession() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            const loggedOutView = document.getElementById('loggedOutView');
-            const loggedInView = document.getElementById('loggedInView');
+        // --- THE "KILL SHOT" PITCH DEMO LOGIC ---
+        function runPitchDemo() {
+            const input = document.getElementById('ideaInput').value;
+            if(!input) return;
 
-            if (user) {
-                // Hide Landing, Show Command Center
-                loggedOutView.classList.add('hidden');
-                loggedInView.classList.remove('hidden');
-                loggedInView.classList.add('flex'); // Ensure flex layout applies
-                
-                document.getElementById('userLabel').innerText = user.email;
-                fetchHistory();
-            } else {
-                // Show Landing, Hide Command Center
-                loggedOutView.classList.remove('hidden');
-                loggedInView.classList.add('hidden');
-                loggedInView.classList.remove('flex');
-            }
-        }
-
-        async function handleAuth() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phoneNumber').value;
-
-            document.getElementById('authSubmitBtn').innerText = "Processing...";
-
-            if (isSignUp) {
-                const { error } = await supabaseClient.auth.signUp({
-                    email, password, options: { data: { full_name: fullName, phone_number: phone } }
-                });
-                if (error) {
-                    alert(error.message);
-                    document.getElementById('authSubmitBtn').innerText = "Create Account";
-                } else {
-                    alert("Identity Initialized. Secure link sent to your email.");
-                    closeAuth();
-                }
-            } else {
-                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                if (error) {
-                    alert(error.message);
-                    document.getElementById('authSubmitBtn').innerText = "Sign In";
-                } else {
-                    // Successful login triggers a reload to cleanly mount the session state
-                    location.reload(); 
-                }
-            }
-        }
-
-        async function logout() { 
-            await supabaseClient.auth.signOut(); 
-            location.reload(); 
-        }
-
-        // --- Protocol Execution & History ---
-        async function fetchHistory() {
-            const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
-            if (data && data.length > 0) {
-                window.allAudits = data;
-                document.getElementById('historyList').innerHTML = data.map(item => `
-                    <div onclick="showAudit('${item.id}')" class="bg-white/5 border border-white/5 p-4 rounded-2xl cursor-pointer hover:border-[#FF6B00]/50 hover:bg-white/10 transition-colors">
-                        <div class="text-white font-bold text-[11px] truncate mb-2">${item.business_idea_title}</div>
-                        <div class="text-zinc-500 text-[9px] uppercase font-black tracking-widest">${new Date(item.created_at).toLocaleDateString()}</div>
-                    </div>
-                `).join('');
-            } else {
-                document.getElementById('historyList').innerHTML = `<div class="text-xs text-zinc-600 italic">No previous audits found.</div>`;
-            }
-        }
-
-        function showAudit(id) {
-            const audit = window.allAudits.find(a => a.id == id);
-            document.getElementById('auditDisplay').innerHTML = `
-                <div class="glass-card p-10 rounded-[32px] animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 class="text-white font-black text-2xl mb-8 border-b border-white/10 pb-6"><span class="text-[#FF6B00] mr-2">/</span> ${audit.business_idea_title}</h2>
-                    <div class="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap font-light">${audit.ai_response}</div>
-                </div>
-            `;
-        }
-
-        async function runAudit() {
-            const idea = document.getElementById('ideaInput').value;
-            if(!idea) return;
-            
             const btn = document.getElementById('auditBtn');
-            btn.innerText = "EXECUTING...";
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            const status = document.getElementById('engineStatus');
+            const display = document.getElementById('auditDisplay');
             
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            
-            try {
-                // API call to backend (assuming route exists)
-                await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
-                location.reload();
-            } catch(e) {
-                alert("Protocol Execution Interrupted.");
-                btn.innerText = "Execute Protocol";
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        }
+            // 1. UI changes to "Processing"
+            btn.innerText = "COMPUTING...";
+            btn.classList.replace('bg-white', 'bg-[#FF6B00]');
+            btn.classList.replace('text-black', 'text-white');
+            btn.style.pointerEvents = 'none';
+            btn.classList.add('animate-pulse');
+            status.innerText = "ANALYZING STRUCTURAL VULNERABILITIES...";
+            status.style.color = "#FF6B00";
 
-        // Initialize state on load
-        checkSession();
+            // 2. The Investor-Grade Script (Appears after 3 seconds)
+            setTimeout(() => {
+                const investorScriptHtml = `
+                    <div class="glass-card p-10 rounded-[32px] border border-[#FF6B00]/40 shadow-[0_0_50px_rgba(255,107,0,0.1)] w-full mb-4 animate-[slideUp_0.5s_ease-out_forwards] opacity-0" style="animation: slideUp 0.6s ease-out forwards;">
+                        <h2 class="text-white font-black text-2xl mb-6 flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-[#FF6B00] animate-pulse"></span>
+                            [ FORENSIC PROTOCOL: COMPLETE ]
+                        </h2>
+                        
+                        <div class="space-y-6 text-sm font-light text-zinc-300">
+                            <div>
+                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// TIM WOODS Vulnerability Analysis:</h3>
+                                <p><strong class="text-white">CRITICAL DRAG DETECTED: Transport & Inventory.</strong><br>
+                                Your proposed localized fulfillment architecture introduces a 31% capital bleed in reverse-logistics (returns/QA processing). Unit economics will fracture at scale without an automated staging buffer.</p>
+                            </div>
+
+                            <div class="border-t border-white/10 pt-6">
+                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// Adversarial SWOT (SWOT-A):</h3>
+                                <p><strong class="text-white">PREDATOR VECTOR:</strong> Market incumbents will exploit your high initial Customer Acquisition Cost (CAC) by undercutting your localized margins before you reach Series A density.</p>
+                                <p class="mt-2"><strong class="text-white">DEFENSIBILITY GAP:</strong> Physical asset acquisition outpaces your software moat.</p>
+                            </div>
+
+                            <div class="border-t border-white/10 pt-6">
+                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// Strategic Moat Recommendation:</h3>
+                                <p class="text-white font-medium italic">"Do not deploy capital into physical warehousing for Phase 1. License your routing algorithm as a localized API to existing 3PLs. Build the proprietary data moat before acquiring physical inventory debt."</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render the output
+                display.innerHTML = investorScriptHtml;
+                
+                // Reset the button
+                btn.innerText = "Execute Protocol";
+                btn.classList.replace('bg-[#FF6B00]', 'bg-white');
+                btn.classList.replace('text-white', 'text-black');
+                btn.style.pointerEvents = 'auto';
+                btn.classList.remove('animate-pulse');
+                
+                status.innerText = "ENGINE READY";
+                status.style.color = "#71717A"; // zinc-500
+                
+            }, 3500); // 3.5 second dramatic pause
+        }
     </script>
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </body>
 </html>
