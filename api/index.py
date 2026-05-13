@@ -4,9 +4,9 @@ import os
 import urllib.request
 import urllib.error
 
-GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-MODEL = "llama-3.3-70b-versatile"
+ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
+MODEL = "claude-haiku-4-5"
 
 SABOTEUR_SYSTEM = """You are AGENT 01 — THE SABOTEUR. Forensic Auditor. Internal threat detection specialist.
 
@@ -53,27 +53,27 @@ Schema:
 }"""
 
 
-def call_groq(system, user_content):
+def call_claude(system, user_content):
     payload = {
         "model": MODEL,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.65,
         "max_tokens": 1200,
+        "system": system,
+        "messages": [
+            {"role": "user", "content": user_content}
+        ]
     }
     req = urllib.request.Request(
-        GROQ_URL,
+        ANTHROPIC_URL,
         data=json.dumps(payload).encode("utf-8"),
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {GROQ_KEY}",
+            "x-api-key": ANTHROPIC_KEY,
+            "anthropic-version": "2023-06-01",
         },
     )
-    with urllib.request.urlopen(req, timeout=45) as resp:
+    with urllib.request.urlopen(req, timeout=60) as resp:
         data = json.loads(resp.read().decode("utf-8"))
-    return data["choices"][0]["message"]["content"]
+    return data["content"][0]["text"]
 
 
 def parse_json(raw):
@@ -98,8 +98,8 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            if not GROQ_KEY:
-                self._respond(500, {"error": "GROQ_API_KEY environment variable not set."})
+            if not ANTHROPIC_KEY:
+                self._respond(500, {"error": "ANTHROPIC_API_KEY environment variable not set."})
                 return
 
             length = int(self.headers.get("Content-Length", 0))
@@ -110,19 +110,19 @@ class handler(BaseHTTPRequestHandler):
                 self._respond(400, {"error": "Hypothesis too thin. Minimum 20 characters."})
                 return
 
-            raw1 = call_groq(SABOTEUR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}")
+            raw1 = call_claude(SABOTEUR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}")
             try:
                 agent1 = parse_json(raw1)
             except Exception:
                 agent1 = {"executive_risk_summary": raw1, "operational_risks": "", "financial_risks": "", "failure_probability_indicators": ""}
 
-            raw2 = call_groq(PREDATOR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}\n\n---\n\nAGENT 01 INTERNAL AUDIT:\n{json.dumps(agent1, indent=2)}")
+            raw2 = call_claude(PREDATOR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}\n\n---\n\nAGENT 01 INTERNAL AUDIT:\n{json.dumps(agent1, indent=2)}")
             try:
                 agent2 = parse_json(raw2)
             except Exception:
                 agent2 = {"market_saturation_analysis": raw2, "regional_geographic_challenges": "", "competitor_attack_analysis": "", "customer_psychology_risks": ""}
 
-            raw3 = call_groq(ORCHESTRATOR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}\n\n---\n\nAGENT 01 (SABOTEUR):\n{json.dumps(agent1, indent=2)}\n\n---\n\nAGENT 02 (PREDATOR):\n{json.dumps(agent2, indent=2)}")
+            raw3 = call_claude(ORCHESTRATOR_SYSTEM, f"VENTURE HYPOTHESIS:\n\n{hypothesis}\n\n---\n\nAGENT 01 (SABOTEUR):\n{json.dumps(agent1, indent=2)}\n\n---\n\nAGENT 02 (PREDATOR):\n{json.dumps(agent2, indent=2)}")
             try:
                 agent3 = parse_json(raw3)
             except Exception:
@@ -134,7 +134,7 @@ class handler(BaseHTTPRequestHandler):
 
         except urllib.error.HTTPError as e:
             err = e.read().decode("utf-8") if e.fp else str(e)
-            self._respond(500, {"error": f"Groq API error: {err}"})
+            self._respond(500, {"error": f"Anthropic API error: {err}"})
         except Exception as e:
             self._respond(500, {"error": f"Server error: {str(e)}"})
 
