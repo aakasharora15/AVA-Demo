@@ -3,287 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVA | Strategic Command</title>
+    <title>AVA | Forensic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --orange: #FF6B00; --dark: #05050A; }
-        body { font-family: 'Urbanist', sans-serif; background-color: var(--dark); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* High-Intensity Liquid Background */
-        .diagonal-glow {
-            position: fixed; top: -10%; right: -20%; width: 90%; height: 150%; z-index: 0;
-            background: 
-                linear-gradient(135deg, rgba(255, 107, 0, 0.35) 0%, transparent 45%),
-                linear-gradient(150deg, rgba(255, 158, 0, 0.15) 15%, transparent 55%);
-            filter: blur(100px); transform: rotate(-15deg);
-            pointer-events: none;
-        }
-
-        .streak-accent {
-            position: fixed; top: -10%; right: 15%; width: 2px; height: 120%;
-            background: linear-gradient(to bottom, transparent, var(--orange), transparent);
-            opacity: 0.3; transform: rotate(15deg); z-index: 0; pointer-events: none;
-        }
-
-        /* Premium Glassmorphism */
-        .pill-nav {
-            background: rgba(10, 10, 12, 0.7);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 100px;
-        }
-
-        .glass-card {
-            background: linear-gradient(180deg, rgba(20, 20, 24, 0.8) 0%, rgba(10, 10, 12, 0.95) 100%);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        .hero-text { font-size: clamp(3.5rem, 8vw, 8.5rem); line-height: 0.9; letter-spacing: -0.05em; }
-        .btn-glow { box-shadow: 0 0 30px rgba(255, 107, 0, 0.4); transition: all 0.3s ease; }
-        .btn-glow:hover { box-shadow: 0 0 50px rgba(255, 107, 0, 0.6); transform: scale(1.02); }
-
-        /* Accordion Animations */
-        .accordion-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
-        .accordion-item.active .accordion-content { max-height: 200px; opacity: 1; margin-top: 0.5rem; }
-        .accordion-item.active .accordion-icon { transform: rotate(45deg); color: #FF6B00; }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 107, 0, 0.3); border-radius: 10px; }
-    </style>
-</head>
-<body class="selection:bg-[#FF6B00] selection:text-black">
-    <div class="diagonal-glow"></div>
-    <div class="streak-accent"></div>
-
-    <!-- ========================================== -->
-    <!-- 1. PITCH VIEW: LANDING PAGE                -->
-    <!-- ========================================== -->
-    <div id="loggedOutView" class="w-full relative z-10 transition-opacity duration-700">
-        <!-- Navigation -->
-        <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-50 px-8 py-4 pill-nav flex items-center justify-between w-[90%] max-w-5xl">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-[#FF6B00] rounded flex items-center justify-center text-black font-black text-[10px]">A</div>
-                <span class="font-bold tracking-tighter text-sm uppercase">AVA</span>
-            </div>
-            <div class="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
-                <a href="#intelligence" class="hover:text-white transition-all cursor-pointer">Methodology</a>
-                <a href="#stack" class="hover:text-white transition-all cursor-pointer">Protocol</a>
-            </div>
-            <button onclick="openAuth()" class="bg-white text-black px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[#FF6B00] hover:text-white transition-colors">Access Protocol</button>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="min-h-screen flex items-center px-8 md:px-20 pt-20 relative">
-            <div class="max-w-4xl z-10">
-                <h1 class="hero-text font-black mb-12">
-                    Audit every <br> <span class="text-zinc-600">vulnerability of</span> <br> your venture
-                </h1>
-                <div class="flex flex-wrap gap-6">
-                    <button onclick="openAuth()" class="bg-white text-black px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] btn-glow">Initialize Engine</button>
-                    <a href="#intelligence" class="inline-flex items-center justify-center border border-zinc-700 text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-zinc-900 transition-colors">View Defense Stack</a>
-                </div>
-
-                <div class="mt-24 flex items-center gap-12">
-                    <div class="max-w-xs">
-                        <div class="flex gap-2 mb-3">
-                            <span class="text-[10px] font-black uppercase tracking-widest text-white">Threat</span>
-                            <span class="text-[10px] text-[#FF6B00]">•</span>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500">Intelligence</span>
-                        </div>
-                        <p class="text-zinc-400 text-xs leading-relaxed font-semibold">Adversarial diagnostics built for scalable execution and differentiated venture opportunities.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Methodology Section (TIM WOODS) -->
-        <section id="intelligence" class="min-h-screen flex items-center px-8 md:px-20 border-t border-white/5 py-32">
-             <div class="max-w-[1200px] w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-16">
-                <div class="md:col-span-5">
-                    <div class="text-[10px] font-black uppercase tracking-[0.4em] text-[#FF6B00] mb-8">Phase 01</div>
-                    <h2 class="text-5xl font-black tracking-tighter italic mb-8">Threat <br>Intelligence.</h2>
-                    <p class="text-zinc-400 text-sm leading-relaxed font-light mb-12">Forensic scanning for operational waste via the TIM WOODS framework, coupled with an Adversarial SWOT to weaponize your vulnerabilities against market incumbents.</p>
-                    <button onclick="openAuth()" class="border border-[#FF6B00]/50 text-white px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-black transition-colors">Access Secure Ledger</button>
-                </div>
-                
-                <div class="md:col-span-7 flex flex-col pt-4 border-l border-white/5 pl-8">
-                    <!-- Item 1 -->
-                    <div class="accordion-item group border-b border-zinc-900/40 py-6 flex items-start justify-between cursor-pointer hover:border-[#FF6B00]/30 transition-colors" onclick="this.classList.toggle('active')">
-                        <div class="flex flex-col">
-                            <h3 class="text-lg font-medium tracking-tight text-white group-hover:text-[#FF6B00] transition-colors">Transport & Inventory Waste</h3>
-                            <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Identify lethal drags in capital allocation before deployment. Scans for logistical and storage vulnerabilities.</p>
-                        </div>
-                        <span class="accordion-icon text-zinc-600 font-light text-2xl transition-transform duration-300">+</span>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="accordion-item group border-b border-zinc-900/40 py-6 flex items-start justify-between cursor-pointer hover:border-[#FF6B00]/30 transition-colors" onclick="this.classList.toggle('active')">
-                        <div class="flex flex-col">
-                            <h3 class="text-lg font-medium tracking-tight text-white group-hover:text-[#FF6B00] transition-colors">Motion & Waiting Inefficiencies</h3>
-                            <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Scan for operational lag and non-value-adding structural loops that slow down execution maturity.</p>
-                        </div>
-                        <span class="accordion-icon text-zinc-600 font-light text-2xl transition-transform duration-300">+</span>
-                    </div>
-                </div>
-             </div>
-        </section>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2. PITCH VIEW: COMMAND CENTER (The Demo)   -->
-    <!-- ========================================== -->
-    <div id="loggedInView" class="hidden min-h-screen w-full relative z-20 bg-[#05050A]">
-        <div class="flex h-screen w-full">
-            
-            <!-- Left Sidebar -->
-            <aside class="w-64 border-r border-white/5 bg-[#0A0A0E] flex flex-col p-8 relative z-30">
-                <div class="flex items-center gap-3 mb-16">
-                    <div class="w-6 h-6 bg-[#FF6B00] rounded flex items-center justify-center text-black font-black text-[10px]">A</div>
-                    <span class="font-bold tracking-tighter text-lg uppercase">AVA <span class="text-[10px] opacity-40 ml-1">v1.1</span></span>
-                </div>
-
-                <div class="flex-1">
-                    <div class="text-[9px] uppercase font-black text-zinc-600 tracking-[0.3em] mb-6">Diagnostic Stack</div>
-                    <div class="bg-white/5 border border-[#FF6B00]/50 rounded-xl p-4 flex items-center gap-3 cursor-pointer">
-                        <div class="w-1.5 h-1.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
-                        <span class="text-[11px] font-bold text-white uppercase tracking-widest">WOODS-SWOT</span>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Center Console (The Pitch Stage) -->
-            <main class="flex-1 flex flex-col p-10 relative overflow-hidden bg-transparent z-10">
-                <header class="mb-8 flex justify-between items-end border-b border-white/5 pb-6">
-                    <div>
-                        <h1 class="text-4xl font-black tracking-tighter italic">Command Center</h1>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6B00] mt-2">Secure Strategic Ledger // Active</p>
-                    </div>
-                </header>
-
-                <!-- Forensic Output Display -->
-                <div id="auditDisplay" class="flex-1 overflow-y-auto pr-4 pb-8 flex flex-col justify-end">
-                    <!-- Empty state initially -->
-                </div>
-
-                <!-- Input Area -->
-                <div class="glass-card rounded-[32px] p-8 mt-4 relative z-20">
-                    <textarea id="ideaInput" class="w-full bg-transparent border-none outline-none text-xl font-light text-white placeholder:text-zinc-700 resize-none" rows="2" placeholder="Enter venture architecture for forensic scan..."></textarea>
-                    <div class="flex justify-between items-center mt-6 pt-6 border-t border-white/10">
-                        <span class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-500" id="engineStatus">Awaiting Input...</span>
-                        <button onclick="runPitchDemo()" id="auditBtn" class="bg-white text-black px-10 py-3 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#FF6B00] hover:text-white transition-all cursor-pointer">
-                            Execute Protocol
-                        </button>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 3. FAKE AUTH MODAL (Smoke & Mirrors)       -->
-    <!-- ========================================== -->
-    <div id="authModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-6 transition-opacity">
-        <div class="glass-card w-full max-w-md p-10 rounded-[32px] border border-[#FF6B00]/30 shadow-[0_0_80px_rgba(255,107,0,0.15)]">
-            <div class="flex justify-between items-start mb-8">
-                <h2 class="text-3xl font-black tracking-tighter italic text-white">Initialize <br>Identity</h2>
-                <button onclick="closeAuth()" class="text-zinc-500 hover:text-white text-2xl leading-none">&times;</button>
-            </div>
-            
-            <input type="email" id="fakeEmail" placeholder="Professional Email" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-[#FF6B00] transition-colors text-sm">
-            <input type="password" id="fakePass" placeholder="Secure Password" class="w-full bg-[#05050A] border border-white/10 p-4 rounded-xl text-white mb-8 outline-none focus:border-[#FF6B00] transition-colors text-sm">
-            
-            <!-- This button immediately bypasses logic and forces the demo -->
-            <button onclick="forceDemoLogin()" class="w-full bg-[#FF6B00] text-black font-black py-4 rounded-xl uppercase tracking-widest text-[11px] hover:scale-[1.02] transition-transform">Verify Identity</button>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 4. PRESENTATION LOGIC (NO BACKEND NEEDED)  -->
-    <!-- ========================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
-        // --- Modal Toggles ---
-        function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
-        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
-
-        // --- Demo Login Force (Instantly swaps to Command Center) ---
-        function forceDemoLogin() {
-            closeAuth();
-            document.getElementById('loggedOutView').style.display = 'none';
-            document.getElementById('loggedInView').classList.remove('hidden');
-        }
-
-        // --- THE "KILL SHOT" PITCH DEMO LOGIC ---
-        function runPitchDemo() {
-            const input = document.getElementById('ideaInput').value;
-            if(!input) return;
-
-            const btn = document.getElementById('auditBtn');
-            const status = document.getElementById('engineStatus');
-            const display = document.getElementById('auditDisplay');
-            
-            // 1. UI changes to "Processing"
-            btn.innerText = "COMPUTING...";
-            btn.classList.replace('bg-white', 'bg-[#FF6B00]');
-            btn.classList.replace('text-black', 'text-white');
-            btn.style.pointerEvents = 'none';
-            btn.classList.add('animate-pulse');
-            status.innerText = "ANALYZING STRUCTURAL VULNERABILITIES...";
-            status.style.color = "#FF6B00";
-
-            // 2. The Investor-Grade Script (Appears after 3 seconds)
-            setTimeout(() => {
-                const investorScriptHtml = `
-                    <div class="glass-card p-10 rounded-[32px] border border-[#FF6B00]/40 shadow-[0_0_50px_rgba(255,107,0,0.1)] w-full mb-4 animate-[slideUp_0.5s_ease-out_forwards] opacity-0" style="animation: slideUp 0.6s ease-out forwards;">
-                        <h2 class="text-white font-black text-2xl mb-6 flex items-center gap-3">
-                            <span class="w-3 h-3 rounded-full bg-[#FF6B00] animate-pulse"></span>
-                            [ FORENSIC PROTOCOL: COMPLETE ]
-                        </h2>
-                        
-                        <div class="space-y-6 text-sm font-light text-zinc-300">
-                            <div>
-                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// TIM WOODS Vulnerability Analysis:</h3>
-                                <p><strong class="text-white">CRITICAL DRAG DETECTED: Transport & Inventory.</strong><br>
-                                Your proposed localized fulfillment architecture introduces a 31% capital bleed in reverse-logistics (returns/QA processing). Unit economics will fracture at scale without an automated staging buffer.</p>
-                            </div>
-
-                            <div class="border-t border-white/10 pt-6">
-                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// Adversarial SWOT (SWOT-A):</h3>
-                                <p><strong class="text-white">PREDATOR VECTOR:</strong> Market incumbents will exploit your high initial Customer Acquisition Cost (CAC) by undercutting your localized margins before you reach Series A density.</p>
-                                <p class="mt-2"><strong class="text-white">DEFENSIBILITY GAP:</strong> Physical asset acquisition outpaces your software moat.</p>
-                            </div>
-
-                            <div class="border-t border-white/10 pt-6">
-                                <h3 class="text-[#FF6B00] font-bold uppercase tracking-widest text-[10px] mb-2">// Strategic Moat Recommendation:</h3>
-                                <p class="text-white font-medium italic">"Do not deploy capital into physical warehousing for Phase 1. License your routing algorithm as a localized API to existing 3PLs. Build the proprietary data moat before acquiring physical inventory debt."</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                // Render the output
-                display.innerHTML = investorScriptHtml;
-                
-                // Reset the button
-                btn.innerText = "Execute Protocol";
-                btn.classList.replace('bg-[#FF6B00]', 'bg-white');
-                btn.classList.replace('text-white', 'text-black');
-                btn.style.pointerEvents = 'auto';
-                btn.classList.remove('animate-pulse');
-                
-                status.innerText = "ENGINE READY";
-                status.style.color = "#71717A"; // zinc-500
-                
-            }, 3500); // 3.5 second dramatic pause
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0A0A0A',
+                        surface: '#15151A',
+                        border: '#1C1C22',
+                        textMain: '#F4F4F0',
+                        textMuted: '#8E8E93',
+                        lime: '#D4FF3F',
+                        coral: '#FF5A5F',
+                        amber: '#FFB020'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
         }
     </script>
     <style>
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        body { background-color: #0A0A0A; color: #F4F4F0; overflow: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1C1C22; }
+
+        /* Terminal Cursor Effect */
+        .cursor-blink::after {
+            content: '█';
+            display: inline-block;
+            margin-left: 4px;
+            animation: blink 1s step-end infinite;
+            color: #D4FF3F;
         }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Sharp utility classes */
+        .border-hard { border-width: 1px; border-style: solid; border-color: #1C1C22; }
     </style>
-</body>
-</html>
+</head>
+<body class="font-sans antialiased h-screen flex flex-col selection:bg-lime selection:text-base">
+
+    <div id="authOverlay" class="fixed inset-0 z-50 bg-base flex flex-col items-center justify-center border-hard border-b-0 border-t-0 border-l-0 border-r-0">
+        <div class="w-full max-w-md bg-surface border-hard p-8 rounded-sm">
+            <div class="flex items-center gap-3 mb-8 pb-4 border-b border-border">
+                <div class="w-4 h-4 bg-lime"></div>
+                <h1 class="text-sm font-mono tracking-widest uppercase text-textMain">AVA // System Governance</h1>
+            </div>
+            
+            <div class="space-y-4 font-mono text-xs">
+                <div>
+                    <label class="block text-textMuted uppercase mb-2 tracking-widest">Operator ID</label>
+                    <input type="text" value="admin@venture-studio.io" class="w-full bg-base border-hard p-3 text-textMain focus:outline-none focus:border-lime transition-colors" readonly>
+                </div>
+                <div>
+                    <label class="block text-textMuted uppercase mb-2 tracking-widest">Authentication Key</label>
+                    <input type="password" value="••••••••••••" class="w-full bg-base border-hard p-3 text-textMain focus:outline-none focus:border-lime transition-colors" readonly>
+                </div>
+            </div>
+            
+            <button onclick="unlockSystem()" class="mt-8 w-full bg-base border border-lime text-lime font-mono uppercase tracking-widest text-xs py-4 hover:bg-lime hover:text-base transition-colors rounded-sm">
+                Initialize War-Room
+            </button>
+        </div>
+    </div>
+
+    <div id="appInterface" class="hidden flex h-screen w-full relative">
+        
+        <aside class="w-56 bg-base border-r border-border flex flex-col justify-between">
+            <div>
+                <div class="p-6 border-b border-border flex items-center gap-3">
+                    <div class="w-3 h-3 bg-lime"></div>
+                    <span class="font-mono text-xs uppercase tracking-widest font-bold">AVA . 01</span>
+                </div>
+                
+                <nav class="flex flex-col mt-4 font-mono text-[10px] uppercase tracking-widest">
+                    <a href="#" class="px-6 py-4 flex items-center gap-4 text-lime bg-surface border-l-2 border-lime">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                        Audits
+                    </a>
+                    <a href="#" class="px-6 py-4 flex items-center gap-4 text-textMuted hover:text-textMain transition-colors border-l-2 border-transparent">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        Ledger
+                    </a>
+                    <a href="#" class="px-6 py-4 flex items-center gap-4 text-textMuted hover:text-textMain transition-colors border-l-2 border-transparent">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        Agents
+                    </a>
+                    <a href="#" class="px-6 py-4 flex items-center gap-4 text-textMuted hover:text-textMain transition-colors border-l-2 border-transparent">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                        Verdicts
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="p-6 border-t border-border">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-1.5 h-1.5 bg-lime rounded-full"></div>
+                    <span class="font-mono text-[9px] uppercase tracking-widest text-textMuted">System Active</span>
+                </div>
+                <div class="font-mono text-[9px] uppercase tracking-widest text-textMuted opacity-50">Identity: Verified</div>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col bg-base overflow-hidden">
+            
+            <header class="h-16 border-b border-border flex items-center justify-between px-8 bg-surface">
+                <h2 class="font-mono text-xs uppercase tracking-widest text-textMuted">Target Workspace // Strategic Input</h2>
+                <div class="font-mono text-[10px] text-lime border border-lime px-2 py-1 uppercase">Awaiting Protocol</div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <div class="max-w-5xl mx-auto space-y-8">
+                    
+                    <div class="bg-surface border-hard rounded-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-mono text-[10px] uppercase tracking-widest text-textMuted">Venture Hypothesis</span>
+                        </div>
+                        <textarea id="hypothesisInput" class="w-full h-24 bg-base border-hard p-4 text-sm font-mono text-textMain focus:outline-none focus:border-textMuted transition-colors resize-none mb-6 placeholder:text-border" placeholder="Define strategic architecture for multi-agent adversarial scan..."></textarea>
+                        
+                        <div class="flex justify-between items-center">
+                            <span id="statusIndicator" class="font-mono text-[10px] uppercase tracking-widest text-textMuted">Idle</span>
+                            <button onclick="executeWarGame()" id="executeBtn" class="bg-base border border-lime text-lime px-6 py-2.5 font-mono text-[10px] uppercase tracking-widest hover:bg-lime hover:text-base transition-colors rounded-sm">
+                                Execute Audit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="verdictOutput" class="hidden space-y-6">
+                        
+                        <div class="flex items-end justify-between border-b border-border pb-6">
+                            <div>
+                                <h3 class="font-mono text-sm uppercase tracking-widest text-textMain mb-2 flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-lime"></span> Forensic Verdict
+                                </h3>
+                                <p class="text-xs text-textMuted font-mono">Ensemble synthesis complete.</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-mono text-[10px] uppercase tracking-widest text-textMuted mb-1">Resilience Score</p>
+                                <div class="font-mono text-5xl text-lime leading-none" id="scoreDisplay">--</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            
+                            <div class="bg-surface border-hard border-l-2 border-l-coral p-6 rounded-sm">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-mono text-[10px] uppercase tracking-widest text-coral font-bold">Agent 01: The Saboteur</span>
+                                    </div>
+                                    <span id="statusSaboteur" class="font-mono text-[9px] uppercase border border-border px-2 py-0.5 text-textMuted">Pending</span>
+                                </div>
+                                <div class="font-mono text-xs text-textMuted min-h-[40px] leading-relaxed" id="textSaboteur"></div>
+                            </div>
+
+                            <div class="bg-surface border-hard border-l-2 border-l-amber p-6 rounded-sm">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-mono text-[10px] uppercase tracking-widest text-amber font-bold">Agent 02: The Predator</span>
+                                    </div>
+                                    <span id="statusPredator" class="font-mono text-[9px] uppercase border border-border px-2 py-0.5 text-textMuted">Pending</span>
+                                </div>
+                                <div class="font-mono text-xs text-textMuted min-h-[40px] leading-relaxed" id="textPredator"></div>
+                            </div>
+
+                            <div class="bg-surface border-hard border-l-2 border-l-lime p-6 rounded-sm">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-mono text-[10px] uppercase tracking-widest text-lime font-bold">Agent 03: Synthesis Orchestrator</span>
+                                    </div>
+                                    <span id="statusOrchestrator" class="font-mono text-[9px] uppercase border border-border px-2 py-0.5 text-textMuted">Pending</span>
+                                </div>
+                                <div class="font-mono text-xs text-textMuted min-h-[40px] leading-relaxed" id="textOrchestrator"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // System Unlock Simulation
+        function unlockSystem() {
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('appInterface').classList.remove('hidden');
+        }
+
+        // Typewriter Engine
+        async function typeWriter(elementId, text, speed = 15) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '';
+            element.classList.add('cursor-blink');
+            element.style.color = '#F4F4F0'; // textMain
+            
+            for (let i = 0; i < text.length; i++) {
+                element.innerHTML += text.charAt(i);
+                await new Promise(r => setTimeout(r, speed));
+            }
+            element.classList.remove('cursor-blink');
+        }
+
+        // Score Counter Engine
+        async function countUpScore(target, duration = 1000) {
+            const display = document.getElementById('scoreDisplay');
+            let start = 0;
+            const steps = 20;
+            const stepTime = duration / steps;
+            const increment = target / steps;
+
+            return new Promise(resolve => {
+                const timer = setInterval(() => {
+                    start += increment;
+                    display.innerText = Math.floor(start);
+                    if (start >= target) {
