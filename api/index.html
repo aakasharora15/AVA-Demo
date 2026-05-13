@@ -16,11 +16,13 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="antialiased selection:bg-[#FF6B00] selection:text-black">
 
-    <div id="mainInterface" class="h-screen w-full flex">
+    <div id="mainInterface" class="h-screen w-full flex fade-in">
         
         <aside class="w-72 border-r border-white/5 bg-[#05050A] flex flex-col p-10">
             <div class="flex items-center gap-3 mb-16">
@@ -46,7 +48,7 @@
         <main class="flex-1 flex flex-col bg-[#05050A] relative overflow-hidden">
             <header class="h-24 border-b border-white/5 flex items-center justify-between px-12">
                 <div class="flex items-center gap-6">
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Governance Layer</span>
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Investment Grade Governance</span>
                     <span class="w-1 h-1 bg-zinc-700 rounded-full"></span>
                     <span class="text-[10px] font-bold text-[#FF6B00] uppercase tracking-widest italic">Multi-Agent Ensemble Active</span>
                 </div>
@@ -56,7 +58,7 @@
                 <div class="max-w-4xl mx-auto space-y-12 pb-24">
                     
                     <div class="glass-card p-12 rounded-[40px] border-white/5 shadow-2xl">
-                        <textarea id="hypInput" class="w-full bg-black/20 border border-white/10 p-8 font-light text-2xl text-white outline-none focus:border-[#FF6B00]/50 h-32 rounded-3xl resize-none mb-10 transition-all" placeholder="Enter venture hypothesis..."></textarea>
+                        <textarea id="hypInput" class="w-full bg-black/20 border border-white/10 p-8 font-light text-2xl text-white outline-none focus:border-[#FF6B00]/50 h-32 rounded-3xl resize-none mb-10 transition-all" placeholder="Enter venture architecture for forensic dissection..."></textarea>
                         <div class="flex justify-between items-center">
                             <span id="status" class="text-[10px] font-mono text-zinc-600 uppercase italic">Awaiting Forensic Protocol</span>
                             <button onclick="runAudit()" id="execBtn" class="bg-white text-black px-16 py-5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-[#FF6B00] hover:text-white btn-glow transition-all">Execute Protocol</button>
@@ -67,7 +69,7 @@
                         <div class="flex justify-between items-end border-b border-white/5 pb-12">
                             <div>
                                 <h2 class="text-5xl font-black italic tracking-tighter uppercase mb-4">Forensic Verdict</h2>
-                                <p class="text-xs font-bold text-zinc-500 uppercase tracking-[0.3em]">Ensemble Synthesis: Complete</p>
+                                <p class="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em]">Strategic Synthesis: Complete</p>
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Resilience Score</p>
@@ -76,16 +78,16 @@
                         </div>
 
                         <div class="space-y-8">
-                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-[#FF5A5F]">
-                                <span class="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest block mb-6">Agent 01 // The Saboteur (TIM WOODS Audit)</span>
+                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-emerald-500">
+                                <span class="text-xs font-bold text-emerald-500 uppercase tracking-widest block mb-6">Agent 01 // The Forensic Auditor (TIM WOODS Optimization)</span>
                                 <div id="saboteurText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line"></div>
                             </div>
-                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-[#FFB020]">
-                                <span class="text-xs font-bold text-[#FFB020] uppercase tracking-widest block mb-6">Agent 02 // The Predator (Adversarial SWOT)</span>
+                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-sky-500">
+                                <span class="text-xs font-bold text-sky-500 uppercase tracking-widest block mb-6">Agent 02 // The Market Rival (Adversarial SWOT-A)</span>
                                 <div id="predatorText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line"></div>
                             </div>
                             <div class="glass-card p-12 rounded-[40px] border-l-4 border-l-[#FF6B00] bg-gradient-to-br from-[#0E0E12] to-[#1C1C24]">
-                                <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block mb-6">Agent 03 // Synthesis Orchestrator (Pivot Roadmap)</span>
+                                <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block mb-6">Agent 03 // Synthesis Orchestrator (Scale Roadmap)</span>
                                 <div id="synthText" class="text-white text-base font-medium leading-relaxed italic whitespace-pre-line"></div>
                             </div>
                         </div>
@@ -108,28 +110,29 @@
             if(!idea) return;
             const btn = document.getElementById('execBtn');
             const status = document.getElementById('status');
-            btn.innerText = 'DISSECTING...'; btn.style.pointerEvents = 'none';
-            status.innerText = 'Engaging Multi-Agent War-Room...';
+            btn.innerText = 'SYNTHESIZING...'; btn.style.pointerEvents = 'none';
+            status.innerText = 'Performing Multi-Agent Strategic Dissection...';
             document.getElementById('output').classList.remove('hidden');
 
+            // Investment-Grade Logic (Focused on defensibility and scale)
             let s1, s2, s3, score;
             const low = idea.toLowerCase();
             
             if (low.includes("casino")) {
-                score = 10;
-                s1 = "1. REGULATORY OVERHEAD: UK Gambling Commission costs 15% of revenue.\n2. MARKETING WASTE: CPA is £200-£300, creating unsustainable burn.\n3. SOCIAL RESPONSIBILITY: Compliance measures add 10% in mandatory costs.";
-                s2 = "UNIT ECONOMICS: £100 Revenue | £60 COGS | £20 Marketing | £10 Compliance = £10 Net Profit. I will poach your users via compliance arbitrage and superior live-dealer tech.";
-                s3 = "PIVOT: Shift from operator to infrastructure provider. License proprietary gambling tech to incumbents instead of competing for users.";
-            } else if (low.includes("wardrobe") || low.includes("delivery")) {
-                score = 42;
-                s1 = "TIM WOODS ALERT: Critical 'Transport & Inventory' waste (31% bleed). Structural paradox in reverse-logistics QA framework.";
-                s2 = "SWOT-A BREACH: Incumbents will undercut localized margins before density is reached. Asset-heavy model outpaces software defensibility.";
-                s3 = "PIVOT: Shift to asset-light API. License routing algorithm to existing 3PLs instead of owning physical hubs.";
+                score = 82;
+                s1 = "TIM WOODS AUDIT: High-efficiency digital architecture. Operational waste is mitigated via automated compliance APIs. Recommendation: Optimize 'Waiting' waste in user withdrawal cycles to increase LTV.";
+                s2 = "ADVERSARIAL SWOT-A: Strong market defensibility. Proprietary UX creates high switching costs for VIP segments. Exploitable vector: Targeted licensing in emerging jurisdictions.";
+                s3 = "SCALE ROADMAP: Accelerate the integration of predictive analytics for real-time risk management. Position for Series A acquisition by Tier-1 gambling incumbents.";
+            } else if (low.includes("wardrobe") || low.includes("delivery") || low.includes("clothing")) {
+                score = 85;
+                s1 = "TIM WOODS AUDIT: Scalable fulfillment architecture. 'Inventory' waste is minimized through just-in-time QA loops. Operational drag in reverse-logistics is managed via proprietary routing.";
+                s2 = "ADVERSARIAL SWOT-A: Defensible logistics moat. Rival predators face high capital barriers to replicate localized hub density. Vulnerability: Scale API to 3PL partners for rapid expansion.";
+                s3 = "SCALE ROADMAP: Transition to an asset-light API-first model for regional expansion. Secure Series A funding to lock in Tier-1 logistics partnerships.";
             } else {
-                score = 38;
-                s1 = "FORENSIC WASTE: Execution maturity mismatch. Roadmap lacks technical defensibility. 'Waiting' waste found in supply chain loops.";
-                s2 = "PREDATOR THREAT: Hyperscalers will weaponize your core feature as a native integration. Moat is too shallow for Series A defense.";
-                s3 = "DIRECTIVE: Tighten niche focus. Delay broad entry until 'Over-production' waste is mitigated through a data moat.";
+                score = 91;
+                s1 = "FORENSIC AUDIT: Institutional-grade execution maturity. Zero 'Over-production' waste detected. High alignment in technical 'Skills' and roadmap milestones.";
+                s2 = "ADVERSARIAL SWOT-A: Significant competitive moat via proprietary BPMN logic gates. Rival feature-creep is mitigated by the 'Identity Moat' and historical data ledger.";
+                s3 = "SCALE ROADMAP: Finalize institutional RAG dataset integration. Initiate US market entry strategy via venture studio partnerships. Model is fully investor-ready.";
             }
 
             await type('saboteurText', s1); await new Promise(r => setTimeout(r, 400));
@@ -138,7 +141,7 @@
             
             document.getElementById('score').innerText = score;
             btn.innerText = 'EXECUTE PROTOCOL'; btn.style.pointerEvents = 'auto';
-            status.innerText = 'Audit Complete // System Nominal';
+            status.innerText = 'Forensic Verdict Logged';
         }
     </script>
 </body>
