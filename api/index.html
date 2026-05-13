@@ -227,3 +227,83 @@
                     start += increment;
                     display.innerText = Math.floor(start);
                     if (start >= target) {
+                        display.innerText = target;
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, stepTime);
+            });
+        }
+
+        // Main Execution Logic
+        async function executeWarGame() {
+            const input = document.getElementById('hypothesisInput').value;
+            if(!input) return;
+
+            const btn = document.getElementById('executeBtn');
+            const status = document.getElementById('statusIndicator');
+            const output = document.getElementById('verdictOutput');
+            
+            // 1. Lock UI & Reset State
+            btn.innerText = "EXECUTING...";
+            btn.classList.replace('bg-base', 'bg-lime');
+            btn.classList.replace('text-lime', 'text-base');
+            btn.style.pointerEvents = 'none';
+            
+            status.innerText = "ROUTING TO ENSEMBLE...";
+            status.style.color = "#D4FF3F";
+            
+            output.classList.remove('hidden');
+            document.getElementById('scoreDisplay').innerText = "--";
+            
+            // Clear texts and reset statuses
+            ['Saboteur', 'Predator', 'Orchestrator'].forEach(agent => {
+                document.getElementById(`text${agent}`).innerHTML = '';
+                const statEl = document.getElementById(`status${agent}`);
+                statEl.innerText = 'WAITING';
+                statEl.className = 'font-mono text-[9px] uppercase border border-border px-2 py-0.5 text-textMuted';
+            });
+
+            // The Content to inject
+            const t1 = "CRITICAL DRAG DETECTED: Transport & Inventory Waste. \nStructural paradox located in reverse-logistics framework. Unit economics will fracture at scale without an automated staging buffer. Estimated capital bleed: 31% of runway.";
+            const t2 = "ATTACK VECTOR IDENTIFIED: Margin Undercutting. \nMarket incumbents will exploit the high initial Customer Acquisition Cost. Predators will undercut localized margins before Series A density is reached. Physical asset acquisition outpaces software moat.";
+            const t3 = "PIVOT DIRECTIVE ESTABLISHED. \nDo not deploy capital into physical warehousing for Phase 1. License the routing algorithm as a localized API to existing 3PLs. Build proprietary data moat before acquiring physical inventory debt.";
+
+            // 2. Sequential Execution Narrative
+            
+            // Saboteur runs
+            await new Promise(r => setTimeout(r, 600));
+            document.getElementById('statusSaboteur').innerText = 'ACTIVE';
+            document.getElementById('statusSaboteur').classList.add('border-coral', 'text-coral');
+            await typeWriter('textSaboteur', t1, 10);
+            document.getElementById('statusSaboteur').innerText = 'COMPLETE';
+
+            // Predator runs
+            await new Promise(r => setTimeout(r, 400));
+            document.getElementById('statusPredator').innerText = 'ACTIVE';
+            document.getElementById('statusPredator').classList.add('border-amber', 'text-amber');
+            await typeWriter('textPredator', t2, 10);
+            document.getElementById('statusPredator').innerText = 'COMPLETE';
+
+            // Orchestrator runs
+            await new Promise(r => setTimeout(r, 400));
+            document.getElementById('statusOrchestrator').innerText = 'ACTIVE';
+            document.getElementById('statusOrchestrator').classList.add('border-lime', 'text-lime');
+            await typeWriter('textOrchestrator', t3, 10);
+            document.getElementById('statusOrchestrator').innerText = 'COMPLETE';
+
+            // Score runs
+            await new Promise(r => setTimeout(r, 300));
+            await countUpScore(42, 800);
+
+            // 3. Unlock UI
+            btn.innerText = "EXECUTE AUDIT";
+            btn.classList.replace('bg-lime', 'bg-base');
+            btn.classList.replace('text-base', 'text-lime');
+            btn.style.pointerEvents = 'auto';
+            status.innerText = "SYSTEM IDLE";
+            status.style.color = "#8E8E93";
+        }
+    </script>
+</body>
+</html>
