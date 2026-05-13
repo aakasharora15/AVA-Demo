@@ -5,157 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
-        .sidebar { background-color: #161618; width: 260px; height: 100vh; flex-shrink: 0; border-right: 1px solid #222; }
-        .main-stage { background-color: #FBFBFB; color: #0F0F10; border-radius: 32px 0 0 32px; flex-grow: 1; min-height: 100vh; overflow-y: auto; box-shadow: -20px 0 40px rgba(0,0,0,0.2); }
-        .card-flat { background: #f8f9fa; border: 1px solid #eee; border-radius: 20px; padding: 20px; transition: all 0.3s ease; }
-        .card-flat:hover { border-color: #bcf948; background: white; }
-        .accent-btn { background: #bcf948; color: #1A2E05; transition: all 0.2s ease; }
-        .accent-btn:hover { background: #a8e036; transform: translateY(-1px); }
-        .hidden-section { display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
-        .show-section { display: block !important; opacity: 1; transform: translateY(0); }
+        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; }
+        .accent-lime { color: #bcf948; }
+        .bg-lime { background-color: #bcf948; }
+        .card-dark { background: #161618; border: 1px solid #222; transition: all 0.3s ease; }
+        .card-dark:hover { border-color: #bcf948; }
+        .hero-gradient { background: radial-gradient(circle at center, #1a1a1a 0%, #0f0f10 100%); }
+        .framework-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #bcf948; opacity: 0.8; }
     </style>
 </head>
-<body class="flex">
+<body>
 
-    <!-- Sidebar -->
-    <aside class="sidebar p-8 hidden md:flex flex-col">
-        <div class="mb-12">
-            <svg class="h-8 w-auto" viewBox="0 0 1103.78 353.49" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#bcf948" d="M237.38,31.75L50.43,353.49l-50.43-.05L208.74,0h57.23l210.37,353.41-49.33.03L237.38,31.75Z"/>
-                <path fill="#bcf948" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
-                <path fill="#bcf948" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
-            </svg>
-            <div class="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-600 mt-4">Venture Lab v1.0</div>
-        </div>
-        
-        <nav class="flex-grow space-y-6">
-            <div class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2">Navigation</div>
-            <button onclick="toggleHowItWorks()" class="w-full flex items-center gap-3 text-zinc-400 hover:text-white transition-all py-2">
-                <span class="text-lg">💡</span> How It Works
-            </button>
-            <div class="flex items-center gap-3 text-white font-medium bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/50">
-                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> Strategic Audit
-            </div>
+    <!-- 1. LANDING PAGE (Logged Out) -->
+    <div id="loggedOutView" class="min-h-screen flex flex-col">
+        <nav class="p-8 flex justify-between items-center">
+            <div class="font-bold tracking-tighter text-2xl">AVA <span class="text-xs opacity-50 uppercase tracking-widest ml-2">v1.1</span></div>
+            <button onclick="handleLogin()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-zinc-200">Sign In</button>
         </nav>
 
-        <div class="mt-auto">
-            <div class="p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-widest">Engine Active</span>
-                </div>
-                <div class="text-xs text-zinc-300">Aakash Arora</div>
-            </div>
-        </div>
-    </aside>
+        <main class="flex-grow flex flex-col items-center justify-center text-center px-6 hero-gradient">
+            <div class="uppercase tracking-[0.4em] text-[10px] font-black accent-lime mb-4">Adversarial Venture Analysis</div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none">Before You Build It, <br><span class="accent-lime italic">Break It.</span></h1>
+            <p class="max-w-2xl text-zinc-400 text-lg mb-10">Integrated adversarial auditing using <span class="text-white font-bold italic">TIM WOODS</span> Lean Waste methodology and <span class="text-white font-bold italic">Adversarial SWOT</span> Analysis.</p>
+            <button onclick="handleLogin()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Start Forensic Audit —></button>
+        </main>
 
-    <!-- Main Content -->
-    <main class="main-stage p-8 md:p-16">
-        <div class="max-w-4xl mx-auto w-full">
+        <!-- 6 MAIN TILES (Framework-Specific) -->
+        <section class="p-12 md:p-24 grid grid-cols-1 md:grid-cols-3 gap-8 bg-zinc-950">
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">Framework: TIM WOODS</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Operational Waste</h3>
+                <p class="text-sm text-zinc-500">Detecting Transport, Inventory, and Over-processing traps in your execution model.</p>
+            </div>
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">Framework: SWOT</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Adversarial Weakness</h3>
+                <p class="text-sm text-zinc-500">A ruthless look at internal vulnerabilities and external threats others ignore.</p>
+            </div>
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">Framework: TIM WOODS</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Skill Underutilization</h3>
+                <p class="text-sm text-zinc-500">Identifying where human capital and expertise are wasted in your business logic.</p>
+            </div>
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">Framework: SWOT</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Predator Opportunity</h3>
+                <p class="text-sm text-zinc-500">How competitors will exploit your 'Opportunities' section to neutralize you.</p>
+            </div>
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">System Logic</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Process Defects</h3>
+                <p class="text-sm text-zinc-500">Pinpointing where 'Defects' and 'Waiting' will kill your unit economic efficiency.</p>
+            </div>
+            <div class="card-dark p-8 rounded-3xl">
+                <div class="framework-tag mb-2">Venture Strategy</div>
+                <h3 class="font-bold mb-2 uppercase tracking-widest text-xs text-white">Moat Defensibility</h3>
+                <p class="text-sm text-zinc-500">Analyzing if your 'Strengths' are actually defensible against market incumbents.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 2. DASHBOARD VIEW (Logged In) -->
+    <div id="loggedInView" class="hidden min-h-screen flex">
+        <aside class="w-72 bg-zinc-950 p-10 border-r border-zinc-800 flex flex-col">
+            <div class="font-black text-2xl accent-lime italic mb-12">AVA v1.1</div>
+            <nav class="flex-grow space-y-6">
+                <div class="text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Active Frameworks</div>
+                <div class="space-y-3">
+                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> TIM WOODS Audit</div>
+                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> SWOT Synthesis</div>
+                </div>
+                <div class="pt-8 text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Account</div>
+                <button onclick="logout()" class="w-full text-left text-zinc-500 text-sm hover:text-white">Sign Out</button>
+            </nav>
+            <div id="userLabel" class="text-[10px] text-zinc-600 truncate mt-auto uppercase tracking-tighter"></div>
+        </aside>
+
+        <main class="flex-grow p-16 bg-zinc-900 overflow-y-auto">
+            <h1 class="text-4xl font-black tracking-tighter mb-2">Hello, Mate</h1>
+            <p class="text-zinc-500 text-sm mb-8">The Adversarial Engine is configured for Lean Waste & SWOT analysis.</p>
             
-            <!-- How It Works Section (Toggleable) -->
-            <section id="howItWorks" class="hidden-section mb-16">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 italic underline decoration-lime-400 underline-offset-8">The AVA Framework</h2>
-                    <button onclick="toggleHowItWorks()" class="text-zinc-400 hover:text-zinc-800 text-sm font-bold">Close ✕</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">🔍</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Forensic Audit</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Systematic deconstruction of internal logic to find structural death-traps.</p>
-                    </div>
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">📉</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Economic Leakage</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Hard-truth unit economic check to identify where capital burns faster than it scales.</p>
-                    </div>
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">🦈</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Rival Predator</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Simulation of aggressive market counter-moves aimed at moat-breaching.</p>
-                    </div>
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">🛡️</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Defensibility</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Evaluating long-term commercial viability and competitive defensibility.</p>
-                    </div>
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">⚙️</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Systems Logic</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Ensuring architectural integrity and business logic consistency.</p>
-                    </div>
-                    <div class="card-flat">
-                        <div class="text-xl mb-2">🚀</div>
-                        <h4 class="font-bold text-sm mb-1 uppercase tracking-tighter">Pre-Mortem</h4>
-                        <p class="text-xs text-zinc-500 leading-relaxed">Identifying high-probability failure points before capital is deployed.</p>
-                    </div>
-                </div>
-            </section>
-
-            <header class="mb-12">
-                <h1 class="text-4xl font-extrabold tracking-tighter mb-2 text-zinc-950">Hello, Mate</h1>
-                <p class="text-zinc-500 text-lg font-light italic">The Adversarial Engine is primed for simulation.</p>
-            </header>
-
-            <div class="bg-white p-6 rounded-3xl border border-zinc-200 mb-12 shadow-sm">
-                <textarea id="ideaInput" rows="6" class="w-full text-lg font-light border-none focus:ring-0 placeholder-zinc-300 resize-none text-zinc-800" placeholder="Drop your venture hypothesis here..."></textarea>
-                <div class="flex justify-end pt-4 border-t border-zinc-100">
-                    <button onclick="runSimulation()" id="runBtn" class="accent-btn px-10 py-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2">
-                        <span id="btnText">Execute War-Game</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </button>
+            <div class="bg-zinc-800/40 p-8 rounded-[32px] border border-zinc-700/50 mb-16">
+                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Drop your hypothesis..."></textarea>
+                <div class="flex justify-end pt-6 border-t border-zinc-700/50">
+                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Execute War-Game</button>
                 </div>
             </div>
 
-            <div id="resultsArea" class="hidden opacity-0 transition-opacity duration-500">
-                <div class="p-8 rounded-3xl bg-zinc-50 border border-zinc-200">
-                    <div class="flex items-center gap-3 text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase mb-8 pb-4 border-b border-zinc-200">
-                        <span class="text-lime-600">Forensic Verdict</span> // Strategic Synthesis
-                    </div>
-                    <div id="output" class="text-zinc-700 leading-relaxed text-xl font-light whitespace-pre-wrap pl-6 border-l-2 border-lime-400"></div>
-                </div>
+            <div id="historyList" class="space-y-6">
+                <div class="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mb-4">Audit History Feed</div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <script>
-        function toggleHowItWorks() {
-            const section = document.getElementById('howItWorks');
-            section.classList.toggle('show-section');
+        const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_Nvm-G3z1DWgzY1uowxqe_w_cj3876-0f796472251a7995188f6a978f85f1c50355f9';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function checkSession() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) {
+                document.getElementById('loggedOutView').classList.add('hidden');
+                document.getElementById('loggedInView').classList.remove('hidden');
+                document.getElementById('userLabel').innerText = user.email;
+                fetchHistory();
+            }
         }
 
-        async function runSimulation() {
-            const idea = document.getElementById('ideaInput').value;
-            const btn = document.getElementById('runBtn');
-            const btnText = document.getElementById('btnText');
-            const outputDiv = document.getElementById('output');
-            const resultsArea = document.getElementById('resultsArea');
+        async function handleLogin() {
+            const email = prompt("Enter email for Magic Link:");
+            if(email) {
+                const { error } = await supabaseClient.auth.signInWithOtp({ email });
+                if(error) alert(error.message);
+                else alert("Check your email for the login link!");
+            }
+        }
 
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            window.location.reload();
+        }
+
+        async function fetchHistory() {
+            const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
+            if(data) {
+                const list = document.getElementById('historyList');
+                list.innerHTML = data.map(item => `
+                    <div class="card-dark p-8 rounded-3xl">
+                        <div class="text-[10px] font-bold text-zinc-600 mb-4 uppercase tracking-widest">${new Date(item.created_at).toDateString()}</div>
+                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 decoration-2 underline-offset-4">${item.business_idea_title}</div>
+                        <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap">${item.ai_response}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function runAudit() {
+            const idea = document.getElementById('ideaInput').value;
+            const btn = document.getElementById('auditBtn');
             if(!idea) return;
 
-            btnText.innerText = "Synthesizing...";
+            btn.innerText = "SYNTHESIZING...";
             btn.disabled = true;
-            
-            resultsArea.classList.remove('hidden');
-            setTimeout(() => resultsArea.classList.add('opacity-100'), 10);
-            outputDiv.innerText = "Forensic logic in progress...";
 
             try {
                 const response = await fetch('/api/audit?idea=' + encodeURIComponent(idea));
                 const data = await response.json();
-                outputDiv.innerText = data.result;
-                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } catch (err) {
-                outputDiv.innerText = "Error connecting to Orchestrator.";
+                fetchHistory(); 
+                document.getElementById('ideaInput').value = '';
+            } catch(e) {
+                alert("Audit Failed.");
             } finally {
-                btnText.innerText = "Execute War-Game";
+                btn.innerText = "EXECUTE WAR-GAME";
                 btn.disabled = false;
             }
         }
+
+        checkSession();
     </script>
 </body>
 </html>
