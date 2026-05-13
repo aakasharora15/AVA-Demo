@@ -6,106 +6,115 @@
     <title>AVA | Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0F0F10; color: #FBFBFB; overflow-x: hidden; }
-        .accent-lime { color: #bcf948; }
-        .bg-lime { background-color: #bcf948; }
-        .card-dark { background: #161618; border: 1px solid #222; transition: all 0.3s ease; }
-        .hero-gradient { background: radial-gradient(circle at center, #1a1a1a 0%, #0f0f10 100%); }
-        .input-field { background: #1a1a1c; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px; width: 100%; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
+        body { font-family: 'Urbanist', sans-serif; background-color: #050505; color: #FBFBFB; overflow: hidden; }
+        .accent-neon { color: #bcf948; text-shadow: 0 0 10px rgba(188, 249, 72, 0.3); }
+        .bg-neon { background-color: #bcf948; box-shadow: 0 0 20px rgba(188, 249, 72, 0.4); }
+        .card-dark { background: #111112; border: 1px solid #1f1f21; transition: all 0.3s ease; }
+        .card-dark:hover { border-color: #bcf948; background: #161617; }
+        .sidebar { background: #0a0a0b; border-right: 1px solid #1a1a1c; }
+        .history-panel { background: #0a0a0b; border-left: 1px solid #1a1a1c; }
+        .input-field { background: #161618; border: 1px solid #222; color: white; border-radius: 12px; padding: 12px; width: 100%; outline: none; }
         .input-field:focus { border-color: #bcf948; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="h-screen flex flex-col">
 
-    <!-- FORENSIC IDENTITY MODAL -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-6">
-        <div class="card-dark w-full max-w-md p-10 rounded-[40px] shadow-2xl border-zinc-800">
-            <h2 id="authTitle" class="text-3xl font-black tracking-tighter mb-2 text-white italic">Initialize Identity</h2>
-            <p id="authSub" class="text-zinc-500 text-xs mb-8 uppercase tracking-widest">Secure Access: WOODS-SWOT Protocol</p>
-            
-            <div id="signupFields">
-                <input type="text" id="fullName" placeholder="Full Name" class="input-field">
-                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="input-field">
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-xl p-6">
+        <div class="card-dark w-full max-w-md p-10 rounded-[32px]">
+            <h2 id="authTitle" class="text-3xl font-black tracking-tighter mb-2 italic">Initialize Identity</h2>
+            <div id="signupFields" class="mt-6">
+                <input type="text" id="fullName" placeholder="Full Name" class="input-field mb-3">
+                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="input-field mb-3">
             </div>
-            <input type="email" id="email" placeholder="Professional Email" class="input-field">
-            <input type="password" id="password" placeholder="Secure Password" class="input-field">
-            
-            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-lime text-black font-black py-4 rounded-2xl uppercase tracking-[0.2em] text-[10px] mt-4 hover:scale-[1.02] transition-transform">Create Account</button>
-            <p class="text-center text-[10px] text-zinc-600 mt-6 uppercase tracking-widest cursor-pointer hover:text-white" onclick="toggleAuthMode()" id="toggleText">Authorized Already? Sign In</p>
-            <button onclick="closeAuth()" class="w-full text-zinc-700 text-[9px] uppercase font-black mt-8 tracking-[0.4em] opacity-50 hover:opacity-100 transition">Discard Session</button>
+            <input type="email" id="email" placeholder="Professional Email" class="input-field mb-3">
+            <input type="password" id="password" placeholder="Secure Password" class="input-field mb-6">
+            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-neon text-black font-black py-4 rounded-xl uppercase tracking-widest text-[10px]">Create Account</button>
+            <p class="text-center text-[10px] text-zinc-600 mt-6 uppercase tracking-widest cursor-pointer hover:text-white" onclick="toggleAuthMode()" id="toggleText">Already Authorized? Sign In</p>
         </div>
     </div>
 
-    <!-- LANDING INTERFACE -->
-    <div id="loggedOutView" class="min-h-screen flex flex-col">
-        <nav class="p-8 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-lime rounded-lg flex items-center justify-center"><span class="text-black font-black text-xl tracking-tighter">A</span></div>
-                <div class="font-bold tracking-tighter text-2xl text-white">AVA <span class="text-[10px] opacity-40 uppercase tracking-[0.2em] ml-1">v1.1</span></div>
+    <!-- MAIN DASHBOARD (Visible only if logged in) -->
+    <div id="loggedInView" class="hidden flex h-full">
+        
+        <!-- LEFT SIDEBAR (Similar to Quirkle) -->
+        <aside class="w-64 sidebar p-6 flex flex-col">
+            <div class="flex items-center gap-2 mb-10">
+                <div class="w-6 h-6 bg-neon rounded flex items-center justify-center text-black font-black text-xs">A</div>
+                <span class="font-bold tracking-tighter text-xl">AVA <span class="text-[8px] opacity-40">v1.1</span></span>
             </div>
-            <button onclick="openAuth()" class="bg-white text-black px-8 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition">Access Protocol</button>
-        </nav>
-
-        <main class="flex-grow flex flex-col items-center justify-center text-center px-6 hero-gradient">
-            <div class="uppercase tracking-[0.4em] text-[10px] font-black accent-lime mb-4">Adversarial Venture Analysis</div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-tight text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
-            <p class="max-w-3xl text-zinc-400 text-lg mb-12 leading-relaxed font-light">
-                Proprietary high-fidelity forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span> to identify latent operational liabilities and structural market vulnerabilities.
-            </p>
-            <button onclick="openAuth()" class="bg-lime text-black px-16 py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:scale-105 transition shadow-[0_0_30px_-10px_#bcf948]">Initialize Forensic Audit —></button>
-        </main>
-    </div>
-
-    <!-- COMMAND CENTER (ACTIVE) -->
-    <div id="loggedInView" class="hidden min-h-screen flex">
-        <aside class="w-80 bg-zinc-950 p-10 border-r border-zinc-800/50 flex flex-col">
-            <div class="font-black text-2xl accent-lime italic mb-12 text-white">AVA v1.1</div>
-            <nav class="flex-grow space-y-8">
-                <div>
-                    <div class="text-[10px] uppercase font-black text-zinc-600 tracking-[0.3em] mb-4">Diagnostic Stack</div>
-                    <div class="space-y-4">
-                        <div class="text-[11px] text-zinc-400 flex items-center gap-3 font-semibold uppercase tracking-widest"><span class="w-1.5 h-1.5 bg-lime rounded-full"></span> WOODS Audit</div>
-                        <div class="text-[11px] text-zinc-400 flex items-center gap-3 font-semibold uppercase tracking-widest"><span class="w-1.5 h-1.5 bg-lime rounded-full"></span> SWOT-A Synthesis</div>
-                    </div>
+            <nav class="flex-grow space-y-2">
+                <div class="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-4">Diagnostic Stack</div>
+                <div class="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800 text-[11px] font-bold text-zinc-300 flex items-center gap-2 cursor-pointer">
+                    <span class="w-1.5 h-1.5 bg-neon rounded-full"></span> WOODS-SWOT Protocol
                 </div>
             </nav>
-            <button onclick="logout()" class="text-left text-zinc-600 text-[10px] uppercase font-black hover:text-white mt-auto tracking-widest">Deauthorize Session</button>
-            <div id="userLabel" class="text-[10px] text-zinc-700 truncate mt-4 uppercase font-bold tracking-tighter italic"></div>
+            <div class="mt-auto pt-6 border-t border-zinc-900">
+                <button onclick="logout()" class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest hover:text-white">Deauthorize</button>
+                <div id="userLabel" class="text-[9px] text-zinc-800 mt-2 truncate"></div>
+            </div>
         </aside>
 
-        <main class="flex-grow p-20 bg-zinc-900 overflow-y-auto">
-            <h1 id="welcomeTitle" class="text-5xl font-black tracking-tighter mb-2 text-white italic">Command Center</h1>
-            <p class="text-zinc-500 text-sm mb-12 uppercase tracking-[0.2em] font-bold">Secure Strategic Ledger // Multi-Framework Diagnostics</p>
+        <!-- CENTER CONTENT (War-Room) -->
+        <main class="flex-grow flex flex-col p-8 overflow-hidden">
+            <header class="mb-8">
+                <h1 id="welcomeTitle" class="text-4xl font-black tracking-tighter italic">Command Center</h1>
+                <p class="text-zinc-500 text-[10px] uppercase tracking-[0.3em] mt-1">High-Fidelity Strategic Audit</p>
+            </header>
             
-            <div class="bg-zinc-800/30 p-10 rounded-[40px] border border-zinc-700/30 mb-20 shadow-inner">
-                <textarea id="ideaInput" class="w-full bg-transparent border-none text-3xl font-light focus:ring-0 placeholder-zinc-800 text-white resize-none" rows="3" placeholder="Enter venture hypothesis for forensic evaluation..."></textarea>
-                <div class="flex justify-end pt-8 border-t border-zinc-700/30">
-                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:brightness-110">Run WOODS-SWOT Protocol</button>
+            <div class="flex-grow flex flex-col gap-6 overflow-hidden">
+                <div id="auditDisplay" class="flex-grow overflow-y-auto space-y-6 pr-4">
+                    <!-- Current Output will load here -->
+                    <div class="text-zinc-700 text-sm italic">Waiting for hypothesis input...</div>
+                </div>
+
+                <div class="mt-auto p-6 card-dark rounded-2xl shadow-2xl">
+                    <textarea id="ideaInput" class="w-full bg-transparent border-none text-xl font-light focus:ring-0 placeholder-zinc-800 text-white resize-none" rows="2" placeholder="Drop your hypothesis..."></textarea>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
+                        <span class="text-[9px] text-zinc-600 uppercase font-bold tracking-widest">Adversarial Engine v1.1</span>
+                        <button onclick="runAudit()" id="auditBtn" class="bg-neon text-black px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition">Execute Protocol</button>
+                    </div>
                 </div>
             </div>
-
-            <div id="historyList" class="space-y-8"></div>
         </main>
+
+        <!-- RIGHT HISTORY PANEL (Similar to image_2bc5da.jpg) -->
+        <aside class="w-80 history-panel p-6 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Forensic Feed</span>
+            </div>
+            <div id="historyList" class="flex-grow overflow-y-auto space-y-3">
+                <!-- History cards populate here -->
+            </div>
+        </aside>
+    </div>
+
+    <!-- LANDING VIEW (Logged Out) -->
+    <div id="loggedOutView" class="flex-grow flex flex-col items-center justify-center text-center p-6 bg-[#050505]">
+        <div class="uppercase tracking-[0.5em] text-[10px] font-black accent-neon mb-6">Proprietary Strategic Asset</div>
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none">AUDIT <br><span class="accent-neon italic">EVERYTHING.</span></h1>
+        <button onclick="openAuth()" class="bg-neon text-black px-16 py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:scale-110 transition">Enter Protocol</button>
     </div>
 
     <script>
         const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaXJkaHhic2V1aHVkdXJqcmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTY0NzAsImV4cCI6MjA5NDE5MjQ3MH0.DIB8aKuBFQzEzHNTZw8lPmxUUygAsTQ0ac9vof2iU8E'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaXJkaHhic2V1aHVkdXJqcmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTY0NzAsImV4cCI6MjA5NDE5MjQ3MH0.DIB8aKuBFQzEzHNTZw8lPmxUUygAsTQ0ac9vof2iU8E';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let isSignUp = true;
 
         function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
-        
         function toggleAuthMode() {
             isSignUp = !isSignUp;
             document.getElementById('authTitle').innerText = isSignUp ? 'Initialize Identity' : 'Authorized Access';
-            document.getElementById('signupFields').classList.toggle('hidden');
+            document.getElementById('signupFields').style.display = isSignUp ? 'block' : 'none';
             document.getElementById('authSubmitBtn').innerText = isSignUp ? 'Create Account' : 'Sign In';
-            document.getElementById('toggleText').innerText = isSignUp ? 'Authorized Already? Sign In' : 'Need Identity? Create One';
+            document.getElementById('toggleText').innerText = isSignUp ? 'Already Authorized? Sign In' : 'Need Identity? Create One';
         }
 
         async function checkSession() {
@@ -127,11 +136,10 @@
 
             if (isSignUp) {
                 const { error } = await supabaseClient.auth.signUp({
-                    email, password,
-                    options: { data: { full_name: fullName, phone_number: phone } }
+                    email, password, options: { data: { full_name: fullName, phone_number: phone } }
                 });
                 if (error) alert(error.message);
-                else alert("ACCOUNT INITIALIZED: Verify your professional email to authorize this identity.");
+                else alert("Check email for verification link.");
             } else {
                 const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) alert(error.message);
@@ -144,30 +152,33 @@
         async function fetchHistory() {
             const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
             if (data) {
-                document.getElementById('historyList').innerHTML = `<div class="text-[10px] uppercase font-black text-zinc-600 tracking-[0.5em] mb-8">Forensic History Log</div>` + 
-                data.map(item => `
-                    <div class="card-dark p-10 rounded-[32px] border-zinc-800">
-                        <div class="text-[9px] font-black text-zinc-600 mb-6 uppercase tracking-[0.3em] italic">${new Date(item.created_at).toLocaleString()}</div>
-                        <div class="text-white font-black text-xl mb-6 underline decoration-lime decoration-4 underline-offset-8 decoration-dashed opacity-90">${item.business_idea_title}</div>
-                        <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap font-light">${item.ai_response}</div>
+                document.getElementById('historyList').innerHTML = data.map(item => `
+                    <div onclick="showAudit('${item.id}')" class="p-4 card-dark rounded-xl cursor-pointer">
+                        <div class="text-white font-bold text-[11px] truncate mb-1">${item.business_idea_title}</div>
+                        <div class="text-zinc-600 text-[9px] uppercase font-black">${new Date(item.created_at).toLocaleDateString()}</div>
                     </div>
                 `).join('');
+                window.allAudits = data;
             }
+        }
+
+        function showAudit(id) {
+            const audit = window.allAudits.find(a => a.id == id);
+            document.getElementById('auditDisplay').innerHTML = `
+                <div class="card-dark p-8 rounded-[32px] border-neon/20">
+                    <div class="text-white font-black text-2xl mb-6 underline decoration-neon underline-offset-8">${audit.business_idea_title}</div>
+                    <div class="text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">${audit.ai_response}</div>
+                </div>
+            `;
         }
 
         async function runAudit() {
             const idea = document.getElementById('ideaInput').value;
             if(!idea) return;
             const { data: { user } } = await supabaseClient.auth.getUser();
-            document.getElementById('auditBtn').innerText = "AUDITING PROTOCOL...";
-            document.getElementById('auditBtn').disabled = true;
-            try {
-                await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
-                location.reload();
-            } catch(e) {
-                alert("Protocol Interrupted.");
-                document.getElementById('auditBtn').disabled = false;
-            }
+            document.getElementById('auditBtn').innerText = "AUDITING...";
+            await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
+            location.reload();
         }
 
         checkSession();
