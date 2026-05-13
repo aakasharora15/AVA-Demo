@@ -10,91 +10,83 @@
         :root { --orange: #FF6B00; --dark: #05050A; --surface: #0E0E12; --border: #1C1C22; }
         body { background-color: var(--dark); color: #F4F4F0; font-family: 'Urbanist', sans-serif; overflow-x: hidden; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .glass-card { background: rgba(14, 14, 18, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--border); }
-        .btn-glow:hover { box-shadow: 0 0 30px rgba(255, 107, 0, 0.4); transform: translateY(-1px); }
+        .glass-card { background: rgba(14, 14, 18, 0.9); backdrop-filter: blur(20px); border: 1px solid var(--border); }
+        .btn-glow:hover { box-shadow: 0 0 40px rgba(255, 107, 0, 0.5); transform: translateY(-1px); }
         .cursor-blink::after { content: '█'; animation: blink 1s step-end infinite; color: var(--orange); }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="antialiased selection:bg-[#FF6B00] selection:text-black">
 
-    <div id="mainInterface" class="h-screen w-full flex fade-in">
+    <div id="mainInterface" class="h-screen w-full flex">
         
-        <aside class="w-64 border-r border-white/5 bg-[#05050A] flex flex-col p-8">
+        <aside class="w-72 border-r border-white/5 bg-[#05050A] flex flex-col p-10">
             <div class="flex items-center gap-3 mb-16">
                 <div class="w-6 h-6 bg-[#FF6B00] rounded flex items-center justify-center text-black font-black text-[10px]">A</div>
-                <span class="font-black tracking-tighter text-lg uppercase">AVA <span class="text-[10px] opacity-40 ml-1">v1.1</span></span>
+                <span class="font-black tracking-tighter text-xl uppercase">AVA <span class="text-[10px] opacity-40 ml-1">v1.1</span></span>
             </div>
-            
-            <nav class="flex-1 space-y-2">
-                <div class="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-6">Strategic Stack</div>
-                <div class="bg-white/5 border border-[#FF6B00]/30 rounded-xl p-4 flex items-center gap-3 cursor-pointer">
-                    <div class="w-1.5 h-1.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
-                    <span class="text-[11px] font-bold text-white uppercase tracking-widest">Ensemble Audit</span>
+            <nav class="flex-1 space-y-4">
+                <div class="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.3em] mb-8">Strategic Intelligence</div>
+                <div class="bg-white/5 border border-[#FF6B00]/30 rounded-2xl p-5 flex items-center gap-4 cursor-pointer">
+                    <div class="w-2 h-2 bg-[#FF6B00] rounded-full shadow-[0_0_12px_#FF6B00]"></div>
+                    <span class="text-xs font-bold text-white uppercase tracking-widest">Forensic Audit</span>
                 </div>
             </nav>
-
             <div class="mt-auto pt-8 border-t border-white/5">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="w-1.5 h-1.5 bg-[#FF6B00] rounded-full animate-pulse"></div>
-                    <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">System Online</span>
+                    <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Active Partner Mode</span>
                 </div>
-                <p class="text-[10px] font-mono text-zinc-600 uppercase">Operator: AAKASH</p>
+                <p class="text-[10px] font-mono text-zinc-600 uppercase">Operator: Strategic_Lead</p>
             </div>
         </aside>
 
         <main class="flex-1 flex flex-col bg-[#05050A] relative overflow-hidden">
-            <header class="h-20 border-b border-white/5 flex items-center justify-between px-10">
-                <div class="flex items-center gap-4">
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">War-Room</span>
+            <header class="h-24 border-b border-white/5 flex items-center justify-between px-12">
+                <div class="flex items-center gap-6">
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Target: UK Market Evolution</span>
                     <span class="w-1 h-1 bg-zinc-700 rounded-full"></span>
-                    <span class="text-[10px] font-bold text-[#FF6B00] uppercase tracking-widest italic">Live Multi-Agent Sequence</span>
+                    <span class="text-[10px] font-bold text-[#FF6B00] uppercase tracking-widest">Adversarial Logic Online</span>
                 </div>
             </header>
 
-            <div class="flex-1 overflow-y-auto p-12 custom-scrollbar">
-                <div class="max-w-4xl mx-auto space-y-12">
+            <div class="flex-1 overflow-y-auto p-16 custom-scrollbar">
+                <div class="max-w-4xl mx-auto space-y-16">
                     
-                    <div class="glass-card p-10 rounded-[32px] border-white/5 shadow-2xl">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Venture Hypothesis Architecture</span>
-                        </div>
-                        <textarea id="hypInput" class="w-full bg-black/40 border border-white/10 p-6 font-light text-xl text-white outline-none focus:border-[#FF6B00]/50 h-32 rounded-2xl resize-none mb-8 transition-all" placeholder="Enter strategy architecture..."></textarea>
+                    <div class="glass-card p-12 rounded-[40px] border-white/5 shadow-2xl">
+                        <textarea id="hypInput" class="w-full bg-black/20 border border-white/10 p-8 font-light text-2xl text-white outline-none focus:border-[#FF6B00]/50 h-40 rounded-3xl resize-none mb-10 transition-all" placeholder="Enter venture hypothesis for ruthless dissection..."></textarea>
                         <div class="flex justify-between items-center">
-                            <span id="status" class="text-[10px] font-mono text-zinc-600 uppercase">Awaiting Initialization</span>
-                            <button onclick="runAudit()" id="execBtn" class="bg-white text-black px-12 py-4 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-[#FF6B00] hover:text-white btn-glow transition-all">Execute Protocol</button>
+                            <span id="status" class="text-[10px] font-mono text-zinc-600 uppercase italic">Awaiting Forensic Protocol</span>
+                            <button onclick="runAudit()" id="execBtn" class="bg-white text-black px-16 py-5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-[#FF6B00] hover:text-white btn-glow transition-all">Initialize Dissection</button>
                         </div>
                     </div>
 
-                    <div id="output" class="hidden space-y-10 pb-20">
-                        <div class="flex justify-between items-end border-b border-white/5 pb-10">
+                    <div id="output" class="hidden space-y-12 pb-32">
+                        <div class="flex justify-between items-end border-b border-white/5 pb-12">
                             <div>
-                                <h2 class="text-4xl font-black italic tracking-tighter uppercase mb-2">Forensic Verdict</h2>
-                                <p class="text-[11px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Synthesis Complete</p>
+                                <h2 id="verdictTitle" class="text-5xl font-black italic tracking-tighter uppercase mb-4">Forensic Audit</h2>
+                                <p class="text-xs font-bold text-zinc-500 uppercase tracking-[0.3em]">Hedge Fund Partner Synthesis</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Resilience Score</p>
-                                <p id="score" class="text-7xl font-black text-[#FF6B00]">--</p>
+                                <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Resilience Score</p>
+                                <p id="score" class="text-8xl font-black text-[#FF6B00]">--</p>
                             </div>
                         </div>
 
-                        <div class="space-y-6">
-                            <div class="glass-card p-8 rounded-3xl border-l-4 border-l-[#FF5A5F] shadow-xl">
-                                <span class="text-[11px] font-bold text-[#FF5A5F] uppercase tracking-widest block mb-4">Agent 01 // The Saboteur (Internal Threats)</span>
-                                <div id="saboteurText" class="text-sm font-light text-zinc-300 leading-relaxed min-h-[40px]"></div>
+                        <div class="space-y-8">
+                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-[#FF5A5F]">
+                                <span class="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest block mb-6">Operational Death-Traps (Internal Failure)</span>
+                                <div id="saboteurText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line"></div>
                             </div>
-                            <div class="glass-card p-8 rounded-3xl border-l-4 border-l-[#FFB020] shadow-xl">
-                                <span class="text-[11px] font-bold text-[#FFB020] uppercase tracking-widest block mb-4">Agent 02 // The Predator (External Attacks)</span>
-                                <div id="predatorText" class="text-sm font-light text-zinc-300 leading-relaxed min-h-[40px]"></div>
+                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-[#FFB020]">
+                                <span class="text-xs font-bold text-[#FFB020] uppercase tracking-widest block mb-6">Unit Economic Reality Check (Leakage)</span>
+                                <div id="predatorText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line"></div>
                             </div>
-                            <div class="glass-card p-8 rounded-[32px] border-l-4 border-l-[#FF6B00] bg-gradient-to-br from-[#0E0E12] to-[#16161D] shadow-2xl">
-                                <span class="text-[11px] font-bold text-[#FF6B00] uppercase tracking-widest font-black block mb-4">Agent 03 // Synthesis Orchestrator</span>
-                                <div id="synthText" class="text-white text-base font-medium leading-relaxed italic min-h-[40px]"></div>
+                            <div class="glass-card p-12 rounded-[40px] border-l-4 border-l-[#FF6B00] bg-gradient-to-br from-[#0E0E12] to-[#1C1C24]">
+                                <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block mb-6">Rival Predator Attack (Market Execution)</span>
+                                <div id="synthText" class="text-white text-base font-medium leading-relaxed italic whitespace-pre-line"></div>
                             </div>
                         </div>
                     </div>
@@ -107,7 +99,7 @@
         async function type(id, text) {
             const el = document.getElementById(id);
             el.innerHTML = ''; el.classList.add('cursor-blink');
-            for (let char of text) { el.innerHTML += char; await new Promise(r => setTimeout(r, 15)); }
+            for (let char of text) { el.innerHTML += char; await new Promise(r => setTimeout(r, 8)); }
             el.classList.remove('cursor-blink');
         }
 
@@ -115,36 +107,42 @@
             const idea = document.getElementById('hypInput').value;
             if(!idea) return;
             const btn = document.getElementById('execBtn');
-            btn.innerText = 'EXECUTING...'; btn.style.pointerEvents = 'none';
+            const status = document.getElementById('status');
+            btn.innerText = 'DISSECTING...'; btn.style.pointerEvents = 'none';
+            status.innerText = 'Engaging Ruthless Lead Partner Persona...';
             document.getElementById('output').classList.remove('hidden');
 
-            // Dynamic logic controller
-            let s1, s2, s3, score;
+            let s1, s2, s3, score, title;
             const low = idea.toLowerCase();
             
-            if (low.length < 10) {
-                score = 12;
-                s1 = "[!] Input too sparse for forensic scan.";
-                s2 = "[!] No identifiable market vulnerability.";
-                s3 = "Directive: Provide detailed architecture.";
-            } else if (low.includes("wardrobe") || low.includes("delivery")) {
+            if (low.includes("casino")) {
+                title = "Forensic Audit: Online Casino in UK";
+                score = 10;
+                s1 = "1. Regulatory Compliance Overhead: UK Gambling Commission costs estimate 10-15% of revenue.\n2. Marketing CAC: Average CPA is £200-£300, leading to massive cash burn.\n3. Problem Gambling Scrutiny: Robust social responsibility measures add another 5-10% in costs.";
+                s2 = "Revenue: £100\nCOGS: £60 (Payouts/Licensing)\nMarketing: £20\nCompliance: £10\nNet Profit: £10\nLeakage: High COGS and aggressive CPA erosion.";
+                s3 = "1. Targeted Marketing: I will poach your high-value segments with aggressive bonuses.\n2. Innovative Content: I'll launch exclusive live-dealer tech you can't afford.\n3. Compliance Arbitrage: I'll report your breaches while positioning as the responsible operator.";
+            } else if (low.includes("wardrobe") || low.includes("clothing")) {
+                title = "Forensic Audit: Localized Apparel Subscription";
                 score = 42;
-                s1 = "SABOTEUR: Critical 'Transport & Inventory' waste. Localized fulfillment introduces a 31% capital bleed.";
-                s2 = "PREDATOR: Incumbents will undercut localized margins before network density is reached.";
-                s3 = "PIVOT: License routing algorithm as an API to existing 3PLs.";
+                s1 = "1. Reverse-Logistics Bleed: 31% capital drag found in return-handling.\n2. Inventory Debt: Asset-heavy physical hub model creates unscalable debt load.\n3. Unit Economic Fracture: High churn rates will offset low initial acquisition.";
+                s2 = "Revenue: £50 (Subscription)\nLogistics: £18\nDry Cleaning/QA: £12\nInventory Amortization: £10\nNet Profit: £10\nLeakage: Return shipping and QA labor costs.";
+                s3 = "1. Scale War: I will undercut your hub margins using existing 3PL density.\n2. Asset-Light Pivot: I'll license your routing API and kill your physical business.\n3. Acquisition Hijack: I'll offer a zero-deposit trial to your churned users.";
             } else {
-                score = 88;
-                s1 = "SABOTEUR: Strong technical defensibility. Minor 'Over-processing' waste detected.";
-                s2 = "PREDATOR: incumbents are slow. Primary threat is hyperscaler feature-creep in late Q4.";
-                s3 = "PIVOT: Accelerate Identity Moat to lock in enterprise-level RAG datasets.";
+                title = "Forensic Audit: Strategic Hypothesis";
+                score = 38;
+                s1 = "1. Moat Defensibility: Low technical barrier to entry for fast-followers.\n2. Scaling Waste: High 'Waiting' inefficiencies in the dev-cycle.\n3. Incumbent Exposure: Vulnerable to hyperscaler feature-creep.";
+                s2 = "Revenue: £100\nDev Ops: £40\nAcquisition: £35\nOps: £15\nNet Profit: £10\nLeakage: Inefficient talent allocation and high cloud overhead.";
+                s3 = "1. Proprietary Lock-in: I will build the RAG layer you missed.\n2. Channel Dominance: I'll buy out the referral partners you rely on.\n3. Feature Parity: I'll ship your 'unique' feature as a free plugin.";
             }
 
-            await type('saboteurText', s1); await new Promise(r => setTimeout(r, 450));
-            await type('predatorText', s2); await new Promise(r => setTimeout(r, 450));
+            document.getElementById('verdictTitle').innerText = title;
+            await type('saboteurText', s1); await new Promise(r => setTimeout(r, 400));
+            await type('predatorText', s2); await new Promise(r => setTimeout(r, 400));
             await type('synthText', s3);
             
             document.getElementById('score').innerText = score;
-            btn.innerText = 'EXECUTE PROTOCOL'; btn.style.pointerEvents = 'auto';
+            btn.innerText = 'INITIALIZE DISSECTION'; btn.style.pointerEvents = 'auto';
+            status.innerText = 'Audit Logged to Strategic Ledger';
         }
     </script>
 </body>
