@@ -13,95 +13,99 @@
         .bg-lime { background-color: #bcf948; }
         .card-dark { background: #161618; border: 1px solid #222; transition: all 0.3s ease; }
         .hero-gradient { background: radial-gradient(circle at center, #1a1a1a 0%, #0f0f10 100%); }
-        .input-field { background: #1a1a1c; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px; width: 100%; outline: none; margin-bottom: 12px; }
+        .input-field { background: #1a1a1c; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px; width: 100%; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
         .input-field:focus { border-color: #bcf948; }
     </style>
 </head>
 <body>
 
-    <!-- AUTH MODAL -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-6">
-        <div class="card-dark w-full max-w-md p-10 rounded-[32px] shadow-2xl">
-            <h2 id="authTitle" class="text-3xl font-black tracking-tighter mb-2 text-white">Initialize Identity</h2>
-            <p id="authSub" class="text-zinc-500 text-sm mb-8">Secure access to the WOODS-SWOT Forensic Stack.</p>
+    <!-- FORENSIC IDENTITY MODAL -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-6">
+        <div class="card-dark w-full max-w-md p-10 rounded-[40px] shadow-2xl border-zinc-800">
+            <h2 id="authTitle" class="text-3xl font-black tracking-tighter mb-2 text-white italic">Initialize Identity</h2>
+            <p id="authSub" class="text-zinc-500 text-xs mb-8 uppercase tracking-widest">Secure Access: WOODS-SWOT Protocol</p>
             
             <div id="signupFields">
                 <input type="text" id="fullName" placeholder="Full Name" class="input-field">
                 <input type="tel" id="phoneNumber" placeholder="Phone Number" class="input-field">
             </div>
-            <input type="email" id="email" placeholder="Gmail" class="input-field">
+            <input type="email" id="email" placeholder="Professional Email" class="input-field">
             <input type="password" id="password" placeholder="Secure Password" class="input-field">
             
-            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-lime text-black font-black py-4 rounded-2xl uppercase tracking-widest text-xs mt-4">Create Account</button>
-            <p class="text-center text-[10px] text-zinc-600 mt-6 uppercase tracking-widest cursor-pointer hover:text-white" onclick="toggleAuthMode()" id="toggleText">Already have an account? Sign In</p>
-            <button onclick="closeAuth()" class="w-full text-zinc-700 text-[10px] uppercase font-bold mt-4 tracking-[0.3em]">Cancel</button>
+            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-lime text-black font-black py-4 rounded-2xl uppercase tracking-[0.2em] text-[10px] mt-4 hover:scale-[1.02] transition-transform">Create Account</button>
+            <p class="text-center text-[10px] text-zinc-600 mt-6 uppercase tracking-widest cursor-pointer hover:text-white" onclick="toggleAuthMode()" id="toggleText">Authorized Already? Sign In</p>
+            <button onclick="closeAuth()" class="w-full text-zinc-700 text-[9px] uppercase font-black mt-8 tracking-[0.4em] opacity-50 hover:opacity-100 transition">Discard Session</button>
         </div>
     </div>
 
-    <!-- LANDING VIEW -->
+    <!-- LANDING INTERFACE -->
     <div id="loggedOutView" class="min-h-screen flex flex-col">
         <nav class="p-8 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-lime rounded-lg flex items-center justify-center"><span class="text-black font-black text-xl">A</span></div>
+                <div class="w-8 h-8 bg-lime rounded-lg flex items-center justify-center"><span class="text-black font-black text-xl tracking-tighter">A</span></div>
                 <div class="font-bold tracking-tighter text-2xl text-white">AVA <span class="text-[10px] opacity-40 uppercase tracking-[0.2em] ml-1">v1.1</span></div>
             </div>
-            <button onclick="openAuth()" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm">Access Protocol</button>
+            <button onclick="openAuth()" class="bg-white text-black px-8 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition">Access Protocol</button>
         </nav>
 
         <main class="flex-grow flex flex-col items-center justify-center text-center px-6 hero-gradient">
             <div class="uppercase tracking-[0.4em] text-[10px] font-black accent-lime mb-4">Adversarial Venture Analysis</div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-none text-white text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
-            <p class="max-w-3xl text-zinc-400 text-lg mb-10 leading-relaxed">
-                Proprietary forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span>. A defensible, investor-grade audit for complex venture architecture.
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-tight text-white">Before You Build It, <br><span class="accent-lime italic">Audit It.</span></h1>
+            <p class="max-w-3xl text-zinc-400 text-lg mb-12 leading-relaxed font-light">
+                Proprietary high-fidelity forensic engine utilizing the <span class="text-white font-bold italic">WOODS-SWOT Protocol</span> to identify latent operational liabilities and structural market vulnerabilities.
             </p>
-            <button onclick="openAuth()" class="bg-lime text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition">Initialize Forensic Audit —></button>
+            <button onclick="openAuth()" class="bg-lime text-black px-16 py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:scale-105 transition shadow-[0_0_30px_-10px_#bcf948]">Initialize Forensic Audit —></button>
         </main>
     </div>
 
-    <!-- COMMAND CENTER (Logged In) -->
+    <!-- COMMAND CENTER (ACTIVE) -->
     <div id="loggedInView" class="hidden min-h-screen flex">
-        <aside class="w-72 bg-zinc-950 p-10 border-r border-zinc-800 flex flex-col">
+        <aside class="w-80 bg-zinc-950 p-10 border-r border-zinc-800/50 flex flex-col">
             <div class="font-black text-2xl accent-lime italic mb-12 text-white">AVA v1.1</div>
-            <nav class="flex-grow space-y-6">
-                <div class="text-[10px] uppercase font-bold text-zinc-600 tracking-widest">Diagnostic Stack</div>
-                <div class="space-y-3">
-                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> WOODS Waste Audit</div>
-                    <div class="text-xs text-zinc-300 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span> SWOT-A Synthesis</div>
+            <nav class="flex-grow space-y-8">
+                <div>
+                    <div class="text-[10px] uppercase font-black text-zinc-600 tracking-[0.3em] mb-4">Diagnostic Stack</div>
+                    <div class="space-y-4">
+                        <div class="text-[11px] text-zinc-400 flex items-center gap-3 font-semibold uppercase tracking-widest"><span class="w-1.5 h-1.5 bg-lime rounded-full"></span> WOODS Audit</div>
+                        <div class="text-[11px] text-zinc-400 flex items-center gap-3 font-semibold uppercase tracking-widest"><span class="w-1.5 h-1.5 bg-lime rounded-full"></span> SWOT-A Synthesis</div>
+                    </div>
                 </div>
             </nav>
-            <button onclick="logout()" class="text-left text-zinc-500 text-sm hover:text-white mt-auto">Sign Out</button>
-            <div id="userLabel" class="text-[10px] text-zinc-600 truncate mt-4 uppercase tracking-tighter"></div>
+            <button onclick="logout()" class="text-left text-zinc-600 text-[10px] uppercase font-black hover:text-white mt-auto tracking-widest">Deauthorize Session</button>
+            <div id="userLabel" class="text-[10px] text-zinc-700 truncate mt-4 uppercase font-bold tracking-tighter italic"></div>
         </aside>
 
-        <main class="flex-grow p-16 bg-zinc-900 overflow-y-auto">
-            <h1 id="welcomeTitle" class="text-4xl font-black tracking-tighter mb-2 text-white">Command Center</h1>
-            <p class="text-zinc-500 text-sm mb-8 italic">Verified Identity: Secure Strategic Ledger.</p>
-            <div class="bg-zinc-800/40 p-8 rounded-[32px] border border-zinc-700/50 mb-16">
-                <textarea id="ideaInput" class="w-full bg-transparent border-none text-2xl font-light focus:ring-0 placeholder-zinc-700 text-white resize-none" rows="4" placeholder="Enter high-level hypothesis..."></textarea>
-                <div class="flex justify-end pt-6 border-t border-zinc-700/50">
-                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Run Protocol</button>
+        <main class="flex-grow p-20 bg-zinc-900 overflow-y-auto">
+            <h1 id="welcomeTitle" class="text-5xl font-black tracking-tighter mb-2 text-white italic">Command Center</h1>
+            <p class="text-zinc-500 text-sm mb-12 uppercase tracking-[0.2em] font-bold">Secure Strategic Ledger // Multi-Framework Diagnostics</p>
+            
+            <div class="bg-zinc-800/30 p-10 rounded-[40px] border border-zinc-700/30 mb-20 shadow-inner">
+                <textarea id="ideaInput" class="w-full bg-transparent border-none text-3xl font-light focus:ring-0 placeholder-zinc-800 text-white resize-none" rows="3" placeholder="Enter venture hypothesis for forensic evaluation..."></textarea>
+                <div class="flex justify-end pt-8 border-t border-zinc-700/30">
+                    <button onclick="runAudit()" id="auditBtn" class="bg-lime text-black px-12 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:brightness-110">Run WOODS-SWOT Protocol</button>
                 </div>
             </div>
-            <div id="historyList" class="space-y-6"></div>
+
+            <div id="historyList" class="space-y-8"></div>
         </main>
     </div>
 
     <script>
         const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
-        const SUPABASE_KEY = 'sb_publishable_Nvm-G3z1DWgzY1uowxqe_w_cj3876-0f796472251a7995188f6a978f85f1c50355f9';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaXJkaHhic2V1aHVkdXJqcmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTY0NzAsImV4cCI6MjA5NDE5MjQ3MH0.DIB8aKuBFQzEzHNTZw8lPmxUUygAsTQ0ac9vof2iU8E'; 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let isSignUp = true;
 
-        // UI ACTIONS
         function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
+        
         function toggleAuthMode() {
             isSignUp = !isSignUp;
             document.getElementById('authTitle').innerText = isSignUp ? 'Initialize Identity' : 'Authorized Access';
-            document.getElementById('signupFields').style.display = isSignUp ? 'block' : 'none';
+            document.getElementById('signupFields').classList.toggle('hidden');
             document.getElementById('authSubmitBtn').innerText = isSignUp ? 'Create Account' : 'Sign In';
-            document.getElementById('toggleText').innerText = isSignUp ? 'Already have an account? Sign In' : 'Need an account? Create One';
+            document.getElementById('toggleText').innerText = isSignUp ? 'Authorized Already? Sign In' : 'Need Identity? Create One';
         }
 
         async function checkSession() {
@@ -127,7 +131,7 @@
                     options: { data: { full_name: fullName, phone_number: phone } }
                 });
                 if (error) alert(error.message);
-                else alert("Account created! Check your email to verify before signing in.");
+                else alert("ACCOUNT INITIALIZED: Verify your professional email to authorize this identity.");
             } else {
                 const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) alert(error.message);
@@ -140,10 +144,12 @@
         async function fetchHistory() {
             const { data } = await supabaseClient.from('audits').select('*').order('created_at', { ascending: false });
             if (data) {
-                document.getElementById('historyList').innerHTML = data.map(item => `
-                    <div class="card-dark p-8 rounded-3xl">
-                        <div class="text-white font-bold text-lg mb-4 underline decoration-lime-400 decoration-2 underline-offset-4">${item.business_idea_title}</div>
-                        <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap">${item.ai_response}</div>
+                document.getElementById('historyList').innerHTML = `<div class="text-[10px] uppercase font-black text-zinc-600 tracking-[0.5em] mb-8">Forensic History Log</div>` + 
+                data.map(item => `
+                    <div class="card-dark p-10 rounded-[32px] border-zinc-800">
+                        <div class="text-[9px] font-black text-zinc-600 mb-6 uppercase tracking-[0.3em] italic">${new Date(item.created_at).toLocaleString()}</div>
+                        <div class="text-white font-black text-xl mb-6 underline decoration-lime decoration-4 underline-offset-8 decoration-dashed opacity-90">${item.business_idea_title}</div>
+                        <div class="text-zinc-400 text-md leading-relaxed whitespace-pre-wrap font-light">${item.ai_response}</div>
                     </div>
                 `).join('');
             }
@@ -153,9 +159,15 @@
             const idea = document.getElementById('ideaInput').value;
             if(!idea) return;
             const { data: { user } } = await supabaseClient.auth.getUser();
-            document.getElementById('auditBtn').innerText = "AUDITING...";
-            await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
-            location.reload();
+            document.getElementById('auditBtn').innerText = "AUDITING PROTOCOL...";
+            document.getElementById('auditBtn').disabled = true;
+            try {
+                await fetch(`/api/audit?idea=${encodeURIComponent(idea)}&user_id=${user.id}`);
+                location.reload();
+            } catch(e) {
+                alert("Protocol Interrupted.");
+                document.getElementById('auditBtn').disabled = false;
+            }
         }
 
         checkSession();
