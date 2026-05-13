@@ -1,4 +1,1 @@
-fastapi
-groq
-supabase
-python-dotenv
+# No external dependencies required
