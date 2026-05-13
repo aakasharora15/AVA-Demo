@@ -1,213 +1,358 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVA | Strategic Command</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; color: #05050A; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* Smooth Accordion Expansion */
+        .accordion-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 150px; /* Arbitrary large enough height */
+            opacity: 1;
+            margin-top: 0.5rem;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-900 selection:text-white">
 
-export default function AvaStrategicCommand() {
-  return (
-    <div className="relative min-h-screen bg-[#F8F9FA] text-[#05050A] font-sans overflow-x-hidden selection:bg-blue-900 selection:text-white">
-      
-      {/* 1. LIQUID GRADIENT SYSTEM (Backgrounds) */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        {/* Top subtle wash */}
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] h-[600px] bg-gradient-to-b from-[#0A0A1A]/10 to-transparent blur-[100px]"></div>
-        {/* Mid ink bleed */}
-        <div className="absolute top-[25%] left-[-10%] w-[120%] h-[400px] bg-[#0A0A1F] blur-[120px] mix-blend-multiply opacity-90 transform -rotate-6"></div>
-        <div className="absolute top-[28%] right-[-10%] w-[80%] h-[500px] bg-[#1A1A4A] blur-[140px] mix-blend-multiply opacity-80 transform rotate-12"></div>
-        {/* Bottom dark abyss */}
-        <div className="absolute top-[50%] left-0 w-full h-[50%] bg-[#030305] z-0"></div>
-        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[150%] h-[600px] bg-[#0A0A2A] blur-[150px] z-0"></div>
-      </div>
+    <!-- 1. LIQUID GRADIENT SYSTEM (Backgrounds) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <!-- Top subtle wash -->
+        <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] h-[600px] bg-gradient-to-b from-[#0A0A1A]/10 to-transparent blur-[100px]"></div>
+        <!-- Mid ink bleed -->
+        <div class="absolute top-[25%] left-[-10%] w-[120%] h-[400px] bg-[#0A0A1F] blur-[120px] mix-blend-multiply opacity-90 transform -rotate-6"></div>
+        <div class="absolute top-[28%] right-[-10%] w-[80%] h-[500px] bg-[#1A1A4A] blur-[140px] mix-blend-multiply opacity-80 transform rotate-12"></div>
+    </div>
 
-      {/* 2. NAVIGATION */}
-      <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 bg-[#05050A] rounded-full flex items-center justify-center text-white font-black text-[9px] tracking-tighter">A</div>
-          <span className="font-semibold tracking-tight text-xs uppercase">AVA Protocol</span>
+    <!-- 2. NAVIGATION -->
+    <nav class="relative z-50 flex items-center justify-between px-8 py-6 max-w-[1600px] mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-[#05050A] rounded-full flex items-center justify-center text-white font-black text-[9px] tracking-tighter">A</div>
+            <span class="font-semibold tracking-tight text-xs uppercase">AVA Protocol</span>
         </div>
-        <div className="hidden md:flex gap-12 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
-          <a href="#intelligence" className="hover:text-black transition-colors">Intelligence</a>
-          <a href="#stack" className="hover:text-black transition-colors">Diagnostic Stack</a>
-          <a href="#moat" className="hover:text-black transition-colors">Identity Moat</a>
+        <div class="hidden md:flex gap-12 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+            <a href="#intelligence" class="hover:text-black transition-colors">Intelligence</a>
+            <a href="#metrics" class="hover:text-black transition-colors">Metrics</a>
+            <a href="#stack" class="hover:text-black transition-colors">Diagnostic Stack</a>
         </div>
-        <button className="text-[10px] font-bold uppercase tracking-[0.2em] border border-zinc-200 px-6 py-2.5 rounded-full hover:bg-[#05050A] hover:text-white transition-all">
-          Initialize
+        <button onclick="openAuth()" class="text-[10px] font-bold uppercase tracking-[0.2em] border border-zinc-300 px-6 py-2.5 rounded-full hover:bg-[#05050A] hover:text-white transition-all">
+            Initialize
         </button>
-      </nav>
+    </nav>
 
-      {/* 3. HERO SECTION */}
-      <section className="relative z-10 pt-32 pb-40 px-8 max-w-[1200px] mx-auto text-center flex flex-col items-center">
-        <h1 className="text-5xl md:text-7xl font-medium tracking-tighter leading-[1.05] text-[#05050A] mb-12 max-w-4xl">
-          AVA Engine — the <span className="italic font-light">Adversarial</span> <br /> future of venture auditing.
+    <!-- 3. HERO SECTION -->
+    <section class="relative z-10 pt-32 pb-40 px-8 max-w-[1200px] mx-auto text-center flex flex-col items-center">
+        <h1 class="text-5xl md:text-7xl font-medium tracking-tighter leading-[1.05] text-[#05050A] mb-12 max-w-4xl">
+            AVA Engine — the <span class="italic font-light">Adversarial</span> <br> future of venture auditing.
         </h1>
         
-        {/* Glassmorphism Floating Input (Mirroring the reference search bar) */}
-        <div className="w-full max-w-2xl bg-white/60 backdrop-blur-2xl border border-white/40 p-2 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.05)] flex items-center justify-between">
-          <div className="flex items-center gap-4 px-4 w-full">
-            <span className="text-zinc-400 text-sm">⬢</span>
-            <input 
-              type="text" 
-              placeholder="Drop venture hypothesis for forensic scan..." 
-              className="bg-transparent border-none outline-none text-sm w-full font-medium placeholder:text-zinc-400 placeholder:font-normal"
-            />
-          </div>
-          <button className="bg-[#05050A] text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#1A1A2A] transition-colors whitespace-nowrap">
-            Execute Protocol
-          </button>
+        <!-- Glassmorphism Floating Input -->
+        <div class="w-full max-w-2xl bg-white/60 backdrop-blur-2xl border border-white/60 p-2 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.05)] flex items-center justify-between transition-all hover:bg-white/80">
+            <div class="flex items-center gap-4 px-4 w-full">
+                <span class="text-zinc-400 text-sm">⬢</span>
+                <input type="text" id="heroIdeaInput" placeholder="Drop venture hypothesis for forensic scan..." class="bg-transparent border-none outline-none text-sm w-full font-medium placeholder:text-zinc-400 placeholder:font-normal">
+            </div>
+            <button onclick="openAuth()" class="bg-[#05050A] text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#1A1A2A] transition-colors whitespace-nowrap">
+                Execute Protocol
+            </button>
         </div>
-      </section>
+    </section>
 
-      {/* 4. ACCORDION / CAPABILITY SECTION */}
-      <section className="relative z-10 px-8 py-32 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 border-t border-zinc-900/10">
-        <div className="md:col-span-4">
-          <div className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-8">Intelligence</div>
-          <h2 className="text-4xl font-medium tracking-tight leading-tight">
-            Outsmart market <br /> incumbents with <br /> <span className="italic font-light">TIM WOODS</span>.
-          </h2>
+    <!-- 4. ACCORDION / CAPABILITY SECTION -->
+    <section id="intelligence" class="relative z-10 px-8 py-32 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 border-t border-zinc-900/10">
+        <div class="md:col-span-4">
+            <div class="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-8">Intelligence</div>
+            <h2 class="text-4xl font-medium tracking-tight leading-tight">
+                Outsmart market <br> incumbents with <br> <span class="italic font-light">TIM WOODS</span>.
+            </h2>
         </div>
         
-        {/* Fine-line Accordion List */}
-        <div className="md:col-span-8 flex flex-col pt-8">
-          {[
-            { title: "Transport & Inventory Waste", desc: "Identify lethal drags in capital allocation before deployment." },
-            { title: "Motion & Waiting Inefficiencies", desc: "Scan for operational lag and non-value-adding structural loops." },
-            { title: "Over-processing Detection", desc: "Flag over-engineered solutions that kill unit economics." },
-            { title: "Defect & Skills Misalignment", desc: "Audit team architecture and execution maturity gaps." }
-          ].map((item, i) => (
-            <div key={i} className="group border-b border-zinc-900/10 py-8 flex items-start justify-between cursor-pointer hover:border-zinc-900/40 transition-colors">
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-medium tracking-tight text-[#05050A] group-hover:text-blue-800 transition-colors">{item.title}</h3>
-                <p className="text-xs text-zinc-500 max-w-md font-light leading-relaxed opacity-0 group-hover:opacity-100 h-0 group-hover:h-auto overflow-hidden transition-all duration-300">{item.desc}</p>
-              </div>
-              <span className="text-zinc-300 font-light text-2xl group-hover:text-blue-800 transition-colors">+</span>
+        <!-- Fine-line Accordion List -->
+        <div class="md:col-span-8 flex flex-col pt-8">
+            <!-- Item 1 -->
+            <div class="accordion-item group border-b border-zinc-900/10 py-8 flex items-start justify-between cursor-pointer hover:border-zinc-900/40 transition-colors" onclick="this.classList.toggle('active')">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-medium tracking-tight text-[#05050A] group-hover:text-blue-800 transition-colors">Transport & Inventory Waste</h3>
+                    <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Identify lethal drags in capital allocation before deployment. Scans for logistical and storage vulnerabilities.</p>
+                </div>
+                <span class="accordion-icon text-zinc-300 font-light text-2xl transition-transform duration-300 group-hover:text-blue-800">+</span>
             </div>
-          ))}
+            <!-- Item 2 -->
+            <div class="accordion-item group border-b border-zinc-900/10 py-8 flex items-start justify-between cursor-pointer hover:border-zinc-900/40 transition-colors" onclick="this.classList.toggle('active')">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-medium tracking-tight text-[#05050A] group-hover:text-blue-800 transition-colors">Motion & Waiting Inefficiencies</h3>
+                    <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Scan for operational lag and non-value-adding structural loops that slow down execution maturity.</p>
+                </div>
+                <span class="accordion-icon text-zinc-300 font-light text-2xl transition-transform duration-300 group-hover:text-blue-800">+</span>
+            </div>
+            <!-- Item 3 -->
+            <div class="accordion-item group border-b border-zinc-900/10 py-8 flex items-start justify-between cursor-pointer hover:border-zinc-900/40 transition-colors" onclick="this.classList.toggle('active')">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-medium tracking-tight text-[#05050A] group-hover:text-blue-800 transition-colors">Over-processing Detection</h3>
+                    <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Flag over-engineered solutions and unnecessary features that kill unit economics before product-market fit.</p>
+                </div>
+                <span class="accordion-icon text-zinc-300 font-light text-2xl transition-transform duration-300 group-hover:text-blue-800">+</span>
+            </div>
+            <!-- Item 4 -->
+            <div class="accordion-item group border-b border-zinc-900/10 py-8 flex items-start justify-between cursor-pointer hover:border-zinc-900/40 transition-colors" onclick="this.classList.toggle('active')">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-medium tracking-tight text-[#05050A] group-hover:text-blue-800 transition-colors">Defect & Skills Misalignment</h3>
+                    <p class="accordion-content text-xs text-zinc-500 max-w-md font-light leading-relaxed">Audit team architecture, output quality logic, and critical execution maturity gaps.</p>
+                </div>
+                <span class="accordion-icon text-zinc-300 font-light text-2xl transition-transform duration-300 group-hover:text-blue-800">+</span>
+            </div>
         </div>
-      </section>
+    </section>
 
-      {/* 5. DARK ZONE TRANSITION (Metrics & Data Density) */}
-      <section className="relative z-20 bg-[#030305] text-white pt-40 pb-32 px-8">
-        <div className="max-w-[1400px] mx-auto">
-          
-          {/* Dense Typography Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-40">
-            <div className="col-span-1 md:col-span-1">
-              <h2 className="text-3xl font-medium tracking-tight leading-tight">What makes <span className="italic font-light">Adversarial SWOT</span> unstoppable.</h2>
+    <!-- 5. DARK ZONE TRANSITION (Metrics & Data Density) -->
+    <section id="metrics" class="relative z-20 bg-[#030305] text-white pt-40 pb-32 px-8 overflow-hidden">
+        <!-- Bottom dark abyss background layer -->
+        <div class="absolute top-[0%] left-1/2 -translate-x-1/2 w-[150%] h-[600px] bg-[#0A0A2A] blur-[150px] z-0 opacity-50 pointer-events-none"></div>
+        
+        <div class="max-w-[1400px] mx-auto relative z-10">
+            <!-- Dense Typography Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-40">
+                <div class="col-span-1 md:col-span-1">
+                    <h2 class="text-3xl font-medium tracking-tight leading-tight">What makes <span class="italic font-light">Adversarial SWOT</span> unstoppable.</h2>
+                </div>
+                <div class="flex flex-col gap-4 border-l border-white/10 pl-6">
+                    <h4 class="text-sm font-semibold tracking-tight">Predator-Centric</h4>
+                    <p class="text-xs text-zinc-400 font-light leading-relaxed">Unlike traditional SWOT, we war-game your concept against active market predators to weaponize vulnerabilities.</p>
+                </div>
+                <div class="flex flex-col gap-4 border-l border-white/10 pl-6">
+                    <h4 class="text-sm font-semibold tracking-tight">High-Fidelity Output</h4>
+                    <p class="text-xs text-zinc-400 font-light leading-relaxed">Generates investor-grade structural analysis, rejecting generic advice for deep forensic diagnostics.</p>
+                </div>
+                <div class="flex flex-col gap-4 border-l border-white/10 pl-6">
+                    <h4 class="text-sm font-semibold tracking-tight">Secure Ledger</h4>
+                    <p class="text-xs text-zinc-400 font-light leading-relaxed">Every audit is stateful, encrypted, and tied strictly to your initialized professional identity.</p>
+                </div>
             </div>
-            {[
-              { title: "Predator-Centric", text: "Unlike traditional SWOT, we war-game your concept against active market predators to weaponize vulnerabilities." },
-              { title: "High-Fidelity Output", text: "Generates investor-grade structural analysis, rejecting generic advice for deep forensic diagnostics." },
-              { title: "Secure Ledger", text: "Every audit is stateful, encrypted, and tied strictly to your initialized professional identity." }
-            ].map((feature, i) => (
-              <div key={i} className="flex flex-col gap-4 border-l border-white/10 pl-6">
-                <h4 className="text-sm font-semibold tracking-tight">{feature.title}</h4>
-                <p className="text-xs text-zinc-400 font-light leading-relaxed">{feature.text}</p>
-              </div>
-            ))}
-          </div>
 
-          {/* Thin-Line Bar Charts */}
-          <div className="max-w-[1000px]">
-            <div className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-500 mb-12">Forensic Performance Benchmarks</div>
-            
-            <div className="space-y-10">
-              {[
-                { label: "Waste Identification", score: "98.2", width: "98%" },
-                { label: "Defensibility Scoring", score: "94.5", width: "94%" },
-                { label: "Execution Maturity", score: "89.1", width: "89%" }
-              ].map((stat, i) => (
-                <div key={i} className="grid grid-cols-12 items-center gap-8">
-                  <div className="col-span-3 text-xs font-medium text-zinc-300 tracking-tight">{stat.label}</div>
-                  <div className="col-span-8 flex flex-col gap-2">
-                    <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 rounded-full" style={{ width: stat.width }}></div>
+            <!-- Thin-Line Bar Charts -->
+            <div class="max-w-[1000px]">
+                <div class="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-500 mb-12">Forensic Performance Benchmarks</div>
+                
+                <div class="space-y-10">
+                    <div class="grid grid-cols-12 items-center gap-8">
+                        <div class="col-span-4 md:col-span-3 text-xs font-medium text-zinc-300 tracking-tight">Waste Identification</div>
+                        <div class="col-span-6 md:col-span-8 flex flex-col gap-2">
+                            <div class="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500 rounded-full" style="width: 98%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-2 md:col-span-1 text-xs font-mono text-zinc-400 text-right">98.2</div>
                     </div>
-                  </div>
-                  <div className="col-span-1 text-xs font-mono text-zinc-400 text-right">{stat.score}</div>
+                    <div class="grid grid-cols-12 items-center gap-8">
+                        <div class="col-span-4 md:col-span-3 text-xs font-medium text-zinc-300 tracking-tight">Defensibility Scoring</div>
+                        <div class="col-span-6 md:col-span-8 flex flex-col gap-2">
+                            <div class="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-500 rounded-full" style="width: 94%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-2 md:col-span-1 text-xs font-mono text-zinc-400 text-right">94.5</div>
+                    </div>
+                    <div class="grid grid-cols-12 items-center gap-8">
+                        <div class="col-span-4 md:col-span-3 text-xs font-medium text-zinc-300 tracking-tight">Execution Maturity</div>
+                        <div class="col-span-6 md:col-span-8 flex flex-col gap-2">
+                            <div class="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-violet-500 rounded-full" style="width: 89%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-2 md:col-span-1 text-xs font-mono text-zinc-400 text-right">89.1</div>
+                    </div>
                 </div>
-              ))}
             </div>
-          </div>
-
         </div>
-      </section>
+    </section>
 
-      {/* 6. CARDS SECTION (Diagnostic Stack) */}
-      <section className="relative z-20 bg-[#030305] text-white pb-40 px-8">
-        <div className="max-w-[1400px] mx-auto border-t border-white/10 pt-32">
-          <div className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-500 mb-12">Diagnostic Stack</div>
-          <h2 className="text-4xl font-medium tracking-tight mb-16">Tools for every <span className="italic font-light">innovator</span></h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { id: "A1", title: "WOODS Scanner", desc: "Deep-scan unit economics for the 8 structural wastes." },
-              { id: "A2", title: "SWOT-A Engine", desc: "Adversarial modeling against existing market incumbents." },
-              { id: "A3", title: "Identity Moat", desc: "Stateful, encrypted ledger of your venture architecture." },
-              { id: "A4", title: "Command Center", desc: "Centralized war-room for continuous hypothesis testing." }
-            ].map((card, i) => (
-              <div key={i} className="group rounded-3xl bg-white/5 border border-white/10 p-6 flex flex-col hover:bg-white/10 transition-colors cursor-pointer relative overflow-hidden">
-                {/* Inner Fluid Gradient Image Fake */}
-                <div className="w-full h-32 rounded-xl bg-gradient-to-br from-[#1A1A4A] to-[#0A0A1A] mb-8 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 mix-blend-overlay"></div>
-                  <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600 blur-2xl rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+    <!-- 6. CARDS SECTION (Diagnostic Stack) -->
+    <section id="stack" class="relative z-20 bg-[#030305] text-white pb-40 px-8">
+        <div class="max-w-[1400px] mx-auto border-t border-white/10 pt-32">
+            <div class="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-500 mb-12">Diagnostic Stack</div>
+            <h2 class="text-4xl font-medium tracking-tight mb-16">Tools for every <span class="italic font-light">innovator</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div onclick="openAuth()" class="group rounded-3xl bg-white/5 border border-white/10 p-6 flex flex-col hover:bg-white/10 transition-colors cursor-pointer relative overflow-hidden">
+                    <div class="w-full h-32 rounded-xl bg-gradient-to-br from-[#1A1A4A] to-[#0A0A1A] mb-8 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 mix-blend-overlay"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600 blur-2xl rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white">A1</span>
+                    </div>
+                    <h3 class="text-sm font-semibold tracking-tight mb-2">WOODS Scanner</h3>
+                    <p class="text-xs text-zinc-500 font-light leading-relaxed mb-8">Deep-scan unit economics for the 8 structural wastes.</p>
+                    <div class="mt-auto flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
+                        <span>Initialize</span> <span>→</span>
+                    </div>
                 </div>
-                
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white">{card.id}</span>
+                <!-- Card 2 -->
+                <div onclick="openAuth()" class="group rounded-3xl bg-white/5 border border-white/10 p-6 flex flex-col hover:bg-white/10 transition-colors cursor-pointer relative overflow-hidden">
+                    <div class="w-full h-32 rounded-xl bg-gradient-to-br from-[#1A1A3A] to-[#05051A] mb-8 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 mix-blend-overlay"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-600 blur-2xl rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white">A2</span>
+                    </div>
+                    <h3 class="text-sm font-semibold tracking-tight mb-2">SWOT-A Engine</h3>
+                    <p class="text-xs text-zinc-500 font-light leading-relaxed mb-8">Adversarial modeling against existing market incumbents.</p>
+                    <div class="mt-auto flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
+                        <span>Initialize</span> <span>→</span>
+                    </div>
                 </div>
-                <h3 className="text-sm font-semibold tracking-tight mb-2">{card.title}</h3>
-                <p className="text-xs text-zinc-500 font-light leading-relaxed mb-8">{card.desc}</p>
-                
-                <div className="mt-auto flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
-                  <span>Initialize</span>
-                  <span>→</span>
+                <!-- Card 3 -->
+                <div onclick="openAuth()" class="group rounded-3xl bg-white/5 border border-white/10 p-6 flex flex-col hover:bg-white/10 transition-colors cursor-pointer relative overflow-hidden">
+                    <div class="w-full h-32 rounded-xl bg-gradient-to-br from-[#2A1A4A] to-[#0A0A1A] mb-8 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 mix-blend-overlay"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-600 blur-2xl rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white">A3</span>
+                    </div>
+                    <h3 class="text-sm font-semibold tracking-tight mb-2">Identity Moat</h3>
+                    <p class="text-xs text-zinc-500 font-light leading-relaxed mb-8">Stateful, encrypted ledger of your venture architecture.</p>
+                    <div class="mt-auto flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
+                        <span>Initialize</span> <span>→</span>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
+                <!-- Card 4 -->
+                <div onclick="openAuth()" class="group rounded-3xl bg-white/5 border border-white/10 p-6 flex flex-col hover:bg-white/10 transition-colors cursor-pointer relative overflow-hidden">
+                    <div class="w-full h-32 rounded-xl bg-gradient-to-br from-[#1A2A4A] to-[#0A0A1A] mb-8 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 mix-blend-overlay"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-cyan-600 blur-2xl rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white">A4</span>
+                    </div>
+                    <h3 class="text-sm font-semibold tracking-tight mb-2">Command Center</h3>
+                    <p class="text-xs text-zinc-500 font-light leading-relaxed mb-8">Centralized war-room for continuous hypothesis testing.</p>
+                    <div class="mt-auto flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
+                        <span>Initialize</span> <span>→</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </section>
+    </section>
 
-      {/* 7. FOOTER CTA */}
-      <footer className="relative z-20 bg-[#030305] text-white pt-20 pb-12 px-8 overflow-hidden">
-        <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2 w-[100%] h-[800px] bg-[#0A0A4A] blur-[150px] opacity-40 pointer-events-none"></div>
+    <!-- 7. FOOTER CTA -->
+    <footer class="relative z-20 bg-[#030305] text-white pt-20 pb-12 px-8 overflow-hidden">
+        <div class="absolute bottom-[-50%] left-1/2 -translate-x-1/2 w-[100%] h-[800px] bg-[#0A0A4A] blur-[150px] opacity-40 pointer-events-none"></div>
         
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between border-b border-white/10 pb-20 mb-8 relative z-10">
-          <div className="max-w-xl">
-            <h2 className="text-4xl font-medium tracking-tight mb-6">Join the <span className="italic font-light">revolution</span>.</h2>
-            <p className="text-sm text-zinc-400 font-light leading-relaxed mb-8">
-              AVA Protocol requires a verified professional identity. Establish your secure command center and begin adversarial auditing today.
-            </p>
-          </div>
-          <button className="bg-white text-[#05050A] px-8 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors">
-            Initialize Identity
-          </button>
+        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between border-b border-white/10 pb-20 mb-8 relative z-10">
+            <div class="max-w-xl">
+                <h2 class="text-4xl font-medium tracking-tight mb-6">Join the <span class="italic font-light">revolution</span>.</h2>
+                <p class="text-sm text-zinc-400 font-light leading-relaxed mb-8 md:mb-0">
+                    AVA Protocol requires a verified professional identity. Establish your secure command center and begin adversarial auditing today.
+                </p>
+            </div>
+            <button onclick="openAuth()" class="bg-white text-[#05050A] px-8 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors whitespace-nowrap">
+                Initialize Identity
+            </button>
         </div>
 
-        {/* Micro Footer Links */}
-        <div className="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-[10px] font-medium tracking-widest uppercase text-zinc-600 relative z-10">
-          <div className="flex flex-col gap-4">
-            <span className="text-white mb-2">Protocol</span>
-            <a href="#" className="hover:text-white transition-colors">TIM WOODS Engine</a>
-            <a href="#" className="hover:text-white transition-colors">SWOT-A Matrix</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-white mb-2">Platform</span>
-            <a href="#" className="hover:text-white transition-colors">Command Center</a>
-            <a href="#" className="hover:text-white transition-colors">Identity Ledger</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-white mb-2">Legal</span>
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-white mb-2">System</span>
-            <span className="text-blue-500 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
-              All systems nominal
-            </span>
-          </div>
+        <!-- Micro Footer Links -->
+        <div class="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-[10px] font-medium tracking-widest uppercase text-zinc-600 relative z-10">
+            <div class="flex flex-col gap-4">
+                <span class="text-white mb-2">Protocol</span>
+                <a href="#" class="hover:text-white transition-colors">TIM WOODS Engine</a>
+                <a href="#" class="hover:text-white transition-colors">SWOT-A Matrix</a>
+            </div>
+            <div class="flex flex-col gap-4">
+                <span class="text-white mb-2">Platform</span>
+                <a href="#" class="hover:text-white transition-colors">Command Center</a>
+                <a href="#" class="hover:text-white transition-colors">Identity Ledger</a>
+            </div>
+            <div class="flex flex-col gap-4">
+                <span class="text-white mb-2">Legal</span>
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+            <div class="flex flex-col gap-4">
+                <span class="text-white mb-2">System</span>
+                <span class="text-blue-500 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                    All systems nominal
+                </span>
+            </div>
         </div>
-      </footer>
+    </footer>
 
+    <!-- AUTH MODAL (Hidden by default, styled to match DeepSeek minimal vibe) -->
+    <div id="authModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-[#030305]/90 backdrop-blur-md p-6 transition-opacity">
+        <div class="bg-[#0A0A0F] border border-white/10 w-full max-w-md p-10 rounded-[24px] shadow-[0_0_80px_rgba(26,26,74,0.3)]">
+            <div class="flex justify-between items-start mb-8">
+                <h2 id="authTitle" class="text-3xl font-medium tracking-tight text-white">Initialize <br><span class="italic font-light text-blue-400">Identity</span></h2>
+                <button onclick="closeAuth()" class="text-zinc-500 hover:text-white text-xl transition-colors">&times;</button>
+            </div>
+            
+            <div id="signupFields">
+                <input type="text" id="fullName" placeholder="Full Name" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-blue-500 transition-colors text-sm font-light">
+                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-blue-500 transition-colors text-sm font-light">
+            </div>
+            <input type="email" id="email" placeholder="Professional Email" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white mb-3 outline-none focus:border-blue-500 transition-colors text-sm font-light">
+            <input type="password" id="password" placeholder="Secure Password" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white mb-8 outline-none focus:border-blue-500 transition-colors text-sm font-light">
+            
+            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-white text-[#05050A] font-bold py-4 rounded-xl uppercase tracking-widest text-[11px] hover:bg-zinc-200 transition-colors">Create Account</button>
+            <p class="text-center text-[10px] text-zinc-500 mt-6 uppercase tracking-widest cursor-pointer hover:text-blue-400 transition-colors" onclick="toggleAuthMode()" id="toggleText">Already Authorized? Sign In</p>
+        </div>
     </div>
-  );
-}
+
+    <script>
+        // Auth UI Toggles
+        let isSignUp = true;
+        function openAuth() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            document.getElementById('authTitle').innerHTML = isSignUp ? 'Initialize <br><span class="italic font-light text-blue-400">Identity</span>' : 'Authorized <br><span class="italic font-light text-blue-400">Access</span>';
+            document.getElementById('signupFields').style.display = isSignUp ? 'block' : 'none';
+            document.getElementById('authSubmitBtn').innerText = isSignUp ? 'Create Account' : 'Sign In';
+            document.getElementById('toggleText').innerText = isSignUp ? 'Already Authorized? Sign In' : 'Need Identity? Create One';
+        }
+
+        // Supabase Logic
+        const SUPABASE_URL = 'https://hlirdhxbseuhudurjrkl.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaXJkaHhic2V1aHVkdXJqcmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTY0NzAsImV4cCI6MjA5NDE5MjQ3MH0.DIB8aKuBFQzEzHNTZw8lPmxUUygAsTQ0ac9vof2iU8E';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phoneNumber').value;
+
+            if (isSignUp) {
+                const { error } = await supabaseClient.auth.signUp({
+                    email, password, options: { data: { full_name: fullName, phone_number: phone } }
+                });
+                if (error) alert(error.message);
+                else alert("Identity Initialized. Check email to verify.");
+            } else {
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) alert(error.message);
+                else {
+                    alert("Authorized. Redirecting to Command Center...");
+                    // Typically you'd redirect to your logged-in dashboard view here.
+                }
+            }
+        }
+    </script>
+</body>
+</html>
