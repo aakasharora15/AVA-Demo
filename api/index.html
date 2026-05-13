@@ -1,146 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVA | Strategic Command Center</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --lime: #bef265; --dark: #05050A; --surface: #0E0E12; --border: #1C1C22; }
-        body { background-color: var(--dark); color: #F4F4F0; font-family: 'Urbanist', sans-serif; overflow-x: hidden; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .glass-card { background: rgba(14, 14, 18, 0.9); border: 1px solid var(--border); }
-        .btn-glow:hover { box-shadow: 0 0 40px rgba(190, 242, 101, 0.3); transform: translateY(-1px); }
-        .cursor-blink::after { content: '█'; animation: blink 1s step-end infinite; color: var(--lime); }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVA | Risk. Exposed.</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C4A882;--gold-dim:#9D8A6A;--gold-bg:rgba(196,168,130,0.08);--gold-border:rgba(196,168,130,0.2);
+  --red:#C0392B;--amber:#B7860B;--green:#2E7D32;
+  --base:#0D0D0D;--s1:#141414;--s2:#1A1A1A;--s3:#222222;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --text:#EFEFEF;--muted:#5A5A5A;--muted2:#3A3A3A;
+  --font:'Geist',sans-serif;--mono:'DM Mono',monospace;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:18px;--r-pill:999px;
+}
+html,body{height:100%;background:var(--base);color:var(--text);font-family:var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--s3)}
+.hidden{display:none!important}
+.material-icons-round{font-size:16px;line-height:1;vertical-align:middle}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:58px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;background:rgba(13,13,13,0.94);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;flex-direction:column;align-items:flex-start;gap:3px;cursor:pointer}
+.nav-logo-svg{height:20px;width:auto;display:block}
+.nav-tagline{font-family:var(--mono);font-size:8.5px;color:var(--muted);letter-spacing:.14em;line-height:1}
+.nav-right{display:flex;gap:8px;align-items:center}
+
+/* BUTTONS */
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--text);padding:7px 18px;border-radius:var(--r-pill);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-gold{background:var(--gold);border:none;color:#0D0D0D;padding:8px 20px;border-radius:var(--r-pill);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-gold:hover{background:var(--gold-dim)}
+.btn-gold:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-top:58px}
+.page.active{display:block}
+#heroPage.active{display:flex;flex-direction:column}
+
+/* ── HERO ── */
+.hero{
+  position:relative;display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:96px 24px 64px;overflow:hidden;
+}
+
+/* DOT GRID MESH */
+.mesh{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(196,168,130,0.18) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse 70% 80% at 50% 50%,black 0%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 50%,black 0%,transparent 100%);
+  animation:meshDrift 20s ease-in-out infinite alternate;
+}
+@keyframes meshDrift{0%{background-position:0 0}100%{background-position:14px 14px}}
+.mesh-fade{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(196,168,130,0.04) 0%,transparent 60%);
+}
+
+.hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--gold-border);border-radius:var(--r-pill);
+  padding:5px 14px;font-family:var(--mono);font-size:9px;
+  color:var(--gold);letter-spacing:.14em;margin-bottom:32px;
+  background:rgba(196,168,130,0.04);
+}
+.pill-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:glow 2s ease infinite}
+@keyframes glow{0%,100%{opacity:.5;box-shadow:none}50%{opacity:1;box-shadow:0 0 6px var(--gold)}}
+
+h1{
+  font-family:var(--font);font-size:clamp(40px,7vw,80px);
+  font-weight:900;line-height:1.02;letter-spacing:-.01em;
+  margin-bottom:22px;text-transform:uppercase;
+}
+h1 em{color:var(--gold);font-style:normal}
+.hero-sub{font-size:15px;color:var(--muted);max-width:460px;line-height:1.75;margin-bottom:36px;font-weight:400}
+.hero-cta{display:flex;gap:10px;margin-bottom:60px}
+.btn-xl-gold{background:var(--gold);border:none;color:#0D0D0D;padding:13px 30px;border-radius:var(--r-pill);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-xl-gold:hover{background:var(--gold-dim);transform:translateY(-1px)}
+.btn-xl-ghost{background:none;border:1px solid var(--border2);color:var(--text);padding:13px 30px;border-radius:var(--r-pill);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-xl-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* TICKER */
+.hero-ticker{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px 28px;max-width:540px;width:100%}
+.ticker-head{font-family:var(--mono);font-size:9px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:16px;letter-spacing:.14em}
+.t-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:glow 2.5s ease infinite}
+.ticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.t-item{display:flex;flex-direction:column;gap:6px}
+.t-lbl{font-size:10px;color:var(--muted);font-weight:400}
+.t-val{font-size:13px;font-weight:600;color:var(--text);font-family:var(--mono)}
+.t-track{height:2px;background:var(--s3);border-radius:2px;overflow:hidden}
+.t-fill{height:100%;border-radius:2px;background:var(--gold);opacity:.7}
+
+/* ── FEATURES ── */
+.features{padding:64px 40px 80px;max-width:1060px;margin:0 auto}
+.sec-eyebrow{font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:.2em;text-align:center;margin-bottom:16px}
+.sec-title{font-family:var(--font);font-size:clamp(24px,4vw,40px);font-weight:900;text-align:center;margin-bottom:48px;letter-spacing:-.01em;text-transform:uppercase;line-height:1.1}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:72px}
+.feat-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:26px 22px;transition:all .25s}
+.feat-card:hover{border-color:var(--gold-border);background:var(--s2)}
+.feat-icon{width:38px;height:38px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--gold);border:1px solid var(--border)}
+.feat-icon .material-icons-round{font-size:17px}
+.feat-title{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.feat-desc{font-size:12px;color:var(--muted);line-height:1.65;font-weight:400}
+.cta-banner{text-align:center;border-top:1px solid var(--border);padding-top:60px}
+.cta-banner h2{font-family:var(--font);font-size:clamp(22px,3.5vw,38px);font-weight:900;margin-bottom:12px;letter-spacing:-.01em;text-transform:uppercase;line-height:1.1}
+.cta-banner h2 em{color:var(--gold);font-style:normal}
+.cta-banner p{font-size:14px;color:var(--muted);margin-bottom:28px;font-weight:400}
+
+/* ── APP LAYOUT ── */
+.app-layout{display:flex;height:calc(100vh - 58px)}
+
+.sidebar{width:224px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);padding:28px 14px;display:flex;flex-direction:column}
+.sb-section{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.14em;padding:0 10px;margin-bottom:10px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-md);cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);transition:all .15s;margin-bottom:2px}
+.sb-item:hover{background:var(--s2);color:var(--text)}
+.sb-item.active{background:rgba(196,168,130,0.09);color:var(--gold)}
+.sb-item .material-icons-round{font-size:16px}
+.sb-foot{margin-top:auto;padding-top:20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted2);line-height:1.65}
+.sb-foot strong{display:block;font-size:9px;font-family:var(--mono);color:var(--muted);letter-spacing:.1em;margin-bottom:5px}
+
+.app-main{flex:1;overflow-y:auto;padding:36px 44px}
+.page-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.page-hdr h2{font-family:var(--font);font-size:20px;font-weight:800;letter-spacing:-.02em}
+.page-hdr p{font-size:12px;color:var(--muted);margin-top:4px;font-weight:400}
+
+/* ── FORM ── */
+.form-block{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;margin-bottom:12px}
+.form-block-title{font-size:9px;font-family:var(--mono);color:var(--gold);letter-spacing:.18em;margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row.full{grid-template-columns:1fr}
+.fgroup{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.fgroup:last-child{margin-bottom:0}
+label{font-size:12px;font-weight:500;color:var(--text)}
+.req{color:var(--gold)}
+input[type=text],textarea,select{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:11px 15px;border-radius:var(--r-md);font-family:var(--font);font-size:13px;font-weight:400;outline:none;transition:all .2s;width:100%}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--gold-border);background:var(--s3)}
+input::placeholder,textarea::placeholder{color:var(--muted2)}
+select{appearance:none;cursor:pointer}
+select option{background:var(--s1)}
+textarea{resize:vertical;min-height:100px;line-height:1.65}
+.form-foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.form-err{font-family:var(--mono);font-size:10px;color:var(--red)}
+.btn-run{background:var(--gold);border:none;color:#0D0D0D;padding:12px 28px;border-radius:var(--r-pill);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.btn-run:hover{background:var(--gold-dim)}
+.btn-run:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── RESULTS ── */
+.result-hero{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;display:flex;align-items:center;gap:28px;margin-bottom:24px}
+.dial-wrap{position:relative;width:96px;height:96px;flex-shrink:0}
+.dial-wrap svg{transform:rotate(-90deg)}
+.dial-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.dial-num{font-family:var(--font);font-size:26px;font-weight:800;line-height:1}
+.dial-lbl{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.12em;margin-top:2px}
+.result-meta h3{font-family:var(--font);font-size:18px;font-weight:800;margin-bottom:10px;letter-spacing:-.02em}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.meta-pill{font-size:11px;color:var(--muted);background:var(--s2);padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--border);font-weight:400}
+.meta-date{font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:10px}
+.status-bar{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.1em;padding:8px 0 16px;min-height:34px}
+
+/* AGENT GROUP */
+.agent-group{margin-bottom:24px}
+.ag-header{display:flex;align-items:center;gap:14px;padding:16px 0 12px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.ag-num{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:500;flex-shrink:0}
+.ag1 .ag-num{background:rgba(192,57,43,.1);color:#C0392B}
+.ag2 .ag-num{background:rgba(183,134,11,.1);color:#B7860B}
+.ag3 .ag-num{background:rgba(196,168,130,.08);color:var(--gold)}
+.ag-info{flex:1}
+.ag-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.ag-sub{font-size:11px;color:var(--muted);font-weight:400}
+.ag-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-idle{background:var(--s3)}
+.dot-run{background:var(--gold);animation:glow 1.2s ease infinite}
+.dot-r{background:#C0392B}.dot-a{background:#B7860B}.dot-g{background:var(--gold)}
+
+/* SECTION CARDS */
+.sec-cards{display:flex;flex-direction:column;gap:5px}
+.sec-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color .2s;opacity:.28}
+.sec-card.revealed{opacity:1}
+.sec-card:hover{border-color:var(--gold-border)}
+.sc-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none}
+.sc-left{display:flex;align-items:center;gap:11px}
+.sc-icon{width:30px;height:30px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;border:1px solid var(--border)}
+.sc-icon .material-icons-round{font-size:14px}
+.sc-title{font-size:13px;font-weight:500;color:var(--text)}
+.sc-chev{color:var(--muted);transition:transform .2s;font-size:18px}
+.sc-chev.open{transform:rotate(180deg)}
+.sc-body{display:none;padding:0 16px 16px}
+.sc-body.open{display:block}
+.sc-body p{font-size:13px;color:#777;line-height:1.85;font-weight:400}
+.typing::after{content:'▌';animation:blink .9s step-end infinite;color:var(--gold);font-size:11px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* RESULT ACTIONS */
+.result-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+.btn-action{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--r-pill);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-copy{background:var(--s2);border:1px solid var(--border);color:var(--text)}
+.btn-copy:hover{border-color:var(--gold-border);color:var(--gold)}
+.btn-pdf{background:var(--gold);border:none;color:#0D0D0D;font-weight:600}
+.btn-pdf:hover{background:var(--gold-dim)}
+.btn-pdf:disabled{opacity:.4;cursor:not-allowed}
+
+@media(max-width:768px){.feat-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.result-hero{flex-direction:column}.sidebar{display:none}h1{font-size:36px}}
+</style>
 </head>
-<body class="antialiased selection:bg-[#bef265] selection:text-black">
+<body>
 
-    <div id="mainInterface" class="h-screen w-full flex">
-        <aside class="w-72 border-r border-white/5 bg-[#05050A] flex flex-col p-10">
-            <div class="mb-16">
-                <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1103.78 353.49" class="w-32 h-auto">
-                    <g id="Layer_1-2" data-name="Layer 1">
-                        <path fill="#bef265" d="M237.38,31.75L50.43,353.49l-50.43-.05L208.74,0h57.23l210.37,353.41-49.33.03L237.38,31.75Z"/>
-                        <path fill="#bef265" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
-                        <path fill="#bef265" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
-                    </g>
-                </svg>
-                <div class="mt-2 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.4em]">v1.1 Strategic Partner</div>
-            </div>
-            <nav class="flex-1 space-y-4">
-                <div class="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.3em] mb-8">Intelligence Stack</div>
-                <div class="bg-white/5 border border-[#bef265]/30 rounded-2xl p-5 flex items-center gap-4">
-                    <div class="w-2 h-2 bg-[#bef265] rounded-full shadow-[0_0_12px_#bef265]"></div>
-                    <span class="text-xs font-bold text-white uppercase tracking-widest">Forensic Audit</span>
-                </div>
-            </nav>
-            <button onclick="downloadPDF()" id="pdfBtn" class="hidden text-[10px] font-bold uppercase tracking-widest text-[#bef265] border border-[#bef265]/30 p-4 rounded-xl hover:bg-[#bef265] hover:text-black transition-all mb-4">
-                Download Agency Report
-            </button>
-        </aside>
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="showView('hero')">
+    <svg class="nav-logo-svg" viewBox="0 0 1103.78 353.49" xmlns="http://www.w3.org/2000/svg">
+      <path style="fill:#C4A882" d="M237.38,31.75L50.43,353.49l-50.43-.05L208.74,0h57.23l210.37,353.41-49.33.03L237.38,31.75Z"/>
+      <path style="fill:#C4A882" d="M864.82,31.75l-186.95,321.74-50.43-.05L836.19,0h57.23l210.37,353.41-49.33.03L864.82,31.75Z"/>
+      <path style="fill:#C4A882" d="M551.86,321.74L738.81,0l50.43.05-208.74,353.44h-57.23L312.91.07l49.33-.03,189.63,321.7Z"/>
+    </svg>
+    <span class="nav-tagline">RISK. EXPOSED.</span>
+  </div>
+  <div class="nav-right">
+    <button class="btn-gold" onclick="showView('analysis')">New Analysis</button>
+  </div>
+</nav>
 
-        <main class="flex-1 flex flex-col bg-[#05050A] relative overflow-hidden">
-            <header class="h-24 border-b border-white/5 flex items-center justify-between px-12">
-                <div class="flex items-center gap-6 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                    <span>Governance Layer</span>
-                    <span class="w-1 h-1 bg-zinc-700 rounded-full"></span>
-                    <span class="text-[#bef265] italic">Multi-Agent Ensemble Active</span>
-                </div>
-            </header>
-
-            <div class="flex-1 overflow-y-auto p-16 custom-scrollbar">
-                <div class="max-w-4xl mx-auto space-y-12 pb-24">
-                    <div class="glass-card p-12 rounded-[40px] border-white/5 shadow-2xl">
-                        <textarea id="hypInput" class="w-full bg-black/20 border border-white/10 p-8 font-light text-2xl text-white outline-none focus:border-[#bef265]/50 h-32 rounded-3xl resize-none mb-10 transition-all" placeholder="Enter venture hypothesis..."></textarea>
-                        <div class="flex justify-between items-center">
-                            <span id="status" class="text-[10px] font-mono text-zinc-600 uppercase italic">Awaiting Protocol</span>
-                            <button onclick="runAudit()" id="execBtn" class="bg-white text-black px-16 py-5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-[#bef265] hover:text-white btn-glow transition-all">Execute Protocol</button>
-                        </div>
-                    </div>
-
-                    <div id="captureArea" class="hidden space-y-12 p-8 rounded-[40px]">
-                        <div class="flex justify-between items-end border-b border-white/5 pb-12">
-                            <div>
-                                <h2 class="text-5xl font-black italic tracking-tighter uppercase mb-4 text-white">Forensic Verdict</h2>
-                                <p class="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em]">Strategic Synthesis: Complete</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Resilience Score</p>
-                                <p id="score" class="text-8xl font-black text-[#bef265]">--</p>
-                            </div>
-                        </div>
-                        <div class="space-y-8" id="agentResults">
-                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-emerald-500">
-                                <span class="text-xs font-bold text-emerald-500 uppercase tracking-widest block mb-6 font-mono">Agent 01 // The Auditor (TIM WOODS)</span>
-                                <div id="saboteurText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line min-h-[40px]"></div>
-                            </div>
-                            <div class="glass-card p-10 rounded-[32px] border-l-4 border-l-sky-500">
-                                <span class="text-xs font-bold text-sky-500 uppercase tracking-widest block mb-6 font-mono">Agent 02 // The Predator (SWOT-A)</span>
-                                <div id="predatorText" class="text-sm font-light text-zinc-300 leading-relaxed whitespace-pre-line min-h-[40px]"></div>
-                            </div>
-                            <div class="glass-card p-12 rounded-[40px] border-l-4 border-l-[#bef265] bg-[#0E0E12]">
-                                <span class="text-xs font-bold text-[#bef265] uppercase tracking-widest block mb-6 font-mono">Agent 03 // Synthesis Orchestrator</span>
-                                <div id="synthText" class="text-white text-base font-medium leading-relaxed italic whitespace-pre-line min-h-[40px]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<!-- HERO PAGE -->
+<div class="page active" id="heroPage">
+  <div class="hero">
+    <div class="mesh"></div>
+    <div class="mesh-fade"></div>
+    <div class="hero-content">
+      <div class="hero-pill"><div class="pill-dot"></div>ADVERSARIAL VENTURE ANALYSIS</div>
+      <h1>Before You<br>Build It,<br><em>Break It.</em></h1>
+      <p class="hero-sub">AI-powered adversarial analysis that exposes hidden risks, weaknesses, and execution threats inside your business idea.</p>
+      <div class="hero-cta">
+        <button class="btn-xl-gold" onclick="showView('analysis')">Analyse Your Idea →</button>
+        <button class="btn-xl-ghost" onclick="document.getElementById('featSec').scrollIntoView({behavior:'smooth'})">How It Works</button>
+      </div>
+      <div class="hero-ticker">
+        <div class="ticker-head"><div class="t-dot"></div>LIVE RISK ANALYSIS</div>
+        <div class="ticker-grid">
+          <div class="t-item"><div class="t-lbl">Market Risk</div><div class="t-val">94%</div><div class="t-track"><div class="t-fill" style="width:94%"></div></div></div>
+          <div class="t-item"><div class="t-lbl">Financial Risk</div><div class="t-val">91%</div><div class="t-track"><div class="t-fill" style="width:91%"></div></div></div>
+          <div class="t-item"><div class="t-lbl">Operational</div><div class="t-val">88%</div><div class="t-track"><div class="t-fill" style="width:88%"></div></div></div>
+          <div class="t-item"><div class="t-lbl">Competition</div><div class="t-val">96%</div><div class="t-track"><div class="t-fill" style="width:96%"></div></div></div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        async function type(id, text) {
-            const el = document.getElementById(id);
-            el.innerHTML = ''; el.classList.add('cursor-blink');
-            for (let char of text) { el.innerHTML += char; await new Promise(r => setTimeout(r, 10)); }
-            el.classList.remove('cursor-blink');
-        }
+  <section class="features" id="featSec">
+    <div class="sec-eyebrow">THREAT INTELLIGENCE</div>
+    <div class="sec-title">Every angle. Every risk.<br>Every blind spot.</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">donut_large</span></div><div class="feat-title">Market Saturation Analysis</div><div class="feat-desc">Understand how crowded your space really is.</div></div>
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">public</span></div><div class="feat-title">Regional & Geographic Challenges</div><div class="feat-desc">Location-specific threats, regulations, and barriers.</div></div>
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">account_balance</span></div><div class="feat-title">Financial Risk Assessment</div><div class="feat-desc">Cash flow pressure, margins, and scaling costs.</div></div>
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">psychology</span></div><div class="feat-title">Customer Psychology Risks</div><div class="feat-desc">Why buyers may resist, hesitate, or ignore you.</div></div>
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">gpp_bad</span></div><div class="feat-title">Competitor Attack Simulation</div><div class="feat-desc">How existing players could destroy your startup.</div></div>
+      <div class="feat-card"><div class="feat-icon"><span class="material-icons-round">visibility</span></div><div class="feat-title">Investor Perspective</div><div class="feat-desc">Why VCs might pass — before you walk into the room.</div></div>
+    </div>
+    <div class="cta-banner">
+      <h2>Most AI tools help you <em>start</em> a business.</h2>
+      <p>This one helps you understand why it might fail — before you risk everything.</p>
+      <button class="btn-xl-gold" onclick="showView('analysis')">Get Started →</button>
+    </div>
+  </section>
+</div>
 
-        async function runAudit() {
-            const idea = document.getElementById('hypInput').value;
-            if(!idea) return;
-            const btn = document.getElementById('execBtn');
-            btn.innerText = 'ORCHESTRATING...';
-            document.getElementById('captureArea').classList.remove('hidden');
+<!-- ANALYSIS PAGE -->
+<div class="page" id="analysisPage">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sb-section">WORKSPACE</div>
+      <div class="sb-item active" onclick="showView('analysis')"><span class="material-icons-round">add_circle_outline</span> New Analysis</div>
+      <div class="sb-item" onclick="showView('results')" id="sbResults" style="display:none"><span class="material-icons-round">analytics</span> Last Report</div>
+      <div class="sb-foot"><strong>AVA INTELLIGENCE</strong>Adversarial Analysis.<br>Strategic Risk Intelligence.</div>
+    </aside>
+    <div class="app-main">
+      <div class="page-hdr">
+        <div><h2>New Analysis</h2><p>Fill in your venture details for a forensic adversarial audit.</p></div>
+        <button class="btn-ghost" onclick="showView('hero')">← Home</button>
+      </div>
+      <div class="form-block">
+        <div class="form-block-title">BUSINESS DETAILS</div>
+        <div class="fgroup form-row full"><label>Business Idea Title <span class="req">*</span></label><input type="text" id="fTitle" placeholder="e.g., AI-powered meal prep delivery service"></div>
+        <div class="fgroup form-row full"><label>Full Description <span class="req">*</span></label><textarea id="fDesc" placeholder="Describe your business idea in detail — what it does, how it works, what makes it unique..."></textarea></div>
+        <div class="form-row">
+          <div class="fgroup"><label>Industry <span class="req">*</span></label><select id="fIndustry"><option value="">Select industry</option><option>SaaS / Technology</option><option>E-Commerce / Retail</option><option>Food & Beverage</option><option>Healthcare</option><option>Finance / Fintech</option><option>Education</option><option>Real Estate</option><option>Media / Entertainment</option><option>Logistics / Supply Chain</option><option>Other</option></select></div>
+          <div class="fgroup"><label>Business Model</label><input type="text" id="fModel" placeholder="e.g., Subscription, marketplace, SaaS"></div>
+        </div>
+      </div>
+      <div class="form-block">
+        <div class="form-block-title">LOCATION & MARKET</div>
+        <div class="form-row">
+          <div class="fgroup"><label>Country <span class="req">*</span></label><input type="text" id="fCountry" placeholder="e.g., United Kingdom"></div>
+          <div class="fgroup"><label>City / Region</label><input type="text" id="fCity" placeholder="e.g., London, Manchester"></div>
+        </div>
+        <div class="fgroup form-row full"><label>Target Customer</label><input type="text" id="fCustomer" placeholder="e.g., Health-conscious millennials aged 25–35"></div>
+      </div>
+      <div class="form-block">
+        <div class="form-block-title">FINANCIALS & OPERATIONS</div>
+        <div class="form-row">
+          <div class="fgroup"><label>Expected Price Range</label><input type="text" id="fPrice" placeholder="e.g., £15–£30 per meal"></div>
+          <div class="fgroup"><label>Delivery Mode</label><select id="fDelivery"><option value="">Select mode</option><option>Digital / Online</option><option>Physical</option><option>Hybrid</option><option>SaaS</option><option>Marketplace</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="fgroup"><label>Startup Budget Range</label><select id="fBudget"><option value="">Select budget</option><option>Under £10,000</option><option>£10,000 – £50,000</option><option>£50,000 – £100,000</option><option>£100,000 – £500,000</option><option>£500,000+</option></select></div>
+          <div class="fgroup"><label>Known Competitors</label><input type="text" id="fCompetitors" placeholder="e.g., HelloFresh, Gousto"></div>
+        </div>
+      </div>
+      <div class="form-foot">
+        <div class="form-err" id="formErr"></div>
+        <button class="btn-run" id="runBtn" onclick="runAudit()"><span class="material-icons-round" style="font-size:15px">bolt</span> Run Adversarial Audit</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            // This ensures a "£4,999 agency" response even if the backend is slow or re-deploying
-            const s1 = "TIM WOODS AUDIT: High-efficiency digital architecture. Operational waste is mitigated via automated compliance logic. Technical defensibility is confirmed at 94% alignment.";
-            const s2 = "ADVERSARIAL SWOT-A: Significant competitive advantage via proprietary BPMN logic gates. Rival feature-creep is mitigated by the Identity Moat and verified strategic ledger.";
-            const s3 = "SCALE ROADMAP: Finalize institutional RAG dataset integration. Initiate national scaling via asset-light API expansion. Architecture is investor-ready for Series A deployment.";
+<!-- RESULTS PAGE -->
+<div class="page" id="resultsPage">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sb-section">WORKSPACE</div>
+      <div class="sb-item" onclick="showView('analysis')"><span class="material-icons-round">add_circle_outline</span> New Analysis</div>
+      <div class="sb-item active"><span class="material-icons-round">analytics</span> Current Report</div>
+      <div class="sb-foot"><strong>AVA INTELLIGENCE</strong>Adversarial Analysis.<br>Strategic Risk Intelligence.</div>
+    </aside>
+    <div class="app-main">
+      <div class="page-hdr">
+        <div><h2>Forensic Verdict</h2><p>Agent Ensemble Synthesis</p></div>
+        <button class="btn-gold" onclick="showView('analysis')">← New Analysis</button>
+      </div>
+      <div class="result-hero">
+        <div class="dial-wrap">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="40" fill="none" stroke="#1C1C1C" stroke-width="6"/>
+            <circle id="dialRing" cx="48" cy="48" r="40" fill="none" stroke="#C0392B" stroke-width="6" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" style="transition:stroke-dashoffset 1.4s ease"/>
+          </svg>
+          <div class="dial-inner"><div class="dial-num" id="dialNum" style="color:#C0392B">--</div><div class="dial-lbl">RISK</div></div>
+        </div>
+        <div class="result-meta">
+          <h3 id="rTitle">—</h3>
+          <div class="meta-row">
+            <span class="meta-pill" id="rIndustry">—</span>
+            <span class="meta-pill" id="rLocation">—</span>
+            <span class="meta-pill" id="rModel">—</span>
+            <span class="meta-pill" id="rBudget">—</span>
+          </div>
+          <div class="meta-date" id="rDate">—</div>
+        </div>
+      </div>
 
-            await type('saboteurText', s1);
-            await type('predatorText', s2);
-            await type('synthText', s3);
-            
-            document.getElementById('score').innerText = '94';
-            btn.innerText = 'EXECUTE PROTOCOL';
-            document.getElementById('pdfBtn').classList.remove('hidden');
-        }
+      <div class="status-bar" id="statusBar"></div>
 
-        async function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const element = document.getElementById('captureArea');
-            const btn = document.getElementById('pdfBtn');
-            btn.innerText = "GENERATING...";
+      <div class="agent-group ag1">
+        <div class="ag-header">
+          <div class="ag-num">01</div>
+          <div class="ag-info"><div class="ag-title">The Saboteur — Internal Forensics</div><div class="ag-sub">TIM WOODS Waste Scan · Financial Exposure · Failure Signals</div></div>
+          <div class="ag-dot dot-idle" id="grpDot1"></div>
+        </div>
+        <div class="sec-cards">
+          <div class="sec-card" id="sc_ers"><div class="sc-head" onclick="toggleSec('ers')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">description</span></div><div class="sc-title">Executive Risk Summary</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_ers"><p id="txt_ers"></p></div></div>
+          <div class="sec-card" id="sc_ops"><div class="sc-head" onclick="toggleSec('ops')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">settings</span></div><div class="sc-title">Operational Risks</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_ops"><p id="txt_ops"></p></div></div>
+          <div class="sec-card" id="sc_fin"><div class="sc-head" onclick="toggleSec('fin')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">account_balance_wallet</span></div><div class="sc-title">Financial Risks</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_fin"><p id="txt_fin"></p></div></div>
+          <div class="sec-card" id="sc_fpi"><div class="sc-head" onclick="toggleSec('fpi')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">warning_amber</span></div><div class="sc-title">Failure Probability Indicators</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_fpi"><p id="txt_fpi"></p></div></div>
+        </div>
+      </div>
 
-            html2canvas(element, { backgroundColor: "#05050A", scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdfWidth = doc.internal.pageSize.getWidth();
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                doc.save(`AVA_Strategic_Audit.pdf`);
-                btn.innerText = "DOWNLOAD REPORT";
-            });
-        }
-    </script>
+      <div class="agent-group ag2">
+        <div class="ag-header">
+          <div class="ag-num">02</div>
+          <div class="ag-info"><div class="ag-title">The Predator — External Offensive</div><div class="ag-sub">Market Analysis · Regional Threats · Competitor Attack · Psychology</div></div>
+          <div class="ag-dot dot-idle" id="grpDot2"></div>
+        </div>
+        <div class="sec-cards">
+          <div class="sec-card" id="sc_msa"><div class="sc-head" onclick="toggleSec('msa')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">bar_chart</span></div><div class="sc-title">Market Saturation Analysis</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_msa"><p id="txt_msa"></p></div></div>
+          <div class="sec-card" id="sc_rgc"><div class="sc-head" onclick="toggleSec('rgc')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">public</span></div><div class="sc-title">Regional & Geographic Challenges</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_rgc"><p id="txt_rgc"></p></div></div>
+          <div class="sec-card" id="sc_caa"><div class="sc-head" onclick="toggleSec('caa')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">shield</span></div><div class="sc-title">Competitor Attack Analysis</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_caa"><p id="txt_caa"></p></div></div>
+          <div class="sec-card" id="sc_cpr"><div class="sc-head" onclick="toggleSec('cpr')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">psychology</span></div><div class="sc-title">Customer Psychology Risks</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_cpr"><p id="txt_cpr"></p></div></div>
+        </div>
+      </div>
+
+      <div class="agent-group ag3">
+        <div class="ag-header">
+          <div class="ag-num">03</div>
+          <div class="ag-info"><div class="ag-title">The Orchestrator — Strategic Verdict</div><div class="ag-sub">Investor Perspective · Pivot Roadmap · Resilience Score</div></div>
+          <div class="ag-dot dot-idle" id="grpDot3"></div>
+        </div>
+        <div class="sec-cards">
+          <div class="sec-card" id="sc_inv"><div class="sc-head" onclick="toggleSec('inv')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">visibility</span></div><div class="sc-title">Investor Perspective</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_inv"><p id="txt_inv"></p></div></div>
+          <div class="sec-card" id="sc_str"><div class="sc-head" onclick="toggleSec('str')"><div class="sc-left"><div class="sc-icon"><span class="material-icons-round">explore</span></div><div class="sc-title">Strategic Recommendations</div></div><span class="sc-chev material-icons-round">expand_more</span></div><div class="sc-body" id="body_str"><p id="txt_str"></p></div></div>
+        </div>
+      </div>
+
+      <div class="result-actions" id="resultActions" style="display:none">
+        <button class="btn-action btn-copy" onclick="copyReport()"><span class="material-icons-round" style="font-size:14px">content_copy</span> Copy Report</button>
+        <button class="btn-action btn-pdf" id="pdfBtn" onclick="downloadPDF()"><span class="material-icons-round" style="font-size:14px">download</span> Download PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let auditData={},formMeta={};
+
+function showView(v){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(v+'Page').classList.add('active')}
+function toggleSec(key){document.getElementById('body_'+key).classList.toggle('open');document.getElementById('sc_'+key).querySelector('.sc-chev').classList.toggle('open')}
+function openSec(key){document.getElementById('body_'+key).classList.add('open');document.getElementById('sc_'+key).querySelector('.sc-chev').classList.add('open')}
+function setGrpDot(n,cls){document.getElementById('grpDot'+n).className='ag-dot '+cls}
+function revealCard(key){document.getElementById('sc_'+key).classList.add('revealed')}
+
+async function type(id,text){
+  const el=document.getElementById(id);
+  el.innerHTML='';el.classList.add('typing');
+  for(const ch of text){el.innerHTML+=ch==='\n'?'<br>':ch;await new Promise(r=>setTimeout(r,6));}
+  el.classList.remove('typing');
+}
+
+function animDial(score){
+  const circ=251,offset=circ-(score/100)*circ;
+  const ring=document.getElementById('dialRing'),num=document.getElementById('dialNum');
+  const col=score>=70?'#C0392B':score>=45?'#B7860B':'#2E7D32';
+  ring.style.stroke=col;num.style.color=col;
+  setTimeout(()=>{ring.style.strokeDashoffset=offset},80);
+  let s=0;const step=Math.max(1,Math.floor(score/35));
+  const t=setInterval(()=>{s=Math.min(s+step,score);num.innerText=s;if(s>=score)clearInterval(t)},28);
+}
+
+async function runAudit(){
+  const title=document.getElementById('fTitle').value.trim();
+  const desc=document.getElementById('fDesc').value.trim();
+  const industry=document.getElementById('fIndustry').value;
+  const country=document.getElementById('fCountry').value.trim();
+  const city=document.getElementById('fCity').value.trim();
+  const model=document.getElementById('fModel').value.trim();
+  const customer=document.getElementById('fCustomer').value.trim();
+  const price=document.getElementById('fPrice').value.trim();
+  const delivery=document.getElementById('fDelivery').value;
+  const budget=document.getElementById('fBudget').value;
+  const comps=document.getElementById('fCompetitors').value.trim();
+  const err=document.getElementById('formErr');
+  if(!title||!desc||!industry||!country){err.innerText='Required: Title, Description, Industry, Country.';return;}
+  err.innerText='';
+  formMeta={title,industry,country,city,model,customer,price,delivery,budget,comps};
+  const hypothesis=[`Business: ${title}`,`Description: ${desc}`,`Industry: ${industry}`,model?`Business Model: ${model}`:'',`Location: ${city?city+', ':''}${country}`,customer?`Target Customer: ${customer}`:'',price?`Pricing: ${price}`:'',delivery?`Delivery Mode: ${delivery}`:'',budget?`Startup Budget: ${budget}`:'',comps?`Known Competitors: ${comps}`:''].filter(Boolean).join('\n');
+
+  showView('results');
+  document.getElementById('sbResults').style.display='flex';
+  document.getElementById('rTitle').innerText=title;
+  document.getElementById('rIndustry').innerText=industry;
+  document.getElementById('rLocation').innerText=(city?city+', ':'')+country;
+  document.getElementById('rModel').innerText=delivery||'—';
+  document.getElementById('rBudget').innerText=budget||'—';
+  document.getElementById('rDate').innerText=`Generated ${new Date().toLocaleString('en-GB')}`;
+  document.getElementById('dialNum').innerText='--';
+  document.getElementById('dialRing').style.strokeDashoffset=251;
+  document.getElementById('resultActions').style.display='none';
+
+  ['ers','ops','fin','fpi','msa','rgc','caa','cpr','inv','str'].forEach(k=>{
+    document.getElementById('sc_'+k).classList.remove('revealed');
+    document.getElementById('body_'+k).classList.remove('open');
+    document.getElementById('sc_'+k).querySelector('.sc-chev').classList.remove('open');
+    document.getElementById('txt_'+k).innerHTML='';
+  });
+  [1,2,3].forEach(n=>setGrpDot(n,'dot-idle'));
+
+  const sb=document.getElementById('statusBar');
+  setGrpDot(1,'dot-run');
+  sb.innerText='▶  AGENT 01 ENGAGING — INTERNAL FORENSICS ACTIVE...';
+  document.getElementById('runBtn').disabled=true;
+
+  try{
+    const res=await fetch('/api/index',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hypothesis})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error||'Audit failed');}
+    const data=await res.json();
+    auditData=data;
+    const a1=data.agent1;
+    for(const[key,field]of[['ers','executive_risk_summary'],['ops','operational_risks'],['fin','financial_risks'],['fpi','failure_probability_indicators']]){revealCard(key);openSec(key);await type('txt_'+key,a1[field]||'No data returned.');await new Promise(r=>setTimeout(r,180));}
+    setGrpDot(1,'dot-r');await new Promise(r=>setTimeout(r,600));
+
+    setGrpDot(2,'dot-run');sb.innerText='▶  AGENT 02 ENGAGING — ADVERSARIAL SWOT-A ACTIVE...';
+    const a2=data.agent2;
+    for(const[key,field]of[['msa','market_saturation_analysis'],['rgc','regional_geographic_challenges'],['caa','competitor_attack_analysis'],['cpr','customer_psychology_risks']]){revealCard(key);openSec(key);await type('txt_'+key,a2[field]||'No data returned.');await new Promise(r=>setTimeout(r,180));}
+    setGrpDot(2,'dot-a');await new Promise(r=>setTimeout(r,600));
+
+    setGrpDot(3,'dot-run');sb.innerText='▶  AGENT 03 SYNTHESISING — FORENSIC VERDICT INCOMING...';
+    const a3=data.agent3;
+    for(const[key,field]of[['inv','investor_perspective'],['str','strategic_recommendations']]){revealCard(key);openSec(key);await type('txt_'+key,a3[field]||'No data returned.');await new Promise(r=>setTimeout(r,180));}
+    setGrpDot(3,'dot-g');
+    animDial(data.score);
+    sb.innerText=`✓  FORENSIC VERDICT DELIVERED — RESILIENCE SCORE: ${data.score} / 100`;
+    document.getElementById('resultActions').style.display='flex';
+  }catch(e){
+    sb.style.color='#C0392B';sb.innerText='✕  PROTOCOL FAILED: '+e.message;
+    [1,2,3].forEach(n=>setGrpDot(n,'dot-idle'));
+  }
+  document.getElementById('runBtn').disabled=false;
+}
+
+function copyReport(){
+  if(!auditData.agent1)return;
+  const a1=auditData.agent1,a2=auditData.agent2,a3=auditData.agent3;
+  const lines=[`AVA FORENSIC VERDICT — ${formMeta.title}`,`Generated: ${new Date().toLocaleString('en-GB')}`,`Resilience Score: ${auditData.score}/100\n`,`── AGENT 01: THE SABOTEUR ──\n`,`Executive Risk Summary\n${a1.executive_risk_summary}\n`,`Operational Risks\n${a1.operational_risks}\n`,`Financial Risks\n${a1.financial_risks}\n`,`Failure Probability Indicators\n${a1.failure_probability_indicators}\n`,`── AGENT 02: THE PREDATOR ──\n`,`Market Saturation Analysis\n${a2.market_saturation_analysis}\n`,`Regional & Geographic Challenges\n${a2.regional_geographic_challenges}\n`,`Competitor Attack Analysis\n${a2.competitor_attack_analysis}\n`,`Customer Psychology Risks\n${a2.customer_psychology_risks}\n`,`── AGENT 03: THE ORCHESTRATOR ──\n`,`Investor Perspective\n${a3.investor_perspective}\n`,`Strategic Recommendations\n${a3.strategic_recommendations}`];
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>{
+    const btn=document.querySelector('.btn-copy');
+    btn.innerHTML='<span class="material-icons-round" style="font-size:14px">check</span> Copied';
+    setTimeout(()=>{btn.innerHTML='<span class="material-icons-round" style="font-size:14px">content_copy</span> Copy Report';},2200);
+  });
+}
+
+async function downloadPDF(){
+  const btn=document.getElementById('pdfBtn');
+  btn.disabled=true;btn.innerHTML='<span class="material-icons-round" style="font-size:14px">hourglass_empty</span> Generating...';
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,H=297,M=22,CW=W-M*2;
+  const rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const fill=h=>doc.setFillColor(...rgb(h));
+  const tc=h=>doc.setTextColor(...rgb(h));
+  const bg=()=>{fill('#0D0D0D');doc.rect(0,0,W,H,'F')};
+  const wrapText=(text,x,y,maxW,lh)=>{
+    const lines=doc.splitTextToSize(text||'',maxW);
+    lines.forEach(l=>{if(y>H-22){doc.addPage();bg();y=28;}doc.text(l,x,y);y+=lh;});
+    return y;
+  };
+  bg();
+  fill('#111111');doc.rect(0,0,W,H*0.52,'F');
+  fill('#C4A882');doc.rect(0,0,2,H,'F');
+  tc('#C4A882');doc.setFontSize(44);doc.setFont('helvetica','bold');doc.text('AVA',M,52);
+  tc('#666666');doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('RISK. EXPOSED.',M,62);
+  fill('#C4A882');doc.rect(M,70,36,0.8,'F');
+  tc('#F0EDE8');doc.setFontSize(20);doc.setFont('helvetica','bold');
+  const tlines=doc.splitTextToSize(formMeta.title||'Venture Audit',CW);
+  let ty=84;tlines.forEach(l=>{doc.text(l,M,ty);ty+=9;});
+  tc('#888888');doc.setFontSize(10);doc.setFont('helvetica','normal');
+  const meta=[formMeta.industry,(formMeta.city?formMeta.city+', ':'')+formMeta.country,formMeta.delivery||null,formMeta.budget||null].filter(Boolean).join('  ·  ');
+  doc.text(meta,M,ty+4);tc('#555555');doc.text(`Generated ${new Date().toLocaleString('en-GB')}`,M,ty+12);
+  fill('#141414');doc.roundedRect(M,ty+22,CW,38,4,4,'F');
+  tc('#C4A882');doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('RESILIENCE SCORE',M+10,ty+34);
+  const scoreCol=auditData.score>=70?'#C0392B':auditData.score>=45?'#B7860B':'#2E7D32';
+  tc(scoreCol);doc.setFontSize(30);doc.text(String(auditData.score),M+10,ty+54);
+  tc('#555555');doc.setFontSize(10);doc.setFont('helvetica','normal');doc.text('/ 100',M+32,ty+54);
+  tc('#333333');doc.setFontSize(8);doc.text('ADVERSARIAL VENTURE ANALYSIS REPORT',M,H-14);doc.text('Confidential — AVA Intelligence',W-M,H-14,{align:'right'});
+  const sections=[
+    {agent:'01 — THE SABOTEUR',sub:'Internal Forensics · TIM WOODS · Financial Exposure',col:'#C0392B',items:[{title:'Executive Risk Summary',text:auditData.agent1?.executive_risk_summary},{title:'Operational Risks',text:auditData.agent1?.operational_risks},{title:'Financial Risks',text:auditData.agent1?.financial_risks},{title:'Failure Probability Indicators',text:auditData.agent1?.failure_probability_indicators}]},
+    {agent:'02 — THE PREDATOR',sub:'External Offensive · Market Analysis · Competitor Simulation',col:'#B7860B',items:[{title:'Market Saturation Analysis',text:auditData.agent2?.market_saturation_analysis},{title:'Regional & Geographic Challenges',text:auditData.agent2?.regional_geographic_challenges},{title:'Competitor Attack Analysis',text:auditData.agent2?.competitor_attack_analysis},{title:'Customer Psychology Risks',text:auditData.agent2?.customer_psychology_risks}]},
+    {agent:'03 — THE ORCHESTRATOR',sub:'Strategic Verdict · Investor Perspective · Pivot Roadmap',col:'#C4A882',items:[{title:'Investor Perspective',text:auditData.agent3?.investor_perspective},{title:'Strategic Recommendations',text:auditData.agent3?.strategic_recommendations}]},
+  ];
+  for(const sec of sections){
+    doc.addPage();bg();
+    fill('#141414');doc.rect(0,0,W,34,'F');
+    fill(sec.col);doc.rect(0,0,2,34,'F');
+    tc(sec.col);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('AGENT '+sec.agent,M,14);
+    tc('#666666');doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text(sec.sub,M,22);
+    tc('#333333');doc.setFontSize(8);doc.text(formMeta.title||'',W-M,14,{align:'right'});
+    let y=46;
+    for(const item of sec.items){
+      if(y>H-42){doc.addPage();bg();y=24;}
+      fill('#1C1C1C');doc.roundedRect(M,y-5,CW,11,2,2,'F');
+      fill(sec.col);doc.rect(M,y-5,2,11,'F');
+      tc('#F0EDE8');doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(item.title,M+6,y+3);
+      y+=14;tc('#888888');doc.setFontSize(9);doc.setFont('helvetica','normal');
+      y=wrapText(item.text||'',M,y,CW,5.4);y+=8;
+    }
+    fill('#141414');doc.rect(0,H-10,W,10,'F');
+    tc('#333333');doc.setFontSize(7);doc.text('AVA Adversarial Venture Analysis  ·  Confidential',M,H-4);doc.text(`Score: ${auditData.score}/100`,W-M,H-4,{align:'right'});
+  }
+  const safe=(formMeta.title||'Venture').replace(/[^a-zA-Z0-9]/g,'_');
+  doc.save(`AVA_Audit_${safe}_${new Date().toISOString().slice(0,10)}.pdf`);
+  btn.disabled=false;btn.innerHTML='<span class="material-icons-round" style="font-size:14px">download</span> Download PDF';
+}
+</script>
 </body>
 </html>
